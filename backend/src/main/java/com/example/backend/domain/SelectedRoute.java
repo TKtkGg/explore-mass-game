@@ -1,4 +1,4 @@
-package domain;
+package com.example.backend.domain;
 
 public enum SelectedRoute {
     BATTLE,

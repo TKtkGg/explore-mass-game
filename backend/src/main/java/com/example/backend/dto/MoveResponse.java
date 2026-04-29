@@ -1,6 +1,6 @@
-package dto;
+package com.example.backend.dto;
 
-import domain.SelectedRoute;
+import com.example.backend.domain.SelectedRoute;
 
 public class MoveResponse {
     private SelectedRoute routeType;
