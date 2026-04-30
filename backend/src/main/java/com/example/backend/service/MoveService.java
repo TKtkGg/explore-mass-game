@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.backend.dto.MoveRequest;
 import com.example.backend.dto.MoveResponse;
 import com.example.backend.domain.SelectedRoute;
+import com.example.backend.exception.GameStoppedException;
 
 @Service
 public class MoveService {
@@ -16,6 +17,8 @@ public class MoveService {
         this.routeType = request.getRouteType();
         if(!this.stopped) {
             this.remainingSteps--;
+        } else {
+            throw new GameStoppedException("ゲームが停止しました。");
         }
         if(this.remainingSteps <= 0) {
             this.stopped = true;
