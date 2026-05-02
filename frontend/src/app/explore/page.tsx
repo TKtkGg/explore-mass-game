@@ -1,12 +1,37 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ExplorePage() {
-    const [remainingSteps, setRemainingSteps] = useState(25);
+    const [remainingSteps, setRemainingSteps] = useState();
     const [stopped, setStopped] = useState(false);
     const [error, setError] = useState<Error | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const optionArray: string[] = ["BATTLE", "TREASURE", "REST", "CARD", "SHOP"];
+
+    useEffect(() => {
+        const reset = async () => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset`, {
+                    method: "POST",
+                });
+                if(!response.ok) {
+                    throw new Error("Failed to reset");
+                } else {
+                    const data = await response.json();
+                    setRemainingSteps(data.remainingSteps);
+                    setStopped(data.stopped);
+                    setError(null);
+                }
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setError(error);
+                } else {
+                    setError(new Error("通信に失敗しました。"));
+                }
+            }
+        };
+        reset();
+    }, []);
 
     const handleMove = async (routeType: string) => {
         if (isLoading) return;

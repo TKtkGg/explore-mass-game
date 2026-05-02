@@ -25,4 +25,12 @@ public class MoveService {
         }
         return new MoveResponse(this.routeType, this.remainingSteps, this.stopped);
     }
+
+    public MoveResponse reset() {
+        this.remainingSteps = 25;
+        this.stopped = false;
+        this.routeType = null;
+
+        return new MoveResponse(this.routeType, this.remainingSteps, this.stopped);
+    }
 }

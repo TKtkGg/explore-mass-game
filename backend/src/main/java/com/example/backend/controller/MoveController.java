@@ -10,6 +10,7 @@ import com.example.backend.dto.MoveResponse;
 import com.example.backend.service.MoveService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3001")
 public class MoveController {
     private MoveService moveService;
 
@@ -18,8 +19,12 @@ public class MoveController {
     }
 
     @PostMapping("/move")
-    @CrossOrigin(origins = "http://localhost:3001")
     public MoveResponse move(@RequestBody MoveRequest request) {
         return this.moveService.move(request);
+    }
+
+    @PostMapping("/reset")
+    public MoveResponse reset() {
+        return this.moveService.reset();
     }
 }
