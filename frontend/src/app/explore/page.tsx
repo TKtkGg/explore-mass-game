@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
+import { apiPost } from "@/lib/apiClient";
 
 export default function ExplorePage() {
-    const [remainingSteps, setRemainingSteps] = useState();
+    const [remainingSteps, setRemainingSteps] = useState(25);
     const [stopped, setStopped] = useState(false);
     const [error, setError] = useState<Error | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -11,17 +12,10 @@ export default function ExplorePage() {
     useEffect(() => {
         const reset = async () => {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset`, {
-                    method: "POST",
-                });
-                if(!response.ok) {
-                    throw new Error("Failed to reset");
-                } else {
-                    const data = await response.json();
-                    setRemainingSteps(data.remainingSteps);
-                    setStopped(data.stopped);
-                    setError(null);
-                }
+                const response = await apiPost("/reset");
+                setRemainingSteps(response.remainingSteps);
+                setStopped(response.stopped);
+                setError(null);
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     setError(error);
@@ -35,25 +29,13 @@ export default function ExplorePage() {
 
     const handleMove = async (routeType: string) => {
         if (isLoading) return;
-        
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/move`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ routeType }),
-            });
-            if(!response.ok) {
-                throw new Error("Failed to move");
-            } else {
-                const data = await response.json();
-                setRemainingSteps(data.remainingSteps);
-                setStopped(data.stopped);
-                setError(null);
-            }
+            const response = await apiPost("/move", { routeType: routeType });
+            setRemainingSteps(response.remainingSteps);
+            setStopped(response.stopped);
+            setError(null);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setError(error);
