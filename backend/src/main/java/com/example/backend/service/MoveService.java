@@ -7,8 +7,12 @@ import com.example.backend.dto.MoveResponse;
 import com.example.backend.domain.SelectedRoute;
 import com.example.backend.exception.GameStoppedException;
 
+import java.util.Random;
+
 @Service
 public class MoveService {
+    Random rand = new Random();
+
     int remainingSteps = 25;
     boolean stopped = false;
     SelectedRoute routeType;
@@ -23,7 +27,7 @@ public class MoveService {
         if(this.remainingSteps <= 0) {
             this.stopped = true;
         }
-        return new MoveResponse(this.routeType, this.remainingSteps, this.stopped);
+        return new MoveResponse(this.routeType, this.remainingSteps, this.stopped, this.getRandomRouteOptions());
     }
 
     public MoveResponse reset() {
@@ -31,6 +35,12 @@ public class MoveService {
         this.stopped = false;
         this.routeType = null;
 
-        return new MoveResponse(this.routeType, this.remainingSteps, this.stopped);
+        return new MoveResponse(this.routeType, this.remainingSteps, this.stopped, this.getRandomRouteOptions());
+    }
+
+    public String[] getRandomRouteOptions() {
+        String[] route = {"BATTLE", "TREASURE", "REST", "CARD", "SHOP"};
+        String[] options = {route[rand.nextInt(route.length)], route[rand.nextInt(route.length)], route[rand.nextInt(route.length)]};
+        return options;
     }
 }

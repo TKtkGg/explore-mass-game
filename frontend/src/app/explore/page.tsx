@@ -7,7 +7,7 @@ export default function ExplorePage() {
     const [stopped, setStopped] = useState(false);
     const [error, setError] = useState<Error | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const optionArray: string[] = ["BATTLE", "TREASURE", "REST", "CARD", "SHOP"];
+    const [routeOptions, setRouteOptions] = useState<string[]>([]);
 
     useEffect(() => {
         const reset = async () => {
@@ -15,6 +15,7 @@ export default function ExplorePage() {
                 const response = await apiPost("/reset");
                 setRemainingSteps(response.remainingSteps);
                 setStopped(response.stopped);
+                setRouteOptions(response.routeOptions);
                 setError(null);
             } catch (error: unknown) {
                 if (error instanceof Error) {
@@ -35,6 +36,7 @@ export default function ExplorePage() {
             const response = await apiPost("/move", { routeType: routeType });
             setRemainingSteps(response.remainingSteps);
             setStopped(response.stopped);
+            setRouteOptions(response.routeOptions);
             setError(null);
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -53,9 +55,9 @@ export default function ExplorePage() {
             <p>Stopped: {stopped ? "Stopping" : "You can go."}</p>
             <p>Error: {error?.message}</p>
             <p>Is Loading: {isLoading ? "Loading..." : ""}</p>
-            {optionArray.map((option) => (
-                <div key={option}>
-                    <button onClick={() => handleMove(option)} disabled={isLoading}>{option}</button>
+            {routeOptions.map((option, index) => (
+                <div key={index}>
+                    <button onClick={() => handleMove(option)} disabled={isLoading || stopped}>{option}</button>
                     <br />
                 </div>
             ))}
