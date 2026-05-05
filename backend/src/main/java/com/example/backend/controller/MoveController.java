@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.dto.MoveRequest;
-import com.example.backend.dto.MoveResponse;
+import com.example.backend.dto.move.MoveRequest;
+import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.service.MoveService;
 
 @RestController

@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.move;
 
 import com.example.backend.domain.SelectedRoute;
 

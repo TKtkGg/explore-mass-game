@@ -2,10 +2,11 @@ package com.example.backend.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.backend.dto.MoveRequest;
-import com.example.backend.dto.MoveResponse;
 import com.example.backend.domain.SelectedRoute;
+import com.example.backend.dto.move.MoveRequest;
+import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
+import com.example.backend.service.gamestate.MoveState;
 
 import java.util.Random;
 
@@ -13,33 +14,35 @@ import java.util.Random;
 public class MoveService {
     Random rand = new Random();
 
-    int remainingSteps = 25;
-    boolean stopped = false;
-    SelectedRoute routeType;
+    private MoveState moveState;
+
+    public MoveService(MoveState moveState) {
+        this.moveState = moveState;
+    }
 
     public MoveResponse move(MoveRequest request) {
-        this.routeType = request.getRouteType();
-        if(!this.stopped) {
-            this.remainingSteps--;
+        this.moveState.setRouteType(request.getRouteType());
+        if(!this.moveState.isStopped()) {
+            this.moveState.setRemainingSteps(this.moveState.getRemainingSteps() - 1);
         } else {
             throw new GameStoppedException("ゲームが停止しました。");
         }
-        if(this.remainingSteps <= 0) {
-            this.stopped = true;
+        if(this.moveState.getRemainingSteps() <= 0) {
+            this.moveState.setStopped(true);
         }
-        return new MoveResponse(this.routeType, this.remainingSteps, this.stopped, this.getRandomRouteOptions());
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions());
     }
 
     public MoveResponse reset() {
-        this.remainingSteps = 25;
-        this.stopped = false;
-        this.routeType = null;
+        this.moveState.setRemainingSteps(25);
+        this.moveState.setStopped(false);
+        this.moveState.setRouteType(null);
 
-        return new MoveResponse(this.routeType, this.remainingSteps, this.stopped, this.getRandomRouteOptions());
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions());
     }
 
     public String[] getRandomRouteOptions() {
-        String[] route = {"BATTLE", "TREASURE", "REST", "CARD", "SHOP"};
+        String[] route = this.moveState.getRouteOptions();
         String[] options = {route[rand.nextInt(route.length)], route[rand.nextInt(route.length)], route[rand.nextInt(route.length)]};
         return options;
     }

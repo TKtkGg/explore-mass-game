@@ -1,14 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import { apiPost } from "@/lib/apiClient";
-
+import { useRouter } from "next/navigation";
 export default function ExplorePage() {
     const [remainingSteps, setRemainingSteps] = useState(25);
     const [stopped, setStopped] = useState(false);
     const [error, setError] = useState<Error | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [routeOptions, setRouteOptions] = useState<string[]>([]);
-
+    const router = useRouter();
+    
     useEffect(() => {
         const reset = async () => {
             try {
@@ -61,6 +62,7 @@ export default function ExplorePage() {
                     <br />
                 </div>
             ))}
+            <button onClick={() => router.push("/status")}>STATUS</button>
         </div>
     )
 }
