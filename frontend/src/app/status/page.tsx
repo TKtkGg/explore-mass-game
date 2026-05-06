@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { apiGet } from "@/lib/apiClient";
 
 interface StatusResponse {
     name: string;
@@ -21,16 +22,8 @@ export default function StatusPage() {
 
     useEffect(() => {
         const fetchStatus = async () => {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/status`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            if(!response.ok) {
-                throw new Error("HTTP error! status: " + response.status);
-            }
-            setData(await response.json());
+            const response = await apiGet("/status");
+            setData(response);
         }
         fetchStatus();
     }, []);

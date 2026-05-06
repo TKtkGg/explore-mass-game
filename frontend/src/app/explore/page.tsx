@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { apiPost } from "@/lib/apiClient";
+import { apiPost, apiGet } from "@/lib/apiClient";
 import { useRouter } from "next/navigation";
 export default function ExplorePage() {
     const [remainingSteps, setRemainingSteps] = useState(25);
@@ -11,9 +11,9 @@ export default function ExplorePage() {
     const router = useRouter();
     
     useEffect(() => {
-        const reset = async () => {
+        const start = async () => {
             try {
-                const response = await apiPost("/reset");
+                const response = await apiGet("/move/status");
                 setRemainingSteps(response.remainingSteps);
                 setStopped(response.stopped);
                 setRouteOptions(response.routeOptions);
@@ -26,7 +26,7 @@ export default function ExplorePage() {
                 }
             }
         };
-        reset();
+        start();
     }, []);
 
     const handleMove = async (routeType: string) => {
@@ -49,6 +49,27 @@ export default function ExplorePage() {
             setIsLoading(false);
         }
     }
+
+    const handleReset = async () => {
+        if (isLoading) return;
+        setIsLoading(true);
+
+        try {
+            const response = await apiPost("/reset");
+            setRemainingSteps(response.remainingSteps);
+            setStopped(response.stopped);
+            setRouteOptions(response.routeOptions);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setError(error);
+            } else {
+                setError(new Error("通信に失敗しました。"));
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <div>
             <h1>Explore Page</h1>
@@ -63,6 +84,8 @@ export default function ExplorePage() {
                 </div>
             ))}
             <button onClick={() => router.push("/status")}>STATUS</button>
+            <br />
+            <button onClick={handleReset} disabled={isLoading}>RESET</button>
         </div>
     )
 }

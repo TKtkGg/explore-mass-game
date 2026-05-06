@@ -41,9 +41,18 @@ public class MoveService {
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions());
     }
 
+    public MoveResponse getCurrentMoveState() {
+        String[] options = this.moveState.getRandomRouteOptions();
+        if(options == null) {
+            options = this.getRandomRouteOptions();
+        }
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), options);
+    }
+
     public String[] getRandomRouteOptions() {
         String[] route = this.moveState.getRouteOptions();
         String[] options = {route[rand.nextInt(route.length)], route[rand.nextInt(route.length)], route[rand.nextInt(route.length)]};
+        this.moveState.setRandomRouteOptions(options);
         return options;
     }
 }
