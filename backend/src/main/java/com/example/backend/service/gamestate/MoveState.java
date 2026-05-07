@@ -9,14 +9,14 @@ public class MoveState {
     int remainingSteps ;
     boolean stopped;
     SelectedRoute routeType;
-    String[] routeOptions;
-    String[] randomRouteOptions;
+    SelectedRoute[] routeOptions;
+    SelectedRoute[] randomRouteOptions;
 
     public MoveState() {
         this.remainingSteps = 25;
         this.stopped = false;
         this.routeType = null;
-        this.routeOptions = new String[] {"BATTLE", "TREASURE", "REST", "CARD", "SHOP"};
+        this.routeOptions = new SelectedRoute[] {SelectedRoute.BATTLE, SelectedRoute.TREASURE, SelectedRoute.REST, SelectedRoute.CARD, SelectedRoute.SHOP};
         this.randomRouteOptions = null;
     }
     public int getRemainingSteps() {
@@ -28,10 +28,10 @@ public class MoveState {
     public SelectedRoute getRouteType() {
         return routeType;
     }
-    public String[] getRouteOptions() {
+    public SelectedRoute[] getRouteOptions() {
         return routeOptions;
     }
-    public String[] getRandomRouteOptions() {
+    public SelectedRoute[] getRandomRouteOptions() {
         return randomRouteOptions;
     }
 
@@ -44,7 +44,7 @@ public class MoveState {
     public void setRouteType(SelectedRoute routeType) {
         this.routeType = routeType;
     }
-    public void setRandomRouteOptions(String[] randomRouteOptions) {
+    public void setRandomRouteOptions(SelectedRoute[] randomRouteOptions) {
         this.randomRouteOptions = randomRouteOptions;
     }
 }
