@@ -7,12 +7,14 @@ public class MoveResponse {
     private int remainingSteps;
     private boolean stopped;
     private SelectedRoute[] routeOptions;
+    private String message;
 
-    public MoveResponse(SelectedRoute routeType, int remainingSteps, boolean stopped, SelectedRoute[] routeOptions) {
+    public MoveResponse(SelectedRoute routeType, int remainingSteps, boolean stopped, SelectedRoute[] routeOptions, String message) {
         this.routeType = routeType;
         this.remainingSteps = remainingSteps;
         this.stopped = stopped;
         this.routeOptions = routeOptions;
+        this.message = message;
     }
 
     public SelectedRoute getRouteType() {
@@ -29,5 +31,9 @@ public class MoveResponse {
 
     public SelectedRoute[] getRouteOptions() {
         return this.routeOptions;
+    }
+
+    public String getMessage() {
+        return this.message;
     }
 }

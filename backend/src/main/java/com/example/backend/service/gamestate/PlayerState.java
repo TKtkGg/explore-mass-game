@@ -54,4 +54,10 @@ public class PlayerState {
         return gold;
     }
 
+    public int Heal(int amount) {
+        int healAmount = Math.min(amount, this.maxHp - this.hp);
+        this.hp += healAmount;
+        return healAmount;
+    }
+
 }

@@ -8,6 +8,7 @@ export default function ExplorePage() {
     const [error, setError] = useState<Error | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [routeOptions, setRouteOptions] = useState<string[]>([]);
+    const [message, setMessage] = useState("");
     const router = useRouter();
     
     useEffect(() => {
@@ -17,6 +18,7 @@ export default function ExplorePage() {
                 setRemainingSteps(response.remainingSteps);
                 setStopped(response.stopped);
                 setRouteOptions(response.routeOptions);
+                setMessage(response.message);
                 setError(null);
             } catch (error: unknown) {
                 if (error instanceof Error) {
@@ -34,10 +36,17 @@ export default function ExplorePage() {
         setIsLoading(true);
 
         try {
-            const response = await apiPost("/move", { routeType: routeType });
+            let response;
+            if (routeType === "REST") {
+                response = await apiPost("/move/rest", { routeType: routeType });
+                
+            } else {
+                response = await apiPost("/move", { routeType: routeType });
+            }
             setRemainingSteps(response.remainingSteps);
             setStopped(response.stopped);
             setRouteOptions(response.routeOptions);
+            setMessage(response.message);
             setError(null);
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -59,6 +68,8 @@ export default function ExplorePage() {
             setRemainingSteps(response.remainingSteps);
             setStopped(response.stopped);
             setRouteOptions(response.routeOptions);
+            setMessage(response.message);
+            setError(null);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setError(error);
@@ -77,6 +88,7 @@ export default function ExplorePage() {
             <p>Stopped: {stopped ? "Stopping" : "You can go."}</p>
             <p>Error: {error?.message}</p>
             <p>Is Loading: {isLoading ? "Loading..." : ""}</p>
+            <p>{message}</p>
             {routeOptions.map((option, index) => (
                 <div key={index}>
                     <button onClick={() => handleMove(option)} disabled={isLoading || stopped}>{option}</button>

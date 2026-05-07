@@ -7,6 +7,7 @@ import com.example.backend.dto.move.MoveRequest;
 import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
 import com.example.backend.service.gamestate.MoveState;
+import com.example.backend.service.gamestate.PlayerState;
 
 import java.util.Random;
 
@@ -15,12 +16,13 @@ public class MoveService {
     Random rand = new Random();
 
     private MoveState moveState;
-
-    public MoveService(MoveState moveState) {
+    private PlayerState playerState;
+    public MoveService(MoveState moveState, PlayerState playerState) {
         this.moveState = moveState;
+        this.playerState = playerState;
     }
 
-    public MoveResponse move(MoveRequest request) {
+    public void moveAbstract(MoveRequest request) {
         this.moveState.setRouteType(request.getRouteType());
         if(!this.moveState.isStopped()) {
             this.moveState.setRemainingSteps(this.moveState.getRemainingSteps() - 1);
@@ -30,7 +32,11 @@ public class MoveService {
         if(this.moveState.getRemainingSteps() <= 0) {
             this.moveState.setStopped(true);
         }
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions());
+    }
+
+    public MoveResponse move(MoveRequest request) {
+        this.moveAbstract(request);
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
     }
 
     public MoveResponse reset() {
@@ -38,7 +44,7 @@ public class MoveService {
         this.moveState.setStopped(false);
         this.moveState.setRouteType(null);
 
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions());
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
     }
 
     public MoveResponse getCurrentMoveState() {
@@ -46,7 +52,7 @@ public class MoveService {
         if(options == null) {
             options = this.getRandomRouteOptions();
         }
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), options);
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), options, "");
     }
 
     public SelectedRoute[] getRandomRouteOptions() {
@@ -54,5 +60,11 @@ public class MoveService {
         SelectedRoute[] options = {route[rand.nextInt(route.length)], route[rand.nextInt(route.length)], route[rand.nextInt(route.length)]};
         this.moveState.setRandomRouteOptions(options);
         return options;
+    }
+
+    public MoveResponse rest(MoveRequest request) {
+        this.moveAbstract(request);
+        int healAmount = this.playerState.Heal(100);
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "休んで" + healAmount + "回復した！");
     }
 }

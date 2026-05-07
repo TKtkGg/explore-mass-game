@@ -29,6 +29,11 @@ public class MoveController {
         return this.moveService.reset();
     }
 
+    @PostMapping("/move/rest")
+    public MoveResponse rest(@RequestBody MoveRequest request) {
+        return this.moveService.rest(request);
+    }
+
     @GetMapping("/move/status")
     public MoveResponse getCurrentMoveState() {
         return this.moveService.getCurrentMoveState();
