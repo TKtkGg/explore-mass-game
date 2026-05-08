@@ -60,4 +60,29 @@ public class PlayerState {
         return healAmount;
     }
 
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+        if(this.hp > this.maxHp) {
+            this.hp = this.maxHp;
+        }
+    }
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+    public void setAtk(int atk) {
+        this.atk = atk;
+    }
+    public void setDef(int def) {
+        this.def = def;
+    }
+    public void setSpd(int spd) {
+        this.spd = spd;
+    }
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
 }

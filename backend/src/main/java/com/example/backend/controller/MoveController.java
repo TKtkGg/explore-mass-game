@@ -34,6 +34,11 @@ public class MoveController {
         return this.moveService.rest(request);
     }
 
+    @PostMapping("/move/treasure")
+    public MoveResponse treasure(@RequestBody MoveRequest request) {
+        return this.moveService.treasure(request);
+    }
+
     @GetMapping("/move/status")
     public MoveResponse getCurrentMoveState() {
         return this.moveService.getCurrentMoveState();
