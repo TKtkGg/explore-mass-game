@@ -4,6 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiGet } from "@/lib/apiClient";
 
+interface EquipmentState {
+    name: string;
+    atk: number;
+    price: number;
+    chance: number;
+}
+
 interface StatusResponse {
     name: string;
     level: number;
@@ -14,6 +21,8 @@ interface StatusResponse {
     spd: number;
     exp: number;
     gold: number;
+    equipment: EquipmentState;
+    ownEquipmentList: EquipmentState[];
 }
 
 export default function StatusPage() {
@@ -39,6 +48,8 @@ export default function StatusPage() {
             <p>SPD: {data?.spd}</p>
             <p>EXP: {data?.exp}</p>
             <p>Gold: {data?.gold}</p>
+            <p>Equipment: {data?.equipment.name} (ATK: {data?.equipment.atk})</p>
+            <p>Own Equipment: {data?.ownEquipmentList.map((equipment) => equipment.name).join(", ")}</p>
             <button onClick={() => router.push("/explore")}>BACK</button>
         </div>
     )

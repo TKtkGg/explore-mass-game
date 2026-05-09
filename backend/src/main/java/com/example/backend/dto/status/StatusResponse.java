@@ -1,5 +1,10 @@
 package com.example.backend.dto.status;
 
+import com.example.backend.service.gamestate.EquipmentState;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class StatusResponse {
     private String name;
     private int level;
@@ -10,8 +15,10 @@ public class StatusResponse {
     private int spd;
     private int exp;
     private int gold;
+    private EquipmentState equipment;
+    private List<EquipmentState> ownEquipmentList;
 
-    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold) {
+    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold, EquipmentState equipment, List<EquipmentState> ownEquipmentList) {
         this.name = name;
         this.level = level;
         this.maxHp = maxHp;
@@ -21,6 +28,8 @@ public class StatusResponse {
         this.spd = spd;
         this.exp = exp;
         this.gold = gold;
+        this.equipment = equipment;
+        this.ownEquipmentList = ownEquipmentList;
     }
 
     public String getName() {
@@ -57,5 +66,13 @@ public class StatusResponse {
     
     public int getGold() {
         return this.gold;
+    }
+
+    public EquipmentState getEquipment() {
+        return this.equipment;
+    }
+
+    public List<EquipmentState> getOwnEquipmentList() {
+        return this.ownEquipmentList;
     }
 }

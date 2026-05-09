@@ -2,6 +2,9 @@ package com.example.backend.service.gamestate;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PlayerState {
     String name;
@@ -13,6 +16,9 @@ public class PlayerState {
     int spd;
     int exp;
     int gold;
+    EquipmentState equipment;
+    List<EquipmentState> ownEquipmentList = new ArrayList<>();
+    EquipmentListState equipmentList = new EquipmentListState();
 
     public PlayerState() {
         this.name = "test";
@@ -24,6 +30,10 @@ public class PlayerState {
         this.spd = 10;
         this.exp = 0;
         this.gold = 0;
+        this.equipment = equipmentList.getEquipmentList()[0];
+        this.ownEquipmentList.add(equipment);
+        this.ownEquipmentList.add(equipmentList.getEquipmentList()[1]);
+        this.ownEquipmentList.add(equipmentList.getEquipmentList()[2]);
     }
 
     public String getName() {
@@ -39,7 +49,7 @@ public class PlayerState {
         return hp;
     }
     public int getAtk() {
-        return atk;
+        return atk + equipment.getAtk();
     }
     public int getDef() {
         return def;
@@ -52,6 +62,12 @@ public class PlayerState {
     }
     public int getGold() {
         return gold;
+    }
+    public EquipmentState getEquipment() {
+        return equipment;
+    }
+    public List<EquipmentState> getOwnEquipmentList() {
+        return ownEquipmentList;
     }
 
     public int Heal(int amount) {
@@ -84,5 +100,11 @@ public class PlayerState {
     public void setGold(int gold) {
         this.gold = gold;
     }
+    public void setEquipment(EquipmentState equipment) {
+        this.equipment = equipment;
+    }
 
+    public void addEquipment(EquipmentState equipment) {
+        this.ownEquipmentList.add(equipment);
+    }
 }
