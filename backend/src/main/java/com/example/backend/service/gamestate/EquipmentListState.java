@@ -1,5 +1,8 @@
 package com.example.backend.service.gamestate;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class EquipmentListState {
     EquipmentState[] equipmentList;
 

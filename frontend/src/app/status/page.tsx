@@ -17,6 +17,7 @@ interface StatusResponse {
     maxHp: number;
     hp: number;
     atk: number;
+    totalAtk: number;
     def: number;
     spd: number;
     exp: number;
@@ -43,12 +44,13 @@ export default function StatusPage() {
             <p>Name: {data?.name}</p>
             <p>Level: {data?.level}</p>
             <p>HP: {data?.hp}/{data?.maxHp}</p>
-            <p>ATK: {data?.atk}</p>
+            <p>ATK: {data?.totalAtk}({data?.atk}+{data?.equipment.atk})</p>
             <p>DEF: {data?.def}</p>
             <p>SPD: {data?.spd}</p>
             <p>EXP: {data?.exp}</p>
             <p>Gold: {data?.gold}</p>
             <p>Equipment: {data?.equipment.name} (ATK: {data?.equipment.atk})</p>
+            <button onClick={() => router.push("/equipment")}>装備変更</button>
             <p>Own Equipment: {data?.ownEquipmentList.map((equipment) => equipment.name).join(", ")}</p>
             <button onClick={() => router.push("/explore")}>BACK</button>
         </div>

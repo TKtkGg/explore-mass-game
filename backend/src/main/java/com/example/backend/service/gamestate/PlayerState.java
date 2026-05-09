@@ -49,6 +49,9 @@ public class PlayerState {
         return hp;
     }
     public int getAtk() {
+        return atk;
+    }
+    public int getTotalAtk() {
         return atk + equipment.getAtk();
     }
     public int getDef() {

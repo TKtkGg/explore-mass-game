@@ -11,6 +11,7 @@ public class StatusResponse {
     private int maxHp;
     private int hp;
     private int atk;
+    private int totalAtk;
     private int def;
     private int spd;
     private int exp;
@@ -18,12 +19,13 @@ public class StatusResponse {
     private EquipmentState equipment;
     private List<EquipmentState> ownEquipmentList;
 
-    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold, EquipmentState equipment, List<EquipmentState> ownEquipmentList) {
+    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int totalAtk, int def, int spd, int exp, int gold, EquipmentState equipment, List<EquipmentState> ownEquipmentList) {
         this.name = name;
         this.level = level;
         this.maxHp = maxHp;
         this.hp = hp;
         this.atk = atk;
+        this.totalAtk = totalAtk;
         this.def = def;
         this.spd = spd;
         this.exp = exp;
@@ -50,6 +52,10 @@ public class StatusResponse {
     
     public int getAtk() {
         return this.atk;
+    }
+
+    public int getTotalAtk() {
+        return this.totalAtk;
     }
     
     public int getDef() {
