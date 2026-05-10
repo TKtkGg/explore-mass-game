@@ -21,6 +21,10 @@ public class EquipmentTreasureService {
     public String open() {
         this.randomIndex = equipmentTreasureState.getRandomIndex();
         EquipmentState getEquipment = equipmentTreasureState.getTreasureInside().get(this.randomIndex);
+        if(playerState.getOwnEquipmentList().contains(getEquipment)) {
+            playerState.setGold(playerState.getGold() + getEquipment.getPrice() / 2);
+            return getEquipment.getName() + "はすでに持っているので、売っぱらった。+" + getEquipment.getPrice() / 2 + "ゴールド";
+        }
         playerState.addEquipment(getEquipment);
         return getEquipment.getName() + "を手に入れた！";
     }

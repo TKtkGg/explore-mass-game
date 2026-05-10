@@ -18,9 +18,10 @@ public class PlayerState {
     int gold;
     EquipmentState equipment;
     List<EquipmentState> ownEquipmentList = new ArrayList<>();
-    EquipmentListState equipmentList = new EquipmentListState();
+    EquipmentListState equipmentList;
 
-    public PlayerState() {
+    public PlayerState(EquipmentListState equipmentList) {
+        this.equipmentList = equipmentList;
         this.name = "test";
         this.level = 1;
         this.maxHp = 100;
@@ -30,10 +31,8 @@ public class PlayerState {
         this.spd = 10;
         this.exp = 0;
         this.gold = 0;
-        this.equipment = equipmentList.getEquipmentList()[0];
+        this.equipment = this.equipmentList.getEquipmentList()[0];
         this.ownEquipmentList.add(equipment);
-        this.ownEquipmentList.add(equipmentList.getEquipmentList()[1]);
-        this.ownEquipmentList.add(equipmentList.getEquipmentList()[2]);
     }
 
     public String getName() {

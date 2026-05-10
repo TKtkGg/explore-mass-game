@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 public class EquipmentTreasureState {
     private EquipmentState[] equipmentList;
     private List<EquipmentState> treasureInside = new ArrayList<>();
-    private EquipmentListState equipmentListState;
     public EquipmentTreasureState(EquipmentListState equipmentListState) {
-        this.equipmentListState = equipmentListState;
         this.equipmentList = equipmentListState.getEquipmentList();
         for(EquipmentState equipment : equipmentList) {
             for(int i = 0; i < equipment.getChance(); i++) {
