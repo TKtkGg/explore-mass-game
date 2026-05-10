@@ -6,11 +6,11 @@ import com.example.backend.service.gamestate.PlayerState;
 import com.example.backend.service.gamestate.StatusTreasureState;
 
 @Service
-public class TreasureService {
+public class StatusTreasureService {
     private PlayerState playerState;
     private StatusTreasureState sts;
 
-    public TreasureService(PlayerState playerState, StatusTreasureState statusTreasureState) {
+    public StatusTreasureService(PlayerState playerState, StatusTreasureState statusTreasureState) {
         this.playerState = playerState;
         this.sts = statusTreasureState;
     }

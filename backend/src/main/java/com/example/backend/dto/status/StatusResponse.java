@@ -2,7 +2,6 @@ package com.example.backend.dto.status;
 
 import com.example.backend.service.gamestate.EquipmentState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StatusResponse {

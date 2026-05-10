@@ -17,12 +17,14 @@ public class MoveService {
 
     private MoveState moveState;
     private PlayerState playerState;
-    private TreasureService treasureService;
+    private StatusTreasureService treasureService;
+    private EquipmentTreasureService equipmentTreasureService;
 
-    public MoveService(MoveState moveState, PlayerState playerState, TreasureService treasureService) {
+    public MoveService(MoveState moveState, PlayerState playerState, StatusTreasureService treasureService, EquipmentTreasureService equipmentTreasureService) {
         this.moveState = moveState;
         this.playerState = playerState;
         this.treasureService = treasureService;
+        this.equipmentTreasureService = equipmentTreasureService;
     }
 
     public void moveAbstract(MoveRequest request) {
@@ -74,12 +76,14 @@ public class MoveService {
     public MoveResponse treasure(MoveRequest request) {
         this.moveAbstract(request);
         String message = "";
-        int treasureNum = rand.nextInt(1);
+        int treasureNum = rand.nextInt(2);
         if(treasureNum == 0) {
             message = "ステータス宝箱を見つけた！";
             message += this.treasureService.open();
         } else {
-            message = "装備宝箱を見つけた！";        }
+            message = "装備宝箱を見つけた！";
+            message += this.equipmentTreasureService.open();
+        }
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), message);
     }
 }
