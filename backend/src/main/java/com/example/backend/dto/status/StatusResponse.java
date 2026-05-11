@@ -1,7 +1,7 @@
 package com.example.backend.dto.status;
 
 import com.example.backend.service.gamestate.EquipmentState;
-
+import com.example.backend.service.gamestate.CardState;
 import java.util.List;
 
 public class StatusResponse {
@@ -17,8 +17,9 @@ public class StatusResponse {
     private int gold;
     private EquipmentState equipment;
     private List<EquipmentState> ownEquipmentList;
+    private List<CardState> ownedCards;
 
-    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int totalAtk, int def, int spd, int exp, int gold, EquipmentState equipment, List<EquipmentState> ownEquipmentList) {
+    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int totalAtk, int def, int spd, int exp, int gold, EquipmentState equipment, List<EquipmentState> ownEquipmentList, List<CardState> ownedCards) {
         this.name = name;
         this.level = level;
         this.maxHp = maxHp;
@@ -31,6 +32,7 @@ public class StatusResponse {
         this.gold = gold;
         this.equipment = equipment;
         this.ownEquipmentList = ownEquipmentList;
+        this.ownedCards = ownedCards;
     }
 
     public String getName() {
@@ -79,5 +81,9 @@ public class StatusResponse {
 
     public List<EquipmentState> getOwnEquipmentList() {
         return this.ownEquipmentList;
+    }
+
+    public List<CardState> getOwnedCards() {
+        return this.ownedCards;
     }
 }

@@ -86,4 +86,10 @@ public class MoveService {
         }
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), message);
     }
+
+    public MoveResponse card(MoveRequest request) {
+        this.moveAbstract(request);
+        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
+    }
+
 }

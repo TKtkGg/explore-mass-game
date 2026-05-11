@@ -19,6 +19,7 @@ public class PlayerState {
     EquipmentState equipment;
     List<EquipmentState> ownEquipmentList = new ArrayList<>();
     EquipmentListState equipmentList;
+    List<CardState> ownedCards;
 
     public PlayerState(EquipmentListState equipmentList) {
         this.equipmentList = equipmentList;
@@ -33,6 +34,7 @@ public class PlayerState {
         this.gold = 0;
         this.equipment = this.equipmentList.getEquipmentList()[0];
         this.ownEquipmentList.add(equipment);
+        this.ownedCards = new ArrayList<>();
     }
 
     public String getName() {
@@ -71,7 +73,10 @@ public class PlayerState {
     public List<EquipmentState> getOwnEquipmentList() {
         return ownEquipmentList;
     }
-
+    public List<CardState> getOwnedCards() {
+        return ownedCards;
+    }
+    
     public int Heal(int amount) {
         int healAmount = Math.min(amount, this.maxHp - this.hp);
         this.hp += healAmount;
@@ -108,5 +113,8 @@ public class PlayerState {
 
     public void addEquipment(EquipmentState equipment) {
         this.ownEquipmentList.add(equipment);
+    }
+    public void addCard(CardState card) {
+        this.ownedCards.add(card);
     }
 }

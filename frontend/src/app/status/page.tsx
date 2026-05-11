@@ -11,6 +11,12 @@ interface EquipmentState {
     chance: number;
 }
 
+interface CardState {
+    name: string;
+    text: string;
+    price: number;
+}
+
 interface StatusResponse {
     name: string;
     level: number;
@@ -24,6 +30,7 @@ interface StatusResponse {
     gold: number;
     equipment: EquipmentState;
     ownEquipmentList: EquipmentState[];
+    ownedCards: CardState[];
 }
 
 export default function StatusPage() {
@@ -52,6 +59,7 @@ export default function StatusPage() {
             <p>Equipment: {data?.equipment.name} (ATK: {data?.equipment.atk})</p>
             <button onClick={() => router.push("/equipment")}>装備変更</button>
             <p>Own Equipment: {data?.ownEquipmentList.map((equipment) => equipment.name).join(", ")}</p>
+            <p>Owned Cards: {data?.ownedCards.map((card) => card.name).join(", ")}</p>
             <button onClick={() => router.push("/explore")}>BACK</button>
         </div>
     )

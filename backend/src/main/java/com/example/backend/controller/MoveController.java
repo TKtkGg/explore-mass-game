@@ -43,4 +43,9 @@ public class MoveController {
     public MoveResponse getCurrentMoveState() {
         return this.moveService.getCurrentMoveState();
     }
+
+    @PostMapping("/move/card")
+    public MoveResponse card(@RequestBody MoveRequest request) {
+        return this.moveService.card(request);
+    }
 }
