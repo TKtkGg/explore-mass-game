@@ -31,14 +31,13 @@ public class CardService {
         this.lineup.clear();
         this.display.clear();
         this.lineup.addAll(Arrays.asList(this.cardListState.getCardList()));
+        this.lineup.removeAll(this.playerState.getOwnedCards());
         Collections.shuffle(this.lineup);
-        this.display.addAll(this.lineup.subList(0, 3));
+        this.display.addAll(this.lineup.subList(0, 3 < this.lineup.size() ? 3 : this.lineup.size()));
         return new CardResponse(this.display, null);
     }
 
     public CardResponse chooseCard(CardRequest request) {
-        this.lineup.remove(request.getChosenCard());
-        this.display.remove(request.getChosenCard());
         this.playerState.addCard(request.getChosenCard());
         return new CardResponse(this.display, request.getChosenCard());
     }
