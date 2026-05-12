@@ -41,4 +41,8 @@ public class CardService {
         this.playerState.addCard(request.getChosenCard());
         return new CardResponse(this.display, request.getChosenCard());
     }
+
+    public boolean isCardFull() {
+        return this.playerState.getOwnedCards().size() >= this.cardListState.getCardList().length;
+    }
 }

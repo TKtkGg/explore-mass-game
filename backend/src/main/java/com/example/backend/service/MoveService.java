@@ -8,8 +8,10 @@ import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
 import com.example.backend.service.gamestate.MoveState;
 import com.example.backend.service.gamestate.PlayerState;
+import com.example.backend.service.CardService;
 
 import java.util.Random;
+import java.util.Arrays;
 
 @Service
 public class MoveService {
@@ -19,12 +21,14 @@ public class MoveService {
     private PlayerState playerState;
     private StatusTreasureService treasureService;
     private EquipmentTreasureService equipmentTreasureService;
+    private CardService cardService;
 
-    public MoveService(MoveState moveState, PlayerState playerState, StatusTreasureService treasureService, EquipmentTreasureService equipmentTreasureService) {
+    public MoveService(MoveState moveState, PlayerState playerState, StatusTreasureService treasureService, EquipmentTreasureService equipmentTreasureService, CardService cardService) {
         this.moveState = moveState;
         this.playerState = playerState;
         this.treasureService = treasureService;
         this.equipmentTreasureService = equipmentTreasureService;
+        this.cardService = cardService;
     }
 
     public void moveAbstract(MoveRequest request) {
@@ -54,7 +58,7 @@ public class MoveService {
 
     public MoveResponse getCurrentMoveState() {
         SelectedRoute[] options = this.moveState.getRandomRouteOptions();
-        if(options == null) {
+        if(shouldRegenerate(options)) {
             options = this.getRandomRouteOptions();
         }
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), options, "");
@@ -62,6 +66,18 @@ public class MoveService {
 
     public SelectedRoute[] getRandomRouteOptions() {
         SelectedRoute[] route = this.moveState.getRouteOptions();
+        if(cardService.isCardFull()) {
+            SelectedRoute[] newRoute = new SelectedRoute[route.length - 1];
+            int index = 0;
+            for(SelectedRoute r : route) {
+                if(r == SelectedRoute.CARD) {
+                    continue;
+                }
+                newRoute[index] = r;
+                index++;
+            }
+            route = newRoute;
+        }
         SelectedRoute[] options = {route[rand.nextInt(route.length)], route[rand.nextInt(route.length)], route[rand.nextInt(route.length)]};
         this.moveState.setRandomRouteOptions(options);
         return options;
@@ -92,4 +108,9 @@ public class MoveService {
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
     }
 
+
+    private boolean shouldRegenerate(SelectedRoute[] options) {
+        if (options == null) return true;
+        return Arrays.asList(options).contains(SelectedRoute.CARD) && cardService.isCardFull();
+    }
 }
