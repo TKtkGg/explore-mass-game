@@ -14,15 +14,15 @@ public class StatusService {
         this.playerState = playerState;
     }
     public StatusResponse status() {
-        return new StatusResponse(this.playerState.getName(), this.playerState.getLevel(), this.playerState.getMaxHp(), this.playerState.getHp(), this.playerState.getAtk(), this.playerState.getTotalAtk(), this.playerState.getDef(), this.playerState.getSpd(), this.playerState.getExp(), this.playerState.getGold(), this.playerState.getEquipment(), this.playerState.getOwnEquipmentList(), this.playerState.getOwnedCards());
+        return new StatusResponse(this.playerState.getName(), this.playerState.getLevel(), this.playerState.getMaxHp(), this.playerState.getHp(), this.playerState.getAtk(), this.playerState.getTotalAtk(), this.playerState.getDef(), this.playerState.getSpd(), this.playerState.getExp(), this.playerState.getGold(), this.playerState.getEquipment(), this.playerState.getOwnedEquipmentList(), this.playerState.getOwnedCards());
     }
 
     public EquipmentResponse equipment() {
-        return new EquipmentResponse(this.playerState.getOwnEquipmentList(), this.playerState.getEquipment());
+        return new EquipmentResponse(this.playerState.getOwnedEquipmentList(), this.playerState.getEquipment());
     }
 
     public EquipmentResponse changeEquipment(EquipmentRequest request) {
-        this.playerState.setEquipment(this.playerState.getOwnEquipmentList().stream().filter(e -> e.getName().equals(request.getName())).findFirst().orElse(null));
-        return new EquipmentResponse(this.playerState.getOwnEquipmentList(), this.playerState.getEquipment());
+        this.playerState.setEquipment(this.playerState.getOwnedEquipmentList().stream().filter(e -> e.getName().equals(request.getName())).findFirst().orElse(null));
+        return new EquipmentResponse(this.playerState.getOwnedEquipmentList(), this.playerState.getEquipment());
     }
 }

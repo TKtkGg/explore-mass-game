@@ -1,6 +1,6 @@
 package com.example.backend.dto.card;
 
-import com.example.backend.service.gamestate.CardState;
+import com.example.backend.service.gamestate.card.CardState;
 
 public class CardRequest {
     private CardState chosenCard;

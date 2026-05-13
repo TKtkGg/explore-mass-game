@@ -8,7 +8,6 @@ import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
 import com.example.backend.service.gamestate.MoveState;
 import com.example.backend.service.gamestate.PlayerState;
-import com.example.backend.service.CardService;
 
 import java.util.Random;
 import java.util.Arrays;
@@ -66,7 +65,7 @@ public class MoveService {
 
     public SelectedRoute[] getRandomRouteOptions() {
         SelectedRoute[] route = this.moveState.getRouteOptions();
-        if(cardService.isCardFull()) {
+        if(cardService.getUnownedCards().isEmpty()) {
             SelectedRoute[] newRoute = new SelectedRoute[route.length - 1];
             int index = 0;
             for(SelectedRoute r : route) {
@@ -103,14 +102,8 @@ public class MoveService {
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), message);
     }
 
-    public MoveResponse card(MoveRequest request) {
-        this.moveAbstract(request);
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
-    }
-
-
     private boolean shouldRegenerate(SelectedRoute[] options) {
         if (options == null) return true;
-        return Arrays.asList(options).contains(SelectedRoute.CARD) && cardService.isCardFull();
+        return Arrays.asList(options).contains(SelectedRoute.CARD) && cardService.getUnownedCards().isEmpty();
     }
 }

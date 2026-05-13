@@ -3,7 +3,7 @@ package com.example.backend.service;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.service.gamestate.PlayerState;
-import com.example.backend.service.gamestate.StatusTreasureState;
+import com.example.backend.service.gamestate.treasure.StatusTreasureState;
 
 @Service
 public class StatusTreasureService {

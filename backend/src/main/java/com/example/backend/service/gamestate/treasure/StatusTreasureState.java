@@ -1,4 +1,4 @@
-package com.example.backend.service.gamestate;
+package com.example.backend.service.gamestate.treasure;
 
 import org.springframework.stereotype.Service;
 

@@ -3,8 +3,8 @@ package com.example.backend.service;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.service.gamestate.PlayerState;
-import com.example.backend.service.gamestate.EquipmentState;
-import com.example.backend.service.gamestate.EquipmentTreasureState;
+import com.example.backend.service.gamestate.equipment.EquipmentState;
+import com.example.backend.service.gamestate.treasure.EquipmentTreasureState;
 
 @Service
 public class EquipmentTreasureService {
@@ -21,7 +21,7 @@ public class EquipmentTreasureService {
     public String open() {
         this.randomIndex = equipmentTreasureState.getRandomIndex();
         EquipmentState getEquipment = equipmentTreasureState.getTreasureInside().get(this.randomIndex);
-        if(playerState.getOwnEquipmentList().contains(getEquipment)) {
+        if(playerState.getOwnedEquipmentList().contains(getEquipment)) {
             playerState.setGold(playerState.getGold() + getEquipment.getPrice() / 2);
             return getEquipment.getName() + "はすでに持っているので、売っぱらった。+" + getEquipment.getPrice() / 2 + "ゴールド";
         }

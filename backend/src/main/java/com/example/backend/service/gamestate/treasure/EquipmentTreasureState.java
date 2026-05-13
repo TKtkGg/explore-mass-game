@@ -1,9 +1,12 @@
-package com.example.backend.service.gamestate;
+package com.example.backend.service.gamestate.treasure;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.example.backend.service.gamestate.equipment.EquipmentListState;
+import com.example.backend.service.gamestate.equipment.EquipmentState;
 
 @Service
 public class EquipmentTreasureState {

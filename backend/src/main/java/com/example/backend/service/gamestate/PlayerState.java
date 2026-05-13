@@ -2,6 +2,10 @@ package com.example.backend.service.gamestate;
 
 import org.springframework.stereotype.Service;
 
+import com.example.backend.service.gamestate.card.CardState;
+import com.example.backend.service.gamestate.equipment.EquipmentListState;
+import com.example.backend.service.gamestate.equipment.EquipmentState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +21,7 @@ public class PlayerState {
     int exp;
     int gold;
     EquipmentState equipment;
-    List<EquipmentState> ownEquipmentList = new ArrayList<>();
+    List<EquipmentState> ownedEquipmentList = new ArrayList<>();
     EquipmentListState equipmentList;
     List<CardState> ownedCards;
 
@@ -33,7 +37,7 @@ public class PlayerState {
         this.exp = 0;
         this.gold = 0;
         this.equipment = this.equipmentList.getEquipmentList()[0];
-        this.ownEquipmentList.add(equipment);
+        this.ownedEquipmentList.add(equipment);
         this.ownedCards = new ArrayList<>();
     }
 
@@ -70,8 +74,8 @@ public class PlayerState {
     public EquipmentState getEquipment() {
         return equipment;
     }
-    public List<EquipmentState> getOwnEquipmentList() {
-        return ownEquipmentList;
+    public List<EquipmentState> getOwnedEquipmentList() {
+        return ownedEquipmentList;
     }
     public List<CardState> getOwnedCards() {
         return ownedCards;
@@ -112,7 +116,7 @@ public class PlayerState {
     }
 
     public void addEquipment(EquipmentState equipment) {
-        this.ownEquipmentList.add(equipment);
+        this.ownedEquipmentList.add(equipment);
     }
     public void addCard(CardState card) {
         this.ownedCards.add(card);

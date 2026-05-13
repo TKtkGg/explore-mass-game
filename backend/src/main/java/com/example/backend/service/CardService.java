@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import com.example.backend.service.gamestate.PlayerState;
-import com.example.backend.service.gamestate.CardListState;
-import com.example.backend.service.gamestate.CardState;
+import com.example.backend.service.gamestate.card.CardListState;
+import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.dto.card.CardRequest;
 import com.example.backend.dto.card.CardResponse;
 
@@ -30,8 +31,7 @@ public class CardService {
     public CardResponse showCards() {
         this.lineup.clear();
         this.display.clear();
-        this.lineup.addAll(Arrays.asList(this.cardListState.getCardList()));
-        this.lineup.removeAll(this.playerState.getOwnedCards());
+        this.lineup.addAll(this.getUnownedCards());
         Collections.shuffle(this.lineup);
         this.display.addAll(this.lineup.subList(0, 3 < this.lineup.size() ? 3 : this.lineup.size()));
         return new CardResponse(this.display, null);
@@ -42,7 +42,7 @@ public class CardService {
         return new CardResponse(this.display, request.getChosenCard());
     }
 
-    public boolean isCardFull() {
-        return this.playerState.getOwnedCards().size() >= this.cardListState.getCardList().length;
+    public List<CardState> getUnownedCards() {
+        return Arrays.stream(this.cardListState.getCardList()).filter(card -> !this.playerState.getOwnedCards().contains(card)).collect(Collectors.toList());
     }
 }

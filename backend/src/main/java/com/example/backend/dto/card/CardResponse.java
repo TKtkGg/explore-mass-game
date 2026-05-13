@@ -2,7 +2,7 @@ package com.example.backend.dto.card;
 
 import java.util.List;
 
-import com.example.backend.service.gamestate.CardState;
+import com.example.backend.service.gamestate.card.CardState;
 
 public class CardResponse {
     private List<CardState> display;

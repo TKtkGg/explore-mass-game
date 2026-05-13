@@ -2,19 +2,19 @@ package com.example.backend.dto.status;
 
 import java.util.List;
 
-import com.example.backend.service.gamestate.EquipmentState;
+import com.example.backend.service.gamestate.equipment.EquipmentState;
 
 public class EquipmentResponse {
-    private List<EquipmentState> ownEquipmentList;
+    private List<EquipmentState> ownedEquipmentList;
     private EquipmentState equipment;
 
-    public EquipmentResponse(List<EquipmentState> ownEquipmentList, EquipmentState equipment) {
-        this.ownEquipmentList = ownEquipmentList;
+    public EquipmentResponse(List<EquipmentState> ownedEquipmentList, EquipmentState equipment) {
+        this.ownedEquipmentList = ownedEquipmentList;
         this.equipment = equipment;
     }
 
-    public List<EquipmentState> getOwnEquipmentList() {
-        return this.ownEquipmentList;
+    public List<EquipmentState> getOwnedEquipmentList() {
+        return this.ownedEquipmentList;
     }
 
     public EquipmentState getEquipment() {
