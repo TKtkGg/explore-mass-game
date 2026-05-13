@@ -3,17 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/apiClient";
+import { EquipmentState } from "@/type/types";
 
 interface EquipmentResponse {
-    ownEquipmentList: EquipmentState[];
+    ownedEquipmentList: EquipmentState[];
     equipment: EquipmentState;
-}
-
-interface EquipmentState {
-    name: string;
-    atk: number;
-    price: number;
-    chance: number;
 }
 
 export default function EquipmentPage() {
@@ -36,7 +30,7 @@ export default function EquipmentPage() {
         <div>
             <h1>EQUIPMENT</h1>
             <p>Own Equipment: </p>
-            {data?.ownEquipmentList.map((equipment) => (
+            {data?.ownedEquipmentList.map((equipment: EquipmentState) => (
                 <div key={equipment.name}>
                     <button onClick={() => changeEquipment(equipment.name)}>{equipment.name} (ATK: {equipment.atk}) {(equipment.name === data?.equipment?.name) ? " (装備中)" : ""}</button>
                 </div>

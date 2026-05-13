@@ -121,4 +121,20 @@ public class PlayerState {
     public void addCard(CardState card) {
         this.ownedCards.add(card);
     }
+
+    public void init() {
+        this.name = "test";
+        this.level = 1;
+        this.maxHp = 100;
+        this.hp = 100;
+        this.atk = 10;
+        this.def = 10;
+        this.spd = 10;
+        this.exp = 0;
+        this.gold = 0;
+        this.equipment = this.equipmentList.getEquipmentList()[0];
+        this.ownedEquipmentList.clear();
+        this.ownedEquipmentList.add(equipment);
+        this.ownedCards = new ArrayList<>();
+    }
 }

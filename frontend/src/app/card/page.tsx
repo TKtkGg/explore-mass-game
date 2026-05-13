@@ -4,12 +4,7 @@ import { useEffect } from "react";
 import { apiPost, apiGet } from "@/lib/apiClient";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-interface CardState {
-    name: string;
-    text: string;
-    price: number;
-}
+import { CardState } from "@/type/types";
 
 export default function CardPage() {
     const router = useRouter();
@@ -43,7 +38,7 @@ export default function CardPage() {
     return (
         <div>
             <h1>カード</h1>
-            {cards?.map((card) => (
+            {cards?.map((card: CardState) => (
                 <div key={card.name}>
                     <button onClick={() => handleChooseCard(card)}>???</button>
                     <br />

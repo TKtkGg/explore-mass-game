@@ -1,4 +1,4 @@
-package com.example.backend.dto.status;
+package com.example.backend.dto.equipment;
 
 import java.util.List;
 

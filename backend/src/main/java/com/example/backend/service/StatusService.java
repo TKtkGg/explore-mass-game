@@ -2,8 +2,8 @@ package com.example.backend.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.backend.dto.status.EquipmentResponse;
-import com.example.backend.dto.status.EquipmentRequest;
+import com.example.backend.dto.equipment.EquipmentRequest;
+import com.example.backend.dto.equipment.EquipmentResponse;
 import com.example.backend.dto.status.StatusResponse;
 import com.example.backend.service.gamestate.PlayerState;
 

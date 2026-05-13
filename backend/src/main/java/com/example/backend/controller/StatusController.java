@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.dto.status.EquipmentResponse;
-import com.example.backend.dto.status.EquipmentRequest;
+import com.example.backend.dto.equipment.EquipmentRequest;
+import com.example.backend.dto.equipment.EquipmentResponse;
 import com.example.backend.dto.status.StatusResponse;
 import com.example.backend.service.StatusService;
 

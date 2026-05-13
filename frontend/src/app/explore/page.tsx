@@ -42,8 +42,11 @@ export default function ExplorePage() {
             } else if (routeType === "TREASURE") {
                 response = await apiPost("/move/treasure", { routeType: routeType });
             } else if (routeType === "CARD") {
-                response = await apiPost("/move/card", { routeType: routeType });
+                response = await apiPost("/move", { routeType: routeType });
                 router.push("/card");
+            } else if (routeType === "SHOP") {
+                response = await apiPost("/move", { routeType: routeType });
+                router.push("/shop");
             } else {
                 response = await apiPost("/move", { routeType: routeType });
             }
