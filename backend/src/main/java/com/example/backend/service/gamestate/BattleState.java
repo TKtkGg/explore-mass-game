@@ -8,19 +8,24 @@ import org.springframework.stereotype.Service;
 public class BattleState {
     int currentTurns;
     int damage;
+    boolean finished;
     BattleChoice playerChoice;
     BattleChoice enemyChoice;
-    public BattleState(int currentTurns, int damage, BattleChoice playerChoice, BattleChoice enemyChoice) {
-        this.currentTurns = currentTurns;
-        this.damage = damage;
-        this.playerChoice = playerChoice;
-        this.enemyChoice = enemyChoice;
+    public BattleState() {
+        this.currentTurns = 0;
+        this.damage = 0;
+        this.finished = false;
+        this.playerChoice = null;
+        this.enemyChoice = null;
     }
     public int getCurrentTurns() {
         return currentTurns;
     }
     public int getDamage() {
         return damage;
+    }
+    public boolean getFinished() {
+        return finished;
     }
     public BattleChoice getPlayerChoice() {
         return playerChoice;
@@ -40,5 +45,16 @@ public class BattleState {
     }
     public void setEnemyChoice(BattleChoice enemyChoice) {
         this.enemyChoice = enemyChoice;
+    }
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    public void reset() {
+        this.currentTurns = 0;
+        this.damage = 0;
+        this.finished = false;
+        this.playerChoice = null;
+        this.enemyChoice = null;
     }
 }

@@ -1,9 +1,9 @@
 package com.example.backend.dto.status;
 
+import java.util.List;
+
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
-
-import java.util.List;
 
 public class StatusResponse {
     private String name;

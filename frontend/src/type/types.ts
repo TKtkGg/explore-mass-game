@@ -18,6 +18,19 @@ export type ShopState = {
     message: string;
 }
 
+export type CharacterState = {
+    name: string;
+    level: number;
+    maxHp: number;
+    hp: number;
+    atk: number;
+    totalAtk: number;
+    def: number;
+    spd: number;
+    exp: number;
+    gold: number;
+}
+
 export type StatusState = {
     name: string;
     level: number;
@@ -32,4 +45,23 @@ export type StatusState = {
     equipment: EquipmentState;
     ownedEquipmentList: EquipmentState[];
     ownedCards: CardState[];
+}
+
+export enum BattleChoice {
+    ATTACK = "ATTACK",
+    DEFEND = "DEFEND",
+    RUN = "RUN",
+}
+
+export type BattleState = {
+    message: string;
+    playerState: StatusState;
+    enemyState: CharacterState;
+    battleState: {
+        currentTurns: number;
+        damage: number;
+        finished: boolean;
+        playerChoice: BattleChoice;
+        enemyChoice: BattleChoice;
+    };
 }

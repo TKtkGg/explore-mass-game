@@ -47,6 +47,9 @@ export default function ExplorePage() {
             } else if (routeType === "SHOP") {
                 response = await apiPost("/move", { routeType: routeType });
                 router.push("/shop");
+            } else if (routeType === "BATTLE") {
+                response = await apiPost("/move", { routeType: routeType });
+                router.push("/battle");
             } else {
                 response = await apiPost("/move", { routeType: routeType });
             }

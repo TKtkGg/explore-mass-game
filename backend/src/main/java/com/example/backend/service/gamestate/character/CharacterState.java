@@ -101,4 +101,8 @@ public abstract class CharacterState {
     public void setDefend(boolean isDefend) {
         this.isDefend = isDefend;
     }
+
+    public boolean isAlive() {
+        return this.hp > 0;
+    }
 }

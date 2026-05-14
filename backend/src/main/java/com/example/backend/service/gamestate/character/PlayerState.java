@@ -15,6 +15,7 @@ public class PlayerState extends CharacterState {
     List<EquipmentState> ownedEquipmentList = new ArrayList<>();
     EquipmentListState equipmentList;
     List<CardState> ownedCards;
+    boolean isRun = false;
 
     public PlayerState(EquipmentListState equipmentList) {
         super("test", 1, 100, 100, 10, 10, 10, 0, 0);
@@ -22,6 +23,7 @@ public class PlayerState extends CharacterState {
         this.equipment = this.equipmentList.getEquipmentList()[0];
         this.ownedEquipmentList.add(equipment);
         this.ownedCards = new ArrayList<>();
+        this.isRun = false;
     }
 
     @Override
@@ -42,7 +44,12 @@ public class PlayerState extends CharacterState {
     public List<CardState> getOwnedCards() {
         return ownedCards;
     }
-    
+    public boolean isRun() {
+        return isRun;
+    }
+    public void setRun(boolean isRun) {
+        this.isRun = isRun;
+    }
     public int Heal(int amount) {
         int healAmount = Math.min(amount, this.maxHp - this.hp);
         this.hp += healAmount;
@@ -73,5 +80,6 @@ public class PlayerState extends CharacterState {
         this.ownedEquipmentList.clear();
         this.ownedEquipmentList.add(equipment);
         this.ownedCards = new ArrayList<>();
+        this.isRun = false;
     }
 }
