@@ -2,7 +2,7 @@ package com.example.backend.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.backend.service.gamestate.PlayerState;
+import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
 import com.example.backend.service.gamestate.treasure.EquipmentTreasureState;
 

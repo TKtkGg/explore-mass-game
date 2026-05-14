@@ -3,10 +3,9 @@ package com.example.backend.service;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.dto.shop.ShopResponse;
+import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.dto.card.CardRequest;
 import com.example.backend.dto.equipment.EquipmentRequest;
-
-import com.example.backend.service.gamestate.PlayerState;
 
 @Service
 public class ShopService {

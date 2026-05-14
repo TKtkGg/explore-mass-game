@@ -2,7 +2,7 @@ package com.example.backend.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.backend.service.gamestate.PlayerState;
+import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.service.gamestate.treasure.StatusTreasureState;
 
 @Service
@@ -30,7 +30,7 @@ public class StatusTreasureService {
                 playerState.setHp(playerState.getHp() + sts.getPoint());
 				break;
 			case "ATK":
-				playerState.setAtk(playerState.getAtk() + sts.getPoint());
+				playerState.setAtk(playerState.getOriginalAtk() + sts.getPoint());
 				break;
 			case "DEF":
 				playerState.setDef(playerState.getDef() + sts.getPoint());

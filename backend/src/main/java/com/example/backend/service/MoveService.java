@@ -7,7 +7,7 @@ import com.example.backend.dto.move.MoveRequest;
 import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
 import com.example.backend.service.gamestate.MoveState;
-import com.example.backend.service.gamestate.PlayerState;
+import com.example.backend.service.gamestate.character.PlayerState;
 
 import java.util.Random;
 import java.util.Arrays;

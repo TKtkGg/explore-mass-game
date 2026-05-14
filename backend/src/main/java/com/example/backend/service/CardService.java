@@ -8,11 +8,11 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import com.example.backend.service.gamestate.PlayerState;
-import com.example.backend.service.gamestate.card.CardListState;
-import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.dto.card.CardRequest;
 import com.example.backend.dto.card.CardResponse;
+import com.example.backend.service.gamestate.card.CardListState;
+import com.example.backend.service.gamestate.card.CardState;
+import com.example.backend.service.gamestate.character.PlayerState;
 
 @Service
 public class CardService {

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.backend.dto.equipment.EquipmentRequest;
 import com.example.backend.dto.equipment.EquipmentResponse;
 import com.example.backend.dto.status.StatusResponse;
-import com.example.backend.service.gamestate.PlayerState;
+import com.example.backend.service.gamestate.character.PlayerState;
 
 @Service
 public class StatusService {
@@ -14,7 +14,7 @@ public class StatusService {
         this.playerState = playerState;
     }
     public StatusResponse status() {
-        return new StatusResponse(this.playerState.getName(), this.playerState.getLevel(), this.playerState.getMaxHp(), this.playerState.getHp(), this.playerState.getAtk(), this.playerState.getTotalAtk(), this.playerState.getDef(), this.playerState.getSpd(), this.playerState.getExp(), this.playerState.getGold(), this.playerState.getEquipment(), this.playerState.getOwnedEquipmentList(), this.playerState.getOwnedCards());
+        return new StatusResponse(this.playerState.getName(), this.playerState.getLevel(), this.playerState.getMaxHp(), this.playerState.getHp(), this.playerState.getOriginalAtk(), this.playerState.getAtk(), this.playerState.getDef(), this.playerState.getSpd(), this.playerState.getExp(), this.playerState.getGold(), this.playerState.getEquipment(), this.playerState.getOwnedEquipmentList(), this.playerState.getOwnedCards());
     }
 
     public EquipmentResponse equipment() {
