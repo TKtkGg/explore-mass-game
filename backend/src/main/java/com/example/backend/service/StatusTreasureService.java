@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.service.gamestate.treasure.StatusTreasureState;
 
@@ -24,6 +25,8 @@ public class StatusTreasureService {
             this.sts.setPoint(1);
         }
 
+        sts.setPoint(applyCards(sts.getPoint()));
+
         switch(sts.getTargetName()) {
 			case "HP":
 				playerState.setMaxHp(playerState.getMaxHp() + sts.getPoint());
@@ -43,5 +46,14 @@ public class StatusTreasureService {
 		}
 
         return sts.getTargetName() + "が" + this.sts.getPoint() + "上昇した！";
+    }
+
+    public int applyCards(int point) {
+        for(CardState card : this.playerState.getOwnedCards()) {
+            if(card.getName().equals("ラッキー")) {
+                point = point * 2;
+            }
+        }
+        return point;
     }
 }

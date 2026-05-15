@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnemyState extends CharacterState {
     public EnemyState() {
-        super("test_enemy", 1, 100, 100, 10, 10, 10, 100, 100);
+        super("スライム", 1, 100, 100, 10, 10, 10, 100, 100);
     }
 
     public void respawn() {

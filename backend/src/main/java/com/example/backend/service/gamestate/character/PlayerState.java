@@ -18,7 +18,7 @@ public class PlayerState extends CharacterState {
     boolean isRun = false;
 
     public PlayerState(EquipmentListState equipmentList) {
-        super("test", 1, 100, 100, 10, 10, 10, 0, 0);
+        super("test", 1, 100, 100, 10, 10, 10, 0, 100);
         this.equipmentList = equipmentList;
         this.equipment = this.equipmentList.getEquipmentList()[0];
         this.ownedEquipmentList.add(equipment);
@@ -75,7 +75,7 @@ public class PlayerState extends CharacterState {
         this.def = 10;
         this.spd = 10;
         this.exp = 0;
-        this.gold = 0;
+        this.gold = 100;
         this.equipment = this.equipmentList.getEquipmentList()[0];
         this.ownedEquipmentList.clear();
         this.ownedEquipmentList.add(equipment);

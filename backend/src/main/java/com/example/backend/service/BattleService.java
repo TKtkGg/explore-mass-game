@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.backend.dto.battle.BattleResponse;
 import com.example.backend.service.gamestate.BattleState;
+import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.character.CharacterState;
 import com.example.backend.service.gamestate.character.EnemyState;
 import com.example.backend.service.gamestate.character.PlayerState;
@@ -94,6 +95,9 @@ public class BattleService {
 		double randomValue = Math.random() * (max - min) + min;
 		int defendMultiplier = targetState.getDefend() ? 1 : 3;
 		int damage = (int) ((attackerState.getAtk() - targetState.getDef() / defendMultiplier) * 5 * randomValue); 
+        if(attackerState instanceof PlayerState) {
+            damage = applyCards(damage);
+        }
         if(damage < 0) {
             damage = 0;
         }
@@ -126,5 +130,21 @@ public class BattleService {
         } else {
             return "逃げた！";
         }
+    }
+
+    public int applyCards(int damage) {
+        for(CardState card : this.playerState.getOwnedCards()) {
+            if(card.getName().equals("装備マスター")) {
+                damage = (int) (damage * 1.5);
+            }
+            if(card.getName().equals("スライムキラー") && this.enemyState.getName().contains("スライム")) {
+                damage = (int) (damage * 1.5);
+            }
+            if(card.getName().equals("ゴブリンキラー") && this.enemyState.getName().contains("ゴブリン")) {
+                damage = (int) (damage * 1.5);
+            }
+        }
+
+        return damage;
     }
 }
