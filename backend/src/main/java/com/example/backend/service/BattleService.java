@@ -37,7 +37,7 @@ public class BattleService {
         this.battleState.setEnemyChoice(getEnemyChoice());
         if(isPlayerFast()) {
             message = playerAction();
-            if(this.enemyState.isAlive() || this.playerState.isRun()) {
+            if(this.enemyState.isAlive() || this.playerState.getIsRun()) {
                 message += enemyAction();
             }
         } else {
@@ -115,18 +115,18 @@ public class BattleService {
     }
 
     public String run(){
-        this.playerState.setRun(true);
+        this.playerState.setIsRun(true);
         return result("escape");
     }
 
     public String result(String winnerName) {
         this.battleState.setFinished(true);
         if(winnerName != null && winnerName.equals(this.playerState.getName())) {
-            this.playerState.setExp(this.playerState.getExp() + this.enemyState.getExp());
+            String message = this.playerState.calcExp(this.enemyState.getExp());
             this.playerState.setGold(this.playerState.getGold() + this.enemyState.getGold());
-            return winnerName + "の勝利！ +" + this.enemyState.getExp() + "EXP +" + this.enemyState.getGold() + "Gold";
+            return winnerName + "の勝利！ +" + this.enemyState.getExp() + "EXP +" + this.enemyState.getGold() + "Gold " + message;
         } else if(winnerName != null && winnerName.equals(this.enemyState.getName())) {
-            return winnerName + "の敗北！";
+            return this.playerState.getName() + "の敗北！";
         } else {
             return "逃げた！";
         }

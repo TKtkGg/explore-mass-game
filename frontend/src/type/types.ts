@@ -42,6 +42,7 @@ export type StatusState = {
     spd: number;
     exp: number;
     gold: number;
+    nextLevelExp: number;
     equipment: EquipmentState;
     ownedEquipmentList: EquipmentState[];
     ownedCards: CardState[];

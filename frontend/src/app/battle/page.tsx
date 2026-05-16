@@ -51,6 +51,15 @@ export default function BattlePage() {
                 </>
             )}
             <p>{battleState?.message}</p>
+            {battleState?.message.includes("レベルアップ！") &&
+                <>
+                    <p>LV:{battleState?.playerState.level - 1} → {battleState?.playerState.level}</p>
+                    <p>HP:{battleState?.playerState.maxHp - 10} → {battleState?.playerState.maxHp}</p>
+                    <p>ATK:{battleState?.playerState.atk - 1} → {battleState?.playerState.atk}</p>
+                    <p>DEF:{battleState?.playerState.def - 1} → {battleState?.playerState.def}</p>
+                    <p>SPD:{battleState?.playerState.spd - 1} → {battleState?.playerState.spd}</p>
+                </>
+            }
             {error && <h1>{error}</h1>}
             {battleState?.battleState.finished &&
                 <button onClick={() => router.push("/explore")}>BACK</button>

@@ -15,6 +15,7 @@ public class PlayerState extends CharacterState {
     List<EquipmentState> ownedEquipmentList = new ArrayList<>();
     EquipmentListState equipmentList;
     List<CardState> ownedCards;
+    int nextLevelExp = 100;
     boolean isRun = false;
 
     public PlayerState(EquipmentListState equipmentList) {
@@ -24,6 +25,7 @@ public class PlayerState extends CharacterState {
         this.ownedEquipmentList.add(equipment);
         this.ownedCards = new ArrayList<>();
         this.isRun = false;
+        this.nextLevelExp = 100;
     }
 
     @Override
@@ -49,17 +51,26 @@ public class PlayerState extends CharacterState {
     public List<CardState> getOwnedCards() {
         return ownedCards;
     }
-    public boolean isRun() {
+    public int getNextLevelExp() {
+        return nextLevelExp;
+    }
+    public boolean getIsRun() {
         return isRun;
     }
-    public void setRun(boolean isRun) {
+
+    public void setIsRun(boolean isRun) {
         this.isRun = isRun;
     }
+    public void setNextLevelExp(int nextLevelExp) {
+        this.nextLevelExp = nextLevelExp;
+    }
+
     public int Heal(int amount) {
         int healAmount = Math.min(amount, this.maxHp - this.hp);
         this.hp += healAmount;
         return healAmount;
     }
+
     public void setEquipment(EquipmentState equipment) {
         this.equipment = equipment;
     }
@@ -67,9 +78,30 @@ public class PlayerState extends CharacterState {
     public void addEquipment(EquipmentState equipment) {
         this.ownedEquipmentList.add(equipment);
     }
+
     public void addCard(CardState card) {
         this.ownedCards.add(card);
     }
+
+    public String calcExp(int gainExp) {
+        String message = "";
+		this.setExp(this.getExp() + gainExp);
+		while(this.getExp() >= this.nextLevelExp) {
+			message += this.levelUp();
+			this.setExp(this.getExp() - this.nextLevelExp);
+			this.nextLevelExp *= 1.2;
+		}
+        return message;
+	}
+	public String levelUp() {
+		this.setLevel(this.getLevel() + 1);
+        this.setMaxHp(this.getMaxHp() + 10);
+		this.setHp(this.getMaxHp());
+		this.setAtk(this.getOriginalAtk() + 1);
+		this.setDef(this.getDef() + 1);
+		this.setSpd(this.getSpd() + 1);
+        return "レベルアップ！";
+	}
 
     public void init() {
         this.name = "test";
@@ -86,5 +118,6 @@ public class PlayerState extends CharacterState {
         this.ownedEquipmentList.add(equipment);
         this.ownedCards = new ArrayList<>();
         this.isRun = false;
+        this.nextLevelExp = 100;
     }
 }

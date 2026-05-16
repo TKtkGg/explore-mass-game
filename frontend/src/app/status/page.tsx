@@ -27,7 +27,7 @@ export default function StatusPage() {
             <p>ATK: {data?.totalAtk}({data?.atk}+{data?.equipment.atk}{data?.ownedCards.map((card: CardState) => card.name === "装備マスター" ? "×1.5" : "")})</p>
             <p>DEF: {data?.def}</p>
             <p>SPD: {data?.spd}</p>
-            <p>EXP: {data?.exp}</p>
+            <p>EXP: {data?.exp}/{data?.nextLevelExp}</p>
             <p>Gold: {data?.gold}</p>
             <p>Equipment: {data?.equipment.name} (ATK: {data?.equipment.atk})</p>
             <button onClick={() => router.push("/equipment")}>装備変更</button>
