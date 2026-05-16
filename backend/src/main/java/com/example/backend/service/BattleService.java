@@ -134,9 +134,6 @@ public class BattleService {
 
     public int applyCards(int damage) {
         for(CardState card : this.playerState.getOwnedCards()) {
-            if(card.getName().equals("装備マスター")) {
-                damage = (int) (damage * 1.5);
-            }
             if(card.getName().equals("スライムキラー") && this.enemyState.getName().contains("スライム")) {
                 damage = (int) (damage * 1.5);
             }

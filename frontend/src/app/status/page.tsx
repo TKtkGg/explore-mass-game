@@ -24,7 +24,7 @@ export default function StatusPage() {
             <p>Name: {data?.name}</p>
             <p>Level: {data?.level}</p>
             <p>HP: {data?.hp}/{data?.maxHp}</p>
-            <p>ATK: {data?.totalAtk}({data?.atk}+{data?.equipment.atk})</p>
+            <p>ATK: {data?.totalAtk}({data?.atk}+{data?.equipment.atk}{data?.ownedCards.map((card: CardState) => card.name === "装備マスター" ? "×1.5" : "")})</p>
             <p>DEF: {data?.def}</p>
             <p>SPD: {data?.spd}</p>
             <p>EXP: {data?.exp}</p>

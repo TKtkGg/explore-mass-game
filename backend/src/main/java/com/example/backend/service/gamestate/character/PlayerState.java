@@ -28,6 +28,11 @@ public class PlayerState extends CharacterState {
 
     @Override
     public int getAtk() {
+        for(CardState card : this.ownedCards) {
+            if(card.getName().equals("装備マスター")) {
+                return this.atk + (int)(this.equipment.getAtk() * 1.5);
+            }
+        }
         return this.atk + this.equipment.getAtk();
     }
 
