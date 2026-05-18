@@ -2,27 +2,18 @@ package com.example.backend.service.gamestate.card;
 
 import java.util.Objects;
 
-public class CardState {
-    private String name;
+import com.example.backend.service.gamestate.Merchandise;
+
+public class CardState extends Merchandise {
     private String text;
-    private int price;
 
     public CardState(String name, String text, int price) {
-        this.name = name;
+        super(name, price, "CARD");
         this.text = text;
-        this.price = price;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public String getText() {
         return this.text;
-    }
-
-    public int getPrice() {
-        return this.price;
     }
 
     @Override
@@ -30,11 +21,11 @@ public class CardState {
         if (this == obj) return true;
         if (!(obj instanceof CardState)) return false;
         CardState other = (CardState) obj;
-        return Objects.equals(this.name, other.name);
+        return Objects.equals(this.getName(), other.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(this.getName());
     }
 }

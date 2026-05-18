@@ -1,32 +1,22 @@
 package com.example.backend.service.gamestate.equipment;
 
+import com.example.backend.service.gamestate.Merchandise;
 import java.util.Objects;
 
-public class EquipmentState {
-    String name;
+public class EquipmentState extends Merchandise {
     int atk;
-    int price;
     int chance;
 
     public EquipmentState(String name, int atk, int price, int chance) {
-        this.name = name;
+        super(name, price, "EQUIPMENT");
         this.atk = atk;
-        this.price = price;
         this.chance = chance;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public int getAtk() {
         return this.atk;
     }
 
-    public int getPrice() {
-        return this.price;
-    }
-    
     public int getChance() {
         return this.chance;
     }
@@ -36,11 +26,11 @@ public class EquipmentState {
         if (this == obj) return true;
         if (!(obj instanceof EquipmentState)) return false;
         EquipmentState other = (EquipmentState) obj;
-        return this.atk == other.atk && Objects.equals(this.name, other.name);
+        return this.atk == other.atk && Objects.equals(this.getName(), other.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, atk);
+        return Objects.hash(this.getName(), atk);
     }
 }

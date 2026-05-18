@@ -11,10 +11,15 @@ export type EquipmentState = {
     chance: number;
 }
 
+export type MerchandiseState = {
+    name: string;
+    price: number;
+    type: string;
+}
+
 export type ShopState = {
     gold: number;
-    unownedCards: CardState[];
-    unownedEquipments: EquipmentState[];
+    display: MerchandiseState[];
     message: string;
 }
 
