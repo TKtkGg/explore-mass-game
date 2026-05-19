@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import java.util.Random;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import com.example.backend.service.gamestate.BattleState;
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.character.CharacterState;
 import com.example.backend.service.gamestate.character.EnemyState;
+import com.example.backend.service.gamestate.character.EnemyListState;
 import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.dto.battle.BattleRequest;
 import com.example.backend.domain.BattleChoice;
@@ -18,15 +20,20 @@ public class BattleService {
     private Random rand = new Random();
     private PlayerState playerState;
     private EnemyState enemyState;
+    private List<EnemyState> enemyList;
     private BattleState battleState;
-    public BattleService(PlayerState playerState, EnemyState enemyState, BattleState battleState) {
+
+    public BattleService(PlayerState playerState, EnemyListState enemyListState, BattleState battleState) {
         this.playerState = playerState;
-        this.enemyState = enemyState;
+        this.enemyList = enemyListState.getEnemyList();
         this.battleState = battleState;
     }
 
     public BattleResponse battleStart() {
         this.battleState.reset();
+        EnemyState template = this.enemyList.get(rand.nextInt(this.enemyList.size()));
+        this.enemyState = new EnemyState(template.getName(), template.getLevel(), template.getMaxHp(), template.getHp(), template.getAtk(), template.getDef(), template.getSpd(), template.getExp(), template.getGold());
+        this.enemyState.adjustLevel(this.playerState);
         this.enemyState.respawn();
         return new BattleResponse("Battle started", this.playerState, this.enemyState, this.battleState);
     }
@@ -34,7 +41,7 @@ public class BattleService {
     public BattleResponse battle(BattleRequest request) {
         String message = "";
         this.battleState.setPlayerChoice(request.getPlayerChoice());
-        this.battleState.setEnemyChoice(getEnemyChoice());
+        this.battleState.setEnemyChoice(getRandomEnemyChoice());
         if(isPlayerFast()) {
             message = playerAction();
             if(this.enemyState.isAlive() || this.playerState.getIsRun()) {
@@ -52,12 +59,15 @@ public class BattleService {
         return new BattleResponse(message, this.playerState, this.enemyState, this.battleState);
     }
 
-    public BattleChoice getEnemyChoice() {
+    public BattleChoice getRandomEnemyChoice() {
         BattleChoice[] choices = BattleChoice.values();
         return choices[rand.nextInt(choices.length)];
     }
 
     public boolean isPlayerFast() {
+        if(this.battleState.getEnemyChoice() == BattleChoice.DEFEND) {
+            return false;
+        }
         if((this.playerState.getSpd() >= this.enemyState.getSpd()) || this.battleState.getPlayerChoice() == BattleChoice.DEFEND) {
             return true;
         }
@@ -91,10 +101,10 @@ public class BattleService {
     public String attack(CharacterState attackerState, CharacterState targetState){
         String message = "";
         double min = 0.8;
-		double max = 1.0;
+		double max = 1.3;
 		double randomValue = Math.random() * (max - min) + min;
 		int defendMultiplier = targetState.getDefend() ? 1 : 3;
-		int damage = (int) ((attackerState.getAtk() - targetState.getDef() / defendMultiplier) * 5 * randomValue); 
+		int damage = (int) ((attackerState.getAtk() - targetState.getDef() / defendMultiplier) * 2 * randomValue); 
         if(attackerState instanceof PlayerState) {
             damage = applyCards(damage);
         }
@@ -111,7 +121,7 @@ public class BattleService {
 
     public String defend(CharacterState defenderState){
         defenderState.setDefend(true);
-        return "防御しました！";
+        return defenderState.getName() + "は防御しました！";
     }
 
     public String run(){

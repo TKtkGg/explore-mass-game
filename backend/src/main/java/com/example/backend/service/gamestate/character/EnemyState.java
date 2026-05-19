@@ -1,14 +1,25 @@
 package com.example.backend.service.gamestate.character;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class EnemyState extends CharacterState {
-    public EnemyState() {
-        super("スライム", 1, 100, 100, 10, 10, 10, 100, 100);
+    public EnemyState(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold) {
+        super(name, level, maxHp, hp, atk, def, spd, exp, gold);
     }
 
     public void respawn() {
-        this.hp = this.maxHp;
+        this.setHp(this.getMaxHp());
     }
+
+    public void adjustLevel(PlayerState p) {
+		double playerAvgStatus = (p.getMaxHp() / 10 + p.getAtk() + p.getDef() + p.getSpd()) / 4 + p.getOwnedCards().size() * 5;
+		double enemyAvgStatus = (this.getMaxHp() / 10 + this.getAtk() + this.getDef() + this.getSpd()) / 4;
+		int levelDifference = (int) ((playerAvgStatus - enemyAvgStatus) / 5);
+		
+		this.setLevel(this.getLevel() + levelDifference);
+		this.setMaxHp(this.getMaxHp() + levelDifference * 10);
+		this.setAtk(this.getAtk() + levelDifference);
+		this.setDef(this.getDef() + levelDifference);
+		this.setSpd(this.getSpd() + levelDifference);
+        this.setExp(this.getExp() + (this.getExp() / 5 * this.getLevel()));
+        this.setGold(this.getGold() + (this.getGold() / 5 * this.getLevel()));
+	}
 }

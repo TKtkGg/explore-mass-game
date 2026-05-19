@@ -35,7 +35,7 @@ export default function BattlePage() {
             <h1>Battle</h1>
             {!battleState?.battleState.finished && (
                 <>
-                    <h1>{battleState?.playerState.name} vs {battleState?.enemyState.name}</h1>
+                    <h1>{battleState?.playerState.name}({battleState?.playerState.level}LV) vs {battleState?.enemyState.name}({battleState?.enemyState.level}LV)</h1>
                     <h1>HP: {battleState?.playerState.hp} / {battleState?.playerState.maxHp}(player)</h1>
                     <h1>HP: {battleState?.enemyState.hp} / {battleState?.enemyState.maxHp}(enemy)</h1>
                     <h1>ATK: {battleState?.playerState.atk}(player) / {battleState?.enemyState.atk}(enemy)</h1>
