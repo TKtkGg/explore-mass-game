@@ -5,9 +5,13 @@ import org.springframework.stereotype.Service;
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentListState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
+import com.example.backend.service.gamestate.item.ItemListState;
+import com.example.backend.service.gamestate.item.ItemState;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Service
 public class PlayerState extends CharacterState {
@@ -17,6 +21,7 @@ public class PlayerState extends CharacterState {
     List<CardState> ownedCards;
     int nextLevelExp = 100;
     boolean isRun = false;
+    Map<String, Integer> ownedItems = new HashMap<>();
 
     public PlayerState(EquipmentListState equipmentList) {
         super("test", 1, 100, 100, 10, 10, 10, 0, 100);
@@ -26,6 +31,7 @@ public class PlayerState extends CharacterState {
         this.ownedCards = new ArrayList<>();
         this.isRun = false;
         this.nextLevelExp = 100;
+        this.ownedItems.put("回復薬(小)", 3);
     }
 
     @Override
@@ -50,6 +56,9 @@ public class PlayerState extends CharacterState {
     }
     public List<CardState> getOwnedCards() {
         return ownedCards;
+    }
+    public Map<String, Integer> getOwnedItems() {
+        return ownedItems;
     }
     public int getNextLevelExp() {
         return nextLevelExp;
@@ -81,6 +90,17 @@ public class PlayerState extends CharacterState {
 
     public void addCard(CardState card) {
         this.ownedCards.add(card);
+    }
+
+    public void addItem(ItemState item, int count) {
+        this.ownedItems.getOrDefault(item.getName(), this.ownedItems.get(item.getName()) + count);
+    }
+
+    public void removeItem(ItemState item, int count) {
+        this.ownedItems.put(item.getName(), this.ownedItems.get(item.getName()) - count);
+        if(this.ownedItems.get(item.getName()) <= 0) {
+            this.ownedItems.remove(item.getName());
+        }
     }
 
     public String calcExp(int gainExp) {
@@ -119,5 +139,7 @@ public class PlayerState extends CharacterState {
         this.ownedCards = new ArrayList<>();
         this.isRun = false;
         this.nextLevelExp = 100;
+        this.ownedItems.clear();
+        this.ownedItems.put("回復薬(小)", 3);
     }
 }

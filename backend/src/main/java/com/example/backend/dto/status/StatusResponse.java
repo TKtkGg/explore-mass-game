@@ -1,6 +1,7 @@
 package com.example.backend.dto.status;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
@@ -20,8 +21,9 @@ public class StatusResponse {
     private EquipmentState equipment;
     private List<EquipmentState> ownedEquipmentList;
     private List<CardState> ownedCards;
+    private Map<String, Integer> ownedItems;
 
-    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int totalAtk, int def, int spd, int exp, int nextLevelExp, int gold, EquipmentState equipment, List<EquipmentState> ownEquipmentList, List<CardState> ownedCards) {
+    public StatusResponse(String name, int level, int maxHp, int hp, int atk, int totalAtk, int def, int spd, int exp, int nextLevelExp, int gold, EquipmentState equipment, List<EquipmentState> ownEquipmentList, List<CardState> ownedCards, Map<String, Integer> ownedItems) {
         this.name = name;
         this.level = level;
         this.maxHp = maxHp;
@@ -36,6 +38,7 @@ public class StatusResponse {
         this.equipment = equipment;
         this.ownedEquipmentList = ownEquipmentList;
         this.ownedCards = ownedCards;
+        this.ownedItems = ownedItems;
     }
 
     public String getName() {
@@ -92,5 +95,9 @@ public class StatusResponse {
 
     public List<CardState> getOwnedCards() {
         return this.ownedCards;
+    }
+
+    public Map<String, Integer> getOwnedItems() {
+        return this.ownedItems;
     }
 }

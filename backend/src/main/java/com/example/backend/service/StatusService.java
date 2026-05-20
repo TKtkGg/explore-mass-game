@@ -14,7 +14,7 @@ public class StatusService {
         this.playerState = playerState;
     }
     public StatusResponse status() {
-        return new StatusResponse(this.playerState.getName(), this.playerState.getLevel(), this.playerState.getMaxHp(), this.playerState.getHp(), this.playerState.getOriginalAtk(), this.playerState.getAtk(), this.playerState.getDef(), this.playerState.getSpd(), this.playerState.getExp(), this.playerState.getNextLevelExp(), this.playerState.getGold(), this.playerState.getEquipment(), this.playerState.getOwnedEquipmentList(), this.playerState.getOwnedCards());
+        return new StatusResponse(this.playerState.getName(), this.playerState.getLevel(), this.playerState.getMaxHp(), this.playerState.getHp(), this.playerState.getOriginalAtk(), this.playerState.getAtk(), this.playerState.getDef(), this.playerState.getSpd(), this.playerState.getExp(), this.playerState.getNextLevelExp(), this.playerState.getGold(), this.playerState.getEquipment(), this.playerState.getOwnedEquipmentList(), this.playerState.getOwnedCards(), this.playerState.getOwnedItems());
     }
 
     public EquipmentResponse equipment() {

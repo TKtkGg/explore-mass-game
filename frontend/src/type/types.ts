@@ -51,11 +51,13 @@ export type StatusState = {
     equipment: EquipmentState;
     ownedEquipmentList: EquipmentState[];
     ownedCards: CardState[];
+    ownedItems: { [key: string]: number };
 }
 
 export enum BattleChoice {
     ATTACK = "ATTACK",
     DEFEND = "DEFEND",
+    ITEM = "ITEM",
     RUN = "RUN",
 }
 

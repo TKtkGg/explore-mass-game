@@ -33,6 +33,7 @@ export default function StatusPage() {
             <button onClick={() => router.push("/equipment")}>装備変更</button>
             <p>Own Equipment: {data?.ownedEquipmentList.map((equipment: EquipmentState) => equipment.name).join(", ")}</p>
             <p>Owned Cards: {data?.ownedCards.map((card: CardState) => card.name).join(", ")}</p>
+            <p>Owned Items: {Object.keys(data?.ownedItems ?? {}).map((item: string) => item + " (" + data?.ownedItems[item] + ")").join(", ")}</p>
             <button onClick={() => router.push("/explore")}>BACK</button>
         </div>
     )

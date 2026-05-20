@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 export default function BattlePage() {
     const [battleState, setBattleState] = useState<BattleState | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [itemOptions, setItemOptions] = useState<string[]>([]);
     const router = useRouter();
     useEffect(() => {
         const start = async () => {
@@ -18,8 +19,26 @@ export default function BattlePage() {
     }, []);
 
     const handleChoice = async (choice: BattleChoice) => {
+        if (choice === BattleChoice.ITEM) {
+            setItemOptions(Object.keys(battleState?.playerState.ownedItems ?? {}));
+        } else {
+            setItemOptions([]);
+            try {
+                const response = await apiPost("/battle/action", { playerChoice: choice });
+                setBattleState(response);
+            } catch (error: unknown) {
+                if(error instanceof Error) {
+                    setError(error.message);
+                } else {
+                    setError("通信に失敗しました。");
+                }
+            }
+        }
+    }
+    const handleItemChoice = async (itemName: string) => {
+        setItemOptions([]);
         try {
-            const response = await apiPost("/battle/action", { playerChoice: choice });
+            const response = await apiPost("/battle/action", { playerChoice: BattleChoice.ITEM, itemName: itemName });
             setBattleState(response);
         } catch (error: unknown) {
             if(error instanceof Error) {
@@ -28,7 +47,6 @@ export default function BattlePage() {
                 setError("通信に失敗しました。");
             }
         }
-        
     }
     return (
         <div>
@@ -48,6 +66,15 @@ export default function BattlePage() {
                             </button>
                         </div>
                     ))}
+                    {itemOptions && (
+                        <div>
+                            {itemOptions.map((item) => (
+                                <div key={item}>
+                                    <button onClick={() => handleItemChoice(item)}>{item} ({battleState?.playerState.ownedItems[item]})</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </>
             )}
             <p>{battleState?.message}</p>

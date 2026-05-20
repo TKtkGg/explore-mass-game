@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import java.util.Random;
 import java.util.List;
+import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ import com.example.backend.service.gamestate.character.EnemyListState;
 import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.dto.battle.BattleRequest;
 import com.example.backend.domain.BattleChoice;
+import com.example.backend.service.gamestate.item.ItemState;
+import com.example.backend.service.gamestate.item.ItemListState;
 
 @Service
 public class BattleService {
@@ -22,11 +25,12 @@ public class BattleService {
     private EnemyState enemyState;
     private List<EnemyState> enemyList;
     private BattleState battleState;
-
-    public BattleService(PlayerState playerState, EnemyListState enemyListState, BattleState battleState) {
+    private ItemListState itemListState;
+    public BattleService(PlayerState playerState, EnemyListState enemyListState, BattleState battleState, ItemListState itemListState) {
         this.playerState = playerState;
         this.enemyList = enemyListState.getEnemyList();
         this.battleState = battleState;
+        this.itemListState = itemListState;
     }
 
     public BattleResponse battleStart() {
@@ -43,14 +47,14 @@ public class BattleService {
         this.battleState.setPlayerChoice(request.getPlayerChoice());
         this.battleState.setEnemyChoice(getRandomEnemyChoice());
         if(isPlayerFast()) {
-            message = playerAction();
+            message = playerAction(request);
             if(this.enemyState.isAlive() || this.playerState.getIsRun()) {
                 message += enemyAction();
             }
         } else {
             message = enemyAction();
             if(this.playerState.isAlive()) {
-                message += playerAction();
+                message += playerAction(request);
             }
         }
         this.enemyState.setDefend(false);
@@ -74,15 +78,17 @@ public class BattleService {
         return false;
     }
 
-    public String playerAction(){
+    public String playerAction(BattleRequest request){
         if(this.battleState.getPlayerChoice() == BattleChoice.ATTACK) {
             return attack(this.playerState, this.enemyState);
         } else if(this.battleState.getPlayerChoice() == BattleChoice.DEFEND) {
             return defend(this.playerState);
         } else if(this.battleState.getPlayerChoice() == BattleChoice.RUN) {
             return run();
+        } else if(this.battleState.getPlayerChoice() == BattleChoice.ITEM) {
+            return item(request.getItemName());
         } else {
-            return "";
+            return attack(this.playerState, this.enemyState);
         }
     }
 
@@ -91,10 +97,8 @@ public class BattleService {
             return attack(this.enemyState, this.playerState);
         } else if(this.battleState.getEnemyChoice() == BattleChoice.DEFEND) {
             return defend(this.enemyState);
-        } else if(this.battleState.getEnemyChoice() == BattleChoice.RUN) {
-            return attack(this.enemyState, this.playerState);
         } else {
-            return "";
+            return attack(this.enemyState, this.playerState);
         }
     }
 
@@ -127,6 +131,19 @@ public class BattleService {
     public String run(){
         this.playerState.setIsRun(true);
         return result("escape");
+    }
+
+    public String item(String itemName){
+        ItemState item = Arrays.stream(this.itemListState.getItemList()).filter(i -> i.getName().equals(itemName)).findFirst().orElse(null);
+        if(item == null || this.playerState.getOwnedItems().get(itemName) <= 0) {
+            return "そのアイテムは持っていません。";
+        }
+
+        if (item.getEffectType().equals("HEAL")) {
+            this.playerState.Heal(item.getAmount());
+            this.playerState.removeItem(item, 1);
+        }
+        return this.playerState.getName() + "は" + itemName + "を使用した！";
     }
 
     public String result(String winnerName) {
