@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentListState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
-import com.example.backend.service.gamestate.item.ItemListState;
 import com.example.backend.service.gamestate.item.ItemState;
 
 import java.util.ArrayList;
@@ -93,11 +92,11 @@ public class PlayerState extends CharacterState {
     }
 
     public void addItem(ItemState item, int count) {
-        this.ownedItems.getOrDefault(item.getName(), this.ownedItems.get(item.getName()) + count);
+        this.ownedItems.put(item.getName(), this.ownedItems.getOrDefault(item.getName(), 0) + count);
     }
 
     public void removeItem(ItemState item, int count) {
-        this.ownedItems.put(item.getName(), this.ownedItems.get(item.getName()) - count);
+        this.ownedItems.put(item.getName(), this.ownedItems.getOrDefault(item.getName(), 0) - count);
         if(this.ownedItems.get(item.getName()) <= 0) {
             this.ownedItems.remove(item.getName());
         }

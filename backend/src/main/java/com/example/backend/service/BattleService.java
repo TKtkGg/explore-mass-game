@@ -2,7 +2,6 @@ package com.example.backend.service;
 
 import java.util.Random;
 import java.util.List;
-import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
@@ -134,7 +133,7 @@ public class BattleService {
     }
 
     public String item(String itemName){
-        ItemState item = Arrays.stream(this.itemListState.getItemList()).filter(i -> i.getName().equals(itemName)).findFirst().orElse(null);
+        ItemState item = this.itemListState.getItemList().stream().filter(i -> i.getName().equals(itemName)).findFirst().orElse(null);
         if(item == null || this.playerState.getOwnedItems().get(itemName) <= 0) {
             return "そのアイテムは持っていません。";
         }

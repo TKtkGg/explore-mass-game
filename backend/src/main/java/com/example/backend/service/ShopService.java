@@ -13,17 +13,21 @@ import com.example.backend.service.gamestate.Merchandise;
 import com.example.backend.service.gamestate.ShopState;
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
+import com.example.backend.service.gamestate.item.ItemState;
+import com.example.backend.service.gamestate.item.ItemListState;
 
 @Service
 public class ShopService {
     private PlayerState playerState;
     private CardService cardService;
     private EquipmentService equipmentService;
+    private ItemListState itemListState;
     private ShopState shopState;
-    public ShopService(PlayerState playerState, CardService cardService, EquipmentService equipmentService, ShopState shopState) {
+    public ShopService(PlayerState playerState, CardService cardService, EquipmentService equipmentService, ItemListState itemListState, ShopState shopState) {
         this.playerState = playerState;
         this.cardService = cardService;
         this.equipmentService = equipmentService;
+        this.itemListState = itemListState;
         this.shopState = shopState;
     }
 
@@ -31,6 +35,7 @@ public class ShopService {
         List<Merchandise> lineup = new ArrayList<>();
         lineup.addAll(this.cardService.getUnownedCards());
         lineup.addAll(this.equipmentService.getUnownedEquipments());
+        lineup.addAll(this.itemListState.getItemList());
         Collections.shuffle(lineup);
         List<Merchandise> display = new ArrayList<>();
         for(Merchandise merchandise : lineup) {
@@ -57,8 +62,10 @@ public class ShopService {
         }
         if(boughtItem.getType().equals("CARD")) {
             this.playerState.addCard((CardState) boughtItem);
-        } else {
+        } else if (boughtItem.getType().equals("EQUIPMENT")) {
             this.playerState.addEquipment((EquipmentState) boughtItem);
+        } else if (boughtItem.getType().equals("ITEM")) {
+            this.playerState.addItem((ItemState) boughtItem, 1);
         }
         this.playerState.setGold(this.playerState.getGold() - boughtItem.getPrice());
         this.shopState.getDisplay().remove(boughtItem);
