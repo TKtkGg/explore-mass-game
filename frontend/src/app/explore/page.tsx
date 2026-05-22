@@ -69,28 +69,6 @@ export default function ExplorePage() {
         }
     }
 
-    const handleReset = async () => {
-        if (isLoading) return;
-        setIsLoading(true);
-
-        try {
-            const response = await apiPost("/reset");
-            setRemainingSteps(response.remainingSteps);
-            setStopped(response.stopped);
-            setRouteOptions(response.routeOptions);
-            setMessage(response.message);
-            setError(null);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setError(error);
-            } else {
-                setError(new Error("通信に失敗しました。"));
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
     return (
         <div>
             <h1>Explore Page</h1>
@@ -107,7 +85,7 @@ export default function ExplorePage() {
             ))}
             <button onClick={() => router.push("/status")}>STATUS</button>
             <br />
-            <button onClick={handleReset} disabled={isLoading}>RESET</button>
+            <button onClick={() => router.push("/")} disabled={isLoading}>RESTART</button>
         </div>
     )
 }

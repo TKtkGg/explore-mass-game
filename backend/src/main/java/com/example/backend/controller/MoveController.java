@@ -24,11 +24,6 @@ public class MoveController {
         return this.moveService.move(request);
     }
 
-    @PostMapping("/reset")
-    public MoveResponse reset() {
-        return this.moveService.reset();
-    }
-
     @PostMapping("/move/rest")
     public MoveResponse rest(@RequestBody MoveRequest request) {
         return this.moveService.rest(request);

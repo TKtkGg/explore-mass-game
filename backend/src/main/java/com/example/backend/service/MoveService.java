@@ -47,8 +47,8 @@ public class MoveService {
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
     }
 
-    public MoveResponse reset() {
-        this.playerState.init();
+    public MoveResponse restart() {
+        this.playerState.init("No Name");
         this.moveState.setRemainingSteps(25);
         this.moveState.setStopped(false);
         this.moveState.setRouteType(null);

@@ -23,7 +23,7 @@ public class PlayerState extends CharacterState {
     Map<String, Integer> ownedItems = new HashMap<>();
 
     public PlayerState(EquipmentListState equipmentList) {
-        super("test", 1, 100, 100, 10, 10, 10, 0, 100);
+        super("No Name", 1, 100, 100, 10, 10, 10, 0, 100);
         this.equipmentList = equipmentList;
         this.equipment = this.equipmentList.getEquipmentList()[0];
         this.ownedEquipmentList.add(equipment);
@@ -122,8 +122,8 @@ public class PlayerState extends CharacterState {
         return "レベルアップ！";
 	}
 
-    public void init() {
-        this.name = "test";
+    public void init(String name) {
+        this.name = name;
         this.level = 1;
         this.maxHp = 100;
         this.hp = 100;
