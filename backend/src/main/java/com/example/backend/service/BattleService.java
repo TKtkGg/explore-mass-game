@@ -25,11 +25,13 @@ public class BattleService {
     private List<EnemyState> enemyList;
     private BattleState battleState;
     private ItemListState itemListState;
-    public BattleService(PlayerState playerState, EnemyListState enemyListState, BattleState battleState, ItemListState itemListState) {
+    private MoveService moveService;
+    public BattleService(PlayerState playerState, EnemyListState enemyListState, BattleState battleState, ItemListState itemListState, MoveService moveService) {
         this.playerState = playerState;
         this.enemyList = enemyListState.getEnemyList();
         this.battleState = battleState;
         this.itemListState = itemListState;
+        this.moveService = moveService;
     }
 
     public BattleResponse battleStart() {
@@ -124,7 +126,7 @@ public class BattleService {
 
     public String defend(CharacterState defenderState){
         defenderState.setDefend(true);
-        return defenderState.getName() + "は防御しました！";
+        return defenderState.getName() + "は防御した！";
     }
 
     public String run(){

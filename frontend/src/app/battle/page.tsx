@@ -88,8 +88,15 @@ export default function BattlePage() {
                 </>
             }
             {error && <h1>{error}</h1>}
-            {battleState?.battleState.finished &&
+            {battleState?.battleState.finished && (battleState?.playerState.hp ?? 0) > 0 &&
                 <button onClick={() => router.push("/explore")}>BACK</button>
+            }
+
+            {battleState?.battleState.finished && (battleState?.playerState.hp ?? 0) <= 0 &&
+                <>
+                    <h1>YOU DEAD</h1>
+                    <button onClick={() => router.push("/gameover")}>BACK</button>
+                </>
             }
         </div>
     );
