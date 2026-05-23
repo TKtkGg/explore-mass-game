@@ -31,6 +31,13 @@ export default function ExplorePage() {
         start();
     }, []);
 
+    useEffect(() => {
+        if(remainingSteps === 0) {
+            router.push("/gameover");
+            return;
+        }
+    }, [remainingSteps, router]);
+
     const handleMove = async (routeType: string) => {
         if (isLoading) return;
         setIsLoading(true);
