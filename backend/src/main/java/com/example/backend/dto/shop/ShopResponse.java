@@ -2,7 +2,7 @@ package com.example.backend.dto.shop;
 
 import java.util.List;
 
-import com.example.backend.service.gamestate.Merchandise;
+import com.example.backend.service.gamestate.shop.Merchandise;
 
 public class ShopResponse {
     private int gold;

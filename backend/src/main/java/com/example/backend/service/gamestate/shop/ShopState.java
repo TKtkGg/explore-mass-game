@@ -1,4 +1,4 @@
-package com.example.backend.service.gamestate;
+package com.example.backend.service.gamestate.shop;
 
 import java.util.ArrayList;
 import java.util.List;

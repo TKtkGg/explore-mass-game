@@ -1,6 +1,6 @@
 package com.example.backend.service.gamestate.item;
 
-import com.example.backend.service.gamestate.Merchandise;
+import com.example.backend.service.gamestate.shop.Merchandise;
 
 public class ItemState extends Merchandise {
     int amount;

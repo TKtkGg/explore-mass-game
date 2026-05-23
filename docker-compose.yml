@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: explore-game-db
+    environment:
+      POSTGRES_USER: gameuser
+      POSTGRES_PASSWORD: gamepass
+      POSTGRES_DB: explore_game
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var-data
+
+volumes:
+  pgdata:

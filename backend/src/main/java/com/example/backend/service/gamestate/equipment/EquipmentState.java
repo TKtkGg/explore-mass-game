@@ -1,7 +1,8 @@
 package com.example.backend.service.gamestate.equipment;
 
-import com.example.backend.service.gamestate.Merchandise;
 import java.util.Objects;
+
+import com.example.backend.service.gamestate.shop.Merchandise;
 
 public class EquipmentState extends Merchandise {
     int atk;

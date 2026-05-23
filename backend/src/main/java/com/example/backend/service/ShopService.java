@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import com.example.backend.dto.shop.ShopResponse;
 import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.dto.shop.ShopRequest;
-import com.example.backend.service.gamestate.Merchandise;
-import com.example.backend.service.gamestate.ShopState;
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
 import com.example.backend.service.gamestate.item.ItemState;
+import com.example.backend.service.gamestate.shop.Merchandise;
+import com.example.backend.service.gamestate.shop.ShopState;
 import com.example.backend.service.gamestate.item.ItemListState;
 
 @Service

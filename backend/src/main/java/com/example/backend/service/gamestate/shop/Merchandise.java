@@ -1,4 +1,4 @@
-package com.example.backend.service.gamestate;
+package com.example.backend.service.gamestate.shop;
 
 public abstract class Merchandise {
     private String name;

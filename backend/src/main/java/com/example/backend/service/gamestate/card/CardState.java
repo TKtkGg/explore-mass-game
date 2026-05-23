@@ -2,7 +2,7 @@ package com.example.backend.service.gamestate.card;
 
 import java.util.Objects;
 
-import com.example.backend.service.gamestate.Merchandise;
+import com.example.backend.service.gamestate.shop.Merchandise;
 
 public class CardState extends Merchandise {
     private String text;
