@@ -27,6 +27,8 @@ public class ScoreRecord {
         this.playedAt = playedAt;
     }
 
+    protected ScoreRecord() {}
+
     public String getPlayerName() {
         return playerName;
     }

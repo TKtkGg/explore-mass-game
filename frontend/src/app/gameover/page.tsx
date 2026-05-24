@@ -45,8 +45,12 @@ export default function GameOverPage() {
             {error && <p>{error}</p>}
             <p>Score: {score}</p>
             <button onClick={() => router.push("/")}>RESTART</button>
-            <button onClick={() => handleRegisterScore()}>スコアを登録する</button>
-            {registerScore && <p>スコアを登録しました。</p>}
+            {!registerScore && <button onClick={() => handleRegisterScore()}>スコアを登録する</button>}
+            {registerScore && 
+            <>
+                <p>スコアを登録しました。</p>
+                <button onClick={() => router.push("/ranking")}>ランキングを見る</button>
+            </>}
         </div>
     );
 }

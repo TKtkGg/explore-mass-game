@@ -73,3 +73,10 @@ export type BattleState = {
         enemyChoice: BattleChoice;
     };
 }
+
+export type RankingResponse = {
+    playerName: string;
+    score: number;
+    level: number;
+    playedAt: Date;
+}
