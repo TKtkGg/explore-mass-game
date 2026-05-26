@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { apiPost, apiGet } from "@/lib/apiClient";
 import { useRouter } from "next/navigation";
+import { MainButton } from "@/components/atoms/MainButton";
+import { RouteAllowButton } from "@/components/molecules/RouteAllowButton";
+import { Title } from "@/components/atoms/Title";
 
 /** 進行ボタン配置: 中央(上向き)・左下・右下 に routeOptions の 0,1,2 を対応 */
 const ROUTE_SLOTS = [
@@ -11,9 +13,6 @@ const ROUTE_SLOTS = [
     { positionClass: "left-[10%] bottom-[20%] -translate-x-1/2", rotationClass: "-rotate-90" },
     { positionClass: "right-[10%] bottom-[20%] translate-x-1/2", rotationClass: "rotate-90" }
 ] as const;
-
-const labelShadow =
-    "[text-shadow:_2px_2px_0_#000,_-2px_-2px_0_#000,_2px_-2px_0_#000,_-2px_2px_0_#000,_0_2px_0_#000,_0_-2px_0_#000,_2px_0_0_#000,_-2px_0_0_#000]";
 
 export default function ExplorePage() {
     const [remainingSteps, setRemainingSteps] = useState(25);
@@ -118,14 +117,10 @@ export default function ExplorePage() {
 
                 {/* タイトル */}
                 <header className="px-4 pt-2 text-center sm:pt-4">
-                    <h1
-                        className={`font-black text-white sm:tracking-[0.08em] ${labelShadow} text-4xl sm:text-6xl md:text-7xl`}
-                    >
-                        EXPLORE
-                    </h1>
+                    <Title>EXPLORE</Title>
                     {message ? (
                         <p
-                        className={`mx-auto mt-2 max-w-md rounded-md border-2 border-black bg-black/55 px-3 py-2 text-sm font-bold text-white ${labelShadow} sm:text-base`}
+                        className={`mx-auto mt-2 max-w-md rounded-md border-2 border-black bg-black/55 px-3 py-2 text-sm font-bold text-white text-outline sm:text-base`}
                         >
                         {message}
                         </p>
@@ -154,34 +149,13 @@ export default function ExplorePage() {
                         const option = routeOptions[index];
                         if (!option) return null;
                         return (
-                        <div
-                            key={`${option}-${index}`}
-                            className={`absolute flex flex-col items-center gap-2 sm:gap-3 ${slot.positionClass}`}
-                        >
-                            <button
-                            type="button"
-                            onClick={() => handleMove(option)}
-                            disabled={disabled}
-                            className="group flex flex-col items-center outline-none transition cursor-pointer disabled:opacity-40 disabled:grayscale"
-                            aria-label={`${option}へ進む`}
-                            >
-                            <span className="transition group-active:translate-y-0.5 group-active:shadow-none sm:p-2">
-                                <Image
-                                src="/img/進行ボタン.png"
-                                alt=""
-                                width={150}
-                                height={150}
-                                className={`h-16 w-16 object-contain drop-shadow sm:h-44 sm:w-44 ${slot.rotationClass}`}
-                                unoptimized
-                                />
-                            </span>
-                            <span
-                                className={`max-w-[28vw] truncate text-center text-sm font-black uppercase text-white sm:max-w-[140px] sm:text-lg ${labelShadow}`}
-                            >
-                                {option}
-                            </span>
-                            </button>
-                        </div>
+                            <RouteAllowButton
+                                key={`${option}-${index}`}
+                                option={option}
+                                slot={slot}
+                                handleMove={handleMove}
+                                disabled={disabled}
+                            />
                         );
                     })}
                 </div>
@@ -195,13 +169,7 @@ export default function ExplorePage() {
 
                 {/* STATUS（下部固定風） */}
                 <footer className="mt-auto flex justify-center px-4 pb-6 pt-4 sm:pb-8">
-                <button
-                    type="button"
-                    onClick={() => router.push("/status")}
-                    className={`min-w-[200px] rounded-md border-2 border-black bg-white px-8 py-3 text-lg font-black tracking-widest text-neutral-900 shadow-[4px_4px_0_#000] transition cursor-pointer hover:bg-neutral-100 active:translate-y-0.5 active:shadow-none sm:min-w-[240px] sm:text-xl`}
-                >
-                    STATUS
-                </button>
+                    <MainButton onClick={() => router.push("/status")}>STATUS</MainButton>
                 </footer>
             </div>
         </div>
