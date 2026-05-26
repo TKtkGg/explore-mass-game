@@ -8,6 +8,8 @@ import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
 import com.example.backend.service.gamestate.MoveState;
 import com.example.backend.service.gamestate.character.PlayerState;
+import com.example.backend.service.treasure.EquipmentTreasureService;
+import com.example.backend.service.treasure.StatusTreasureService;
 
 import java.util.Random;
 import java.util.Arrays;

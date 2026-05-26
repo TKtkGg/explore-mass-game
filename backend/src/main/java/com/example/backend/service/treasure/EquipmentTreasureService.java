@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.treasure;
 
 import org.springframework.stereotype.Service;
 
