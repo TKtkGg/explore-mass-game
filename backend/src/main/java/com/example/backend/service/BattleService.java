@@ -25,13 +25,12 @@ public class BattleService {
     private List<EnemyState> enemyList;
     private BattleState battleState;
     private ItemListState itemListState;
-    private MoveService moveService;
-    public BattleService(PlayerState playerState, EnemyListState enemyListState, BattleState battleState, ItemListState itemListState, MoveService moveService) {
+    
+    public BattleService(PlayerState playerState, EnemyListState enemyListState, BattleState battleState, ItemListState itemListState) {
         this.playerState = playerState;
         this.enemyList = enemyListState.getEnemyList();
         this.battleState = battleState;
         this.itemListState = itemListState;
-        this.moveService = moveService;
     }
 
     public BattleResponse battleStart() {

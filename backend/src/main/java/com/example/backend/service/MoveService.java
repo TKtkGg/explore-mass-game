@@ -8,8 +8,6 @@ import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
 import com.example.backend.service.gamestate.MoveState;
 import com.example.backend.service.gamestate.character.PlayerState;
-import com.example.backend.service.treasure.EquipmentTreasureService;
-import com.example.backend.service.treasure.StatusTreasureService;
 
 import java.util.Random;
 import java.util.Arrays;
@@ -20,15 +18,11 @@ public class MoveService {
 
     private MoveState moveState;
     private PlayerState playerState;
-    private StatusTreasureService treasureService;
-    private EquipmentTreasureService equipmentTreasureService;
     private CardService cardService;
 
-    public MoveService(MoveState moveState, PlayerState playerState, StatusTreasureService treasureService, EquipmentTreasureService equipmentTreasureService, CardService cardService) {
+    public MoveService(MoveState moveState, PlayerState playerState, CardService cardService) {
         this.moveState = moveState;
         this.playerState = playerState;
-        this.treasureService = treasureService;
-        this.equipmentTreasureService = equipmentTreasureService;
         this.cardService = cardService;
     }
 
@@ -89,20 +83,6 @@ public class MoveService {
         this.moveAbstract(request);
         int healAmount = this.playerState.Heal(100);
         return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "休んで" + healAmount + "回復した！");
-    }
-
-    public MoveResponse treasure(MoveRequest request) {
-        this.moveAbstract(request);
-        String message = "";
-        int treasureNum = rand.nextInt(2);
-        if(treasureNum == 0) {
-            message = "ステータス宝箱を見つけた！";
-            message += this.treasureService.open();
-        } else {
-            message = "装備宝箱を見つけた！";
-            message += this.equipmentTreasureService.open();
-        }
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), message);
     }
 
     private boolean shouldRegenerate(SelectedRoute[] options) {

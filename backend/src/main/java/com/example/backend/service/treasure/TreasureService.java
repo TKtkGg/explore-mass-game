@@ -23,11 +23,10 @@ public class TreasureService {
         int treasureNum = rand.nextInt(2);
         if(treasureNum == 0) {
             this.treasureState.setAppearedTreasure("ステータス宝箱");
-            return new TreasureResponse("ステータス宝箱を見つけた！");
         } else {
             this.treasureState.setAppearedTreasure("装備宝箱");
-            return new TreasureResponse("装備宝箱を見つけた！");
         }
+        return new TreasureResponse("宝箱を見つけた！");
     }
 
     public TreasureResponse open() {
