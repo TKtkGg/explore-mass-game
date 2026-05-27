@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { MainButton } from "@/components/atoms/MainButton";
 import { RouteAllowButton } from "@/components/molecules/RouteAllowButton";
 import { Title } from "@/components/atoms/Title";
+import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 
 /** 進行ボタン配置: 中央(上向き)・左下・右下 に routeOptions の 0,1,2 を対応 */
 const ROUTE_SLOTS = [
@@ -130,12 +131,7 @@ export default function ExplorePage() {
 
                 {/* エラー */}
                 {error ? (
-                    <p
-                        className="mx-4 mt-2 rounded-md border-2 border-red-700 bg-red-950/90 px-3 py-2 text-center text-sm font-bold text-red-100"
-                        role="alert"
-                    >
-                        {error.message}
-                    </p>
+                    <ErrorAlert message={error.message} />
                 ) : null}
 
                 {stopped ? (

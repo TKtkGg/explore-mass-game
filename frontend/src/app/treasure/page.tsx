@@ -6,6 +6,7 @@ import { apiGet, apiPost } from "@/lib/apiClient";
 import { useRouter } from "next/navigation";
 import { Title } from "@/components/atoms/Title";
 import { MainButton } from "@/components/atoms/MainButton";
+import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 
 export default function TreasurePage() {
     const router = useRouter();
@@ -13,7 +14,7 @@ export default function TreasurePage() {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isOpening, setIsOpening] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         const fetchTreasure = async () => {
@@ -24,9 +25,9 @@ export default function TreasurePage() {
                 setError(null);
             } catch (err: unknown) {
                 if (err instanceof Error) {
-                    setError(err.message);
+                    setError(err);
                 } else {
-                    setError("通信に失敗しました。");
+                    setError(new Error("通信に失敗しました。"));
                 }
             } finally {
                 setIsLoading(false);
@@ -46,9 +47,9 @@ export default function TreasurePage() {
             setError(null);
         } catch (err: unknown) {
             if (err instanceof Error) {
-                setError(err.message);
+                setError(err);
             } else {
-                setError("通信に失敗しました。");
+                setError(new Error("通信に失敗しました。"));
             }
         } finally {
             setIsOpening(false);
@@ -71,12 +72,7 @@ export default function TreasurePage() {
                 </header>
 
                 {error ? (
-                    <p
-                        className="mx-4 mt-4 rounded-md border-2 border-red-700 bg-red-950/90 px-3 py-2 text-center text-sm font-bold text-red-100"
-                        role="alert"
-                    >
-                        {error}
-                    </p>
+                    <ErrorAlert message={error.message} />
                 ) : null}
 
                 <div className="flex flex-1 items-center justify-center px-4 py-6">
