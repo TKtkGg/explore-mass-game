@@ -4,52 +4,94 @@ import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/apiClient";
 import { useRouter } from "next/navigation";
 import { MerchandiseState, ShopState } from "@/type/types";
+import { Title } from "@/components/atoms/Title";
+import { MainButton } from "@/components/atoms/MainButton";
+import { ErrorAlert } from "@/components/atoms/ErrorAlert";
+import { ShopItemButton } from "@/components/molecules/ShopItemButton";
 
 export default function ShopPage() {
     const router = useRouter();
     const [shop, setShop] = useState<ShopState | null>(null);
     const [error, setError] = useState<Error | null>(null);
+    const [isBuying, setIsBuying] = useState(false);
+
     useEffect(() => {
         const fetchShop = async () => {
-            const response = await apiGet("/shop");
-            setShop(response);
-        }
+            try {
+                const response = await apiGet("/shop");
+                setShop(response);
+                setError(null);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err);
+                } else {
+                    setError(new Error("通信に失敗しました。"));
+                }
+            }
+        };
         fetchShop();
     }, []);
 
     const handleBuyMerchandise = async (merchandise: MerchandiseState) => {
+        if (isBuying) return;
+
+        setIsBuying(true);
         try {
             const response = await apiPost("/shop/buy", { name: merchandise.name });
             setShop(response);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setError(error);
+            setError(null);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err);
             } else {
                 setError(new Error("通信に失敗しました。"));
             }
+        } finally {
+            setIsBuying(false);
         }
-    }
-
+    };
 
     return (
-        <div>
-            <h1>ショップ</h1>
-            <div>
-                <h2>所持金: {shop?.gold}</h2>
-                <div>
-                    <h3>カード</h3>
-                    <ul>
-                        {shop?.display.map((merchandise: MerchandiseState) => (
-                            <button key={merchandise.name} onClick={() => handleBuyMerchandise(merchandise)}>{merchandise.name}({merchandise.price}G)</button>
-                        ))}
-                    </ul>
+        <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
+            <div
+                className="pointer-events-none absolute inset-0 bg-center bg-no-repeat"
+                style={{ backgroundImage: "url('/background/ショップ.png')" }}
+                aria-hidden
+            />
+
+            <div className="relative z-10 flex min-h-[100dvh] flex-col">
+                <div className="absolute left-4 top-4 z-20 sm:left-6 sm:top-6">
+                    <p className="text-sm font-bold text-white text-outline sm:text-base">所持金</p>
+                    <p className="text-3xl font-black tabular-nums text-white text-outline sm:text-4xl md:text-5xl">
+                        {shop !== null ? `${shop.gold}G` : "—"}
+                    </p>
                 </div>
+
+                <header className="px-4 pt-8 text-center sm:pt-10">
+                    <Title>SHOP</Title>
+                    {shop?.message ? (
+                        <p className="mx-auto mt-2 max-w-md rounded-md border-2 border-black bg-black/55 px-3 py-2 text-sm font-bold text-white text-outline absolute left-1/2 top-1/5 -translate-x-1/2 sm:text-base">
+                            {shop.message}
+                        </p>
+                    ) : null}
+                </header>
+
+                {error ? <ErrorAlert message={error.message} /> : null}
+                <div className="flex flex-1 items-center justify-evenly">
+                    {shop?.display.map((merchandise: MerchandiseState) => (
+                        <ShopItemButton
+                            key={merchandise.name}
+                            merchandise={merchandise}
+                            onClick={handleBuyMerchandise}
+                            disabled={isBuying}
+                        />
+                    ))}
+                </div>
+
+                <footer className="absolute bottom-6 left-4 z-20 sm:bottom-8 sm:left-6">
+                    <MainButton onClick={() => router.push("/explore")}>戻る</MainButton>
+                </footer>
             </div>
-            <div>
-                <h2>{shop?.message}</h2>
-            </div>
-            <button onClick={() => router.push("/explore")}>BACK</button>
-            {error && <p>{error.message}</p>}
         </div>
     );
 }
