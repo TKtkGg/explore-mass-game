@@ -36,7 +36,7 @@ public class BattleService {
     public BattleResponse battleStart() {
         this.battleState.reset();
         EnemyState template = this.enemyList.get(rand.nextInt(this.enemyList.size()));
-        this.enemyState = new EnemyState(template.getName(), template.getLevel(), template.getMaxHp(), template.getHp(), template.getAtk(), template.getDef(), template.getSpd(), template.getExp(), template.getGold());
+        this.enemyState = new EnemyState(template.getName(), template.getLevel(), template.getMaxHp(), template.getHp(), template.getAtk(), template.getDef(), template.getSpd(), template.getExp(), template.getGold(), template.getImagePath());
         this.enemyState.adjustLevel(this.playerState);
         this.enemyState.respawn();
         return new BattleResponse("Battle started", this.playerState, this.enemyState, this.battleState);

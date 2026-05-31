@@ -23,7 +23,7 @@ export type ShopState = {
     message: string;
 }
 
-export type CharacterState = {
+export type EnemyState = {
     name: string;
     level: number;
     maxHp: number;
@@ -34,6 +34,7 @@ export type CharacterState = {
     spd: number;
     exp: number;
     gold: number;
+    imagePath: string;
 }
 
 export type StatusState = {
@@ -64,7 +65,7 @@ export enum BattleChoice {
 export type BattleState = {
     message: string;
     playerState: StatusState;
-    enemyState: CharacterState;
+    enemyState: EnemyState;
     battleState: {
         currentTurns: number;
         damage: number;

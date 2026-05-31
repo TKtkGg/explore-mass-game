@@ -1,8 +1,10 @@
 package com.example.backend.service.gamestate.character;
 
 public class EnemyState extends CharacterState {
-    public EnemyState(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold) {
+    String imagePath;
+    public EnemyState(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold, String imagePath) {
         super(name, level, maxHp, hp, atk, def, spd, exp, gold);
+        this.imagePath = imagePath;
     }
 
     public void respawn() {
@@ -22,4 +24,8 @@ public class EnemyState extends CharacterState {
         this.setExp(this.getExp() + (this.getExp() / 5 * this.getLevel()));
         this.setGold(this.getGold() + (this.getGold() / 5 * this.getLevel()));
 	}
+
+    public String getImagePath() {
+        return this.imagePath;
+    }
 }
