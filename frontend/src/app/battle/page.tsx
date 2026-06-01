@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/apiClient";
 import { BattleState, BattleChoice } from "@/type/types";
 import { useRouter } from "next/navigation";
-import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
-import { BattleMessageBox } from "@/components/molecules/BattleMessageBox";
 import { BattleEnemyDisplay } from "@/components/molecules/BattleEnemyDisplay";
 import { BattleCommandBox } from "@/components/molecules/BattleCommandBox";
+import { BattleMessageBox } from "@/components/molecules/BattleMessageBox";
+import { BattleResultModal } from "@/components/molecules/BattleResultModal";
+import { parseBattleResult } from "@/lib/parseBattleResult";
 
 export default function BattlePage() {
     const [battleState, setBattleState] = useState<BattleState | null>(null);
@@ -82,9 +83,19 @@ export default function BattlePage() {
         }
     };
 
+    const handleItemBack = () => {
+        setItemOptions([]);
+    };
+
     const finished = battleState?.battleState.finished === true;
-    const playerAlive = (battleState?.playerState.hp ?? 0) > 0;
-    const displayMessage = battleState?.message ?? "";
+    const battleResult =
+        finished && battleState
+            ? parseBattleResult(
+                  battleState.message,
+                  battleState.playerState.level,
+                  battleState.playerState.hp
+              )
+            : null;
 
     return (
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
@@ -95,35 +106,41 @@ export default function BattlePage() {
             />
 
             <div className="relative z-10 flex min-h-[100dvh] flex-col">
-                <BattleMessageBox message={displayMessage} />
-
-                {error ? <ErrorAlert message={error} /> : null}
-
-                <div className="flex flex-1 items-center justify-center pb-4 pt-24 sm:pt-28">
-                    <BattleEnemyDisplay enemy={battleState?.enemyState} />
-                </div>
-
                 {!finished ? (
-                    <BattleCommandBox
-                        player={battleState?.playerState}
-                        disabled={isActing || battleState === null}
-                        onChoice={handleChoice}
-                        itemOptions={itemOptions}
-                        onItemChoice={handleItemChoice}
-                        ownedItems={battleState?.playerState.ownedItems ?? {}}
+                    <>
+                        <BattleMessageBox message={battleState?.message ?? ""} />
+
+                        {error ? <ErrorAlert message={error} /> : null}
+
+                        <div className="flex flex-1 items-center justify-center pb-4 pt-24 sm:pt-28">
+                            <BattleEnemyDisplay enemy={battleState?.enemyState} />
+                        </div>
+
+                        <BattleCommandBox
+                            player={battleState?.playerState}
+                            disabled={isActing || battleState === null}
+                            onChoice={handleChoice}
+                            itemOptions={itemOptions}
+                            onItemChoice={handleItemChoice}
+                            onItemBack={handleItemBack}
+                            ownedItems={battleState?.playerState.ownedItems ?? {}}
+                        />
+                    </>
+                ) : null}
+
+                {finished && battleResult ? (
+                    <BattleResultModal
+                        result={battleResult}
+                        onBack={() => router.push(battleResult.backPath)}
                     />
                 ) : null}
 
-                {finished && playerAlive ? (
-                    <footer className="absolute bottom-6 left-4 z-20 sm:bottom-8 sm:left-6">
-                        <MainButton onClick={() => router.push("/explore")}>戻る</MainButton>
-                    </footer>
-                ) : null}
-
-                {finished && !playerAlive ? (
-                    <footer className="absolute bottom-6 left-4 z-20 sm:bottom-8 sm:left-6">
-                        <MainButton onClick={() => router.push("/gameover")}>戻る</MainButton>
-                    </footer>
+                {finished && !battleResult ? (
+                    <div className="absolute inset-0 z-30 flex items-center justify-center px-4">
+                        <p className="rounded-md border-2 border-black bg-white/90 px-4 py-2 font-bold text-neutral-900">
+                            {battleState?.message || "戦闘終了"}
+                        </p>
+                    </div>
                 ) : null}
             </div>
         </div>

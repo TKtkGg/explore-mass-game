@@ -17,11 +17,12 @@ type Props = {
     onChoice: (choice: BattleChoice) => void;
     itemOptions: string[];
     onItemChoice: (itemName: string) => void;
+    onItemBack: () => void;
     ownedItems: Record<string, number>;
 };
 
 export const BattleCommandBox = (props: Props) => {
-    const { player, disabled, onChoice, itemOptions, onItemChoice, ownedItems } = props;
+    const { player, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems } = props;
 
     return (
         <div className="mt-auto w-full border-t-2 border-yellow-500/80 bg-black/65 px-4 py-4 sm:px-6 sm:py-5">
@@ -38,18 +39,28 @@ export const BattleCommandBox = (props: Props) => {
                 </div>
 
                 {itemOptions.length > 0 ? (
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        {itemOptions.map((item) => (
-                            <button
-                                key={item}
-                                type="button"
-                                onClick={() => onItemChoice(item)}
-                                disabled={disabled}
-                                className="rounded-md border-2 border-yellow-400 bg-black px-3 py-2 text-sm font-black text-white transition hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
-                            >
-                                {item} ({ownedItems[item] ?? 0})
-                            </button>
-                        ))}
+                    <div className="flex items-stretch gap-2 sm:gap-3">
+                        <button
+                            type="button"
+                            onClick={onItemBack}
+                            disabled={disabled}
+                            className="shrink-0 rounded-md border-2 border-white bg-black px-4 py-3 text-sm font-black text-white transition hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-4 sm:text-base"
+                        >
+                            戻る
+                        </button>
+                        <div className="grid flex-1 grid-cols-1 gap-2 sm:grid-cols-2">
+                            {itemOptions.map((item) => (
+                                <button
+                                    key={item}
+                                    type="button"
+                                    onClick={() => onItemChoice(item)}
+                                    disabled={disabled}
+                                    className="rounded-md border-2 border-yellow-400 bg-black px-3 py-2 text-sm font-black text-white transition hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
+                                >
+                                    {item} ({ownedItems[item] ?? 0})
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
