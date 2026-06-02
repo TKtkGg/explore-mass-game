@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.backend.service.CardService;
 import com.example.backend.dto.card.CardRequest;
 import com.example.backend.dto.card.CardResponse;
+import com.example.backend.dto.card.CardsResponse;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3001")
@@ -22,6 +23,11 @@ public class CardController {
     @GetMapping("/card")
     public CardResponse showCards() {
         return this.cardService.showCards();
+    }
+
+    @GetMapping("/cards")
+    public CardsResponse showOwnedCards() {
+        return this.cardService.showOwnedCards();
     }
     
     @PostMapping("/card/choose")

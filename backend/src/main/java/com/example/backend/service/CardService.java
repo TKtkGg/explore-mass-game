@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.example.backend.dto.card.CardRequest;
 import com.example.backend.dto.card.CardResponse;
+import com.example.backend.dto.card.CardsResponse;
 import com.example.backend.service.gamestate.card.CardListState;
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.character.PlayerState;
@@ -44,5 +45,9 @@ public class CardService {
 
     public List<CardState> getUnownedCards() {
         return Arrays.stream(this.cardListState.getCardList()).filter(card -> !this.playerState.getOwnedCards().contains(card)).collect(Collectors.toList());
+    }
+
+    public CardsResponse showOwnedCards() {
+        return new CardsResponse(this.playerState.getOwnedCards());
     }
 }
