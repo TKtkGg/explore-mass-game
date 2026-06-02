@@ -61,7 +61,18 @@ export default function StatusPage() {
                 }
                 return cardNames.join(", ");
             })()}</p>
-            <p>Owned Items: {Object.entries(data?.ownedItems ?? {}).map(([item, count]) => `${item} (${count})`).join(", ")}</p>
+            <button onClick={() => router.push("/items")}>アイテム一覧</button>
+            <p>Owned Items: {(() => {
+                const itemNames = [];
+                for(const item of Object.entries(data?.ownedItems ?? {})) {
+                    if(itemNames.length >= 1) {
+                        itemNames.push("...");
+                        break;
+                    }
+                    itemNames.push(`${item[0]}(${item[1]})`);
+                }
+                return itemNames.join(", ");
+            })()}</p>
             <button onClick={() => router.push("/explore")}>BACK</button>
         </div>
     )
