@@ -30,9 +30,30 @@ export default function StatusPage() {
             <p>EXP: {data?.exp}/{data?.nextLevelExp}</p>
             <p>Gold: {data?.gold}</p>
             <p>Equipment: {data?.equipment.name} (ATK: {data?.equipment.atk})</p>
-            <button onClick={() => router.push("/equipment")}>装備変更</button>
-            <p>Own Equipment: {data?.ownedEquipmentList.map((equipment: EquipmentState) => equipment.name).join(", ")}</p>
-            <p>Owned Cards: {data?.ownedCards.map((card: CardState) => card.name).join(", ")}</p>
+            <button onClick={() => router.push("/equipment")}>装備一覧</button>
+            <p>Own Equipment: {(() => {
+                const equipmentNames = [];
+                for(const equipment of data?.ownedEquipmentList ?? []) {
+                    if(equipmentNames.length >= 3) {
+                        equipmentNames.push("...");
+                        break;
+                    }
+                    equipmentNames.push(equipment.name);
+                }
+                return equipmentNames.join(", ");
+            })()}</p>
+            <button onClick={() => router.push("/cards")}>カード一覧</button>
+            <p>Owned Cards: {(() => {
+                const cardNames = [];
+                for(const card of data?.ownedCards ?? []) {
+                    if(cardNames.length >= 3) {
+                        cardNames.push("...");
+                        break;
+                    }
+                    cardNames.push(card.name);
+                }
+                return cardNames.join(", ");
+            })()}</p>
             <p>Owned Items: {Object.entries(data?.ownedItems ?? {}).map(([item, count]) => `${item} (${count})`).join(", ")}</p>
             <button onClick={() => router.push("/explore")}>BACK</button>
         </div>
