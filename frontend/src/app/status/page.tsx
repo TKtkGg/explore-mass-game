@@ -29,16 +29,23 @@ export default function StatusPage() {
             <p>SPD: {data?.spd}</p>
             <p>EXP: {data?.exp}/{data?.nextLevelExp}</p>
             <p>Gold: {data?.gold}</p>
-            <p>Equipment: {data?.equipment.name} (ATK: {data?.equipment.atk})</p>
             <button onClick={() => router.push("/equipment")}>装備一覧</button>
             <p>Own Equipment: {(() => {
                 const equipmentNames = [];
+                for(const equipment of data?.ownedEquipmentList ?? []) {
+                    if(equipment.name === data?.equipment.name) {
+                        equipmentNames.push(`${equipment.name} (装備中)`);
+                        break;
+                    }
+                }
                 for(const equipment of data?.ownedEquipmentList ?? []) {
                     if(equipmentNames.length >= 3) {
                         equipmentNames.push("...");
                         break;
                     }
-                    equipmentNames.push(equipment.name);
+                    if(data?.equipment.name !== equipment.name) {
+                        equipmentNames.push(equipment.name);
+                    }
                 }
                 return equipmentNames.join(", ");
             })()}</p>
