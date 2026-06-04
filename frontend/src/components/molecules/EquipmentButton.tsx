@@ -5,11 +5,25 @@ type Props = {
     equipment: EquipmentState;
     isEquipped: boolean;
     onClick: (name: string) => void;
+    onHoverStart?: (
+        equipment: EquipmentState,
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => void;
+    onHoverMove?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onHoverEnd?: () => void;
     disabled?: boolean;
 };
 
 export const EquipmentButton = (props: Props) => {
-    const { equipment, isEquipped, onClick, disabled = false } = props;
+    const {
+        equipment,
+        isEquipped,
+        onClick,
+        onHoverStart,
+        onHoverMove,
+        onHoverEnd,
+        disabled = false,
+    } = props;
 
     return (
         <button
@@ -17,6 +31,9 @@ export const EquipmentButton = (props: Props) => {
             onClick={() => onClick(equipment.name)}
             disabled={disabled}
             aria-label={equipment.name}
+            onMouseEnter={(event) => onHoverStart?.(equipment, event)}
+            onMouseMove={(event) => onHoverMove?.(event)}
+            onMouseLeave={() => onHoverEnd?.()}
             className="flex flex-col items-center gap-3 outline-none transition disabled:cursor-not-allowed disabled:opacity-50"
         >
             <Image
