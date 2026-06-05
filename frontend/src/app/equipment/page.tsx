@@ -81,22 +81,20 @@ export default function EquipmentPage() {
             <div className="relative z-10 flex min-h-[100dvh] flex-col px-4 py-6 sm:px-8">
                 {error ? <ErrorAlert message={error.message} /> : null}
 
-                <main className="flex flex-1 flex-col px-4 pt-6 pb-24 sm:px-8 sm:pt-8">
-                    <div className="flex flex-1 flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                        <div className="flex max-w-4xl flex-wrap items-center justify-center gap-8 sm:gap-10">
-                            {data?.ownedEquipmentList.map((equipment: EquipmentState) => (
-                                <EquipmentButton
-                                    key={equipment.name}
-                                    equipment={equipment}
-                                    isEquipped={equipment.name === data?.equipment?.name}
-                                    onClick={changeEquipment}
-                                    onHoverStart={handleHoverStart}
-                                    onHoverMove={updateTooltipPos}
-                                    onHoverEnd={() => setHoveredEquipment(null)}
-                                    disabled={isChanging}
-                                />
-                            ))}
-                        </div>
+                <main className="flex flex-1 items-start justify-start px-4 pt-6 pb-20 sm:px-8 sm:pt-8 sm:pb-24">
+                    <div className="flex flex-wrap items-start justify-start gap-8 sm:gap-10">
+                        {data?.ownedEquipmentList.map((equipment: EquipmentState) => (
+                            <EquipmentButton
+                                key={equipment.name}
+                                equipment={equipment}
+                                isEquipped={equipment.name === data?.equipment?.name}
+                                onClick={changeEquipment}
+                                onHoverStart={handleHoverStart}
+                                onHoverMove={updateTooltipPos}
+                                onHoverEnd={() => setHoveredEquipment(null)}
+                                disabled={isChanging}
+                            />
+                        ))}
                     </div>
                 </main>
 
