@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/apiClient";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
+import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 
 export default function GameOverPage() {
     const router = useRouter();
@@ -52,12 +53,7 @@ export default function GameOverPage() {
             />
 
             <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8">
-                <header className="pt-[6vh] text-center sm:pt-[8vh]">
-                    <h1 className="font-black leading-tight text-white text-outline text-5xl sm:text-7xl md:text-8xl">
-                        <span className="block">GAME</span>
-                        <span className="block">OVER</span>
-                    </h1>
-                </header>
+                <TwoRowTitle firstRow="GAME" secondRow="OVER" />
 
                 <div className="flex flex-1 flex-col items-center justify-center gap-12 sm:gap-16">
                     <p className="text-3xl font-black text-white text-outline sm:text-4xl md:text-5xl">
