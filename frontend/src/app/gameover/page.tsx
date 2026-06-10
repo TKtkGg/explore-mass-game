@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/apiClient";
+import { MainButton } from "@/components/atoms/MainButton";
+import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 
 export default function GameOverPage() {
     const router = useRouter();
@@ -15,9 +17,10 @@ export default function GameOverPage() {
             try {
                 const response = await apiGet("/gameover");
                 setScore(response.score);
-            } catch (error: unknown) {
-                if(error instanceof Error) {
-                    setError(error.message);
+                setError(null);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message);
                 } else {
                     setError("通信に失敗しました。");
                 }
@@ -28,11 +31,12 @@ export default function GameOverPage() {
 
     const handleRegisterScore = async () => {
         try {
-            await apiPost("/score/register", { score: score });
+            await apiPost("/score/register", { score });
             setRegisterScore(true);
-        } catch (error: unknown) {
-            if(error instanceof Error) {
-                setError(error.message);
+            setError(null);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
             } else {
                 setError("通信に失敗しました。");
             }
@@ -40,17 +44,39 @@ export default function GameOverPage() {
     };
 
     return (
-        <div>
-            <h1>GAME OVER</h1>
-            {error && <p>{error}</p>}
-            <p>Score: {score}</p>
-            <button onClick={() => router.push("/")}>RESTART</button>
-            {!registerScore && <button onClick={() => handleRegisterScore()}>スコアを登録する</button>}
-            {registerScore && 
-            <>
-                <p>スコアを登録しました。</p>
-                <button onClick={() => router.push("/ranking")}>ランキングを見る</button>
-            </>}
+        <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
+            <div
+                className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: "url('/background/木の板.jpg')" }}
+                aria-hidden
+            />
+
+            <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8">
+                <header className="pt-[6vh] text-center sm:pt-[8vh]">
+                    <h1 className="font-black leading-tight text-white text-outline text-5xl sm:text-7xl md:text-8xl">
+                        <span className="block">GAME</span>
+                        <span className="block">OVER</span>
+                    </h1>
+                </header>
+
+                <div className="flex flex-1 flex-col items-center justify-center gap-12 sm:gap-16">
+                    <p className="text-3xl font-black text-white text-outline sm:text-4xl md:text-5xl">
+                        SCORE : {score}
+                    </p>
+
+                    <div className="flex flex-col items-center gap-4">
+                        {!registerScore ? (
+                            <MainButton onClick={handleRegisterScore}>ランキングに登録する</MainButton>
+                        ) : (
+                            <MainButton onClick={() => router.push("/ranking")}>ランキング</MainButton>
+                        )}
+
+                        <MainButton onClick={() => router.push("/")}>RESTART</MainButton>
+                    </div>
+                </div>
+
+                {error ? <ErrorAlert message={error} /> : null}
+            </div>
         </div>
     );
 }
