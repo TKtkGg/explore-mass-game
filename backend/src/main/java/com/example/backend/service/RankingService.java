@@ -17,7 +17,7 @@ public class RankingService {
     }
 
     public List<RankingResponse> getRanking() {
-        List<ScoreRecord> scoreRecords = scoreRecordRepository.findTop10ByOrderByScoreDesc();
+        List<ScoreRecord> scoreRecords = scoreRecordRepository.findTop100ByOrderByScoreDesc();
         List<RankingResponse> result = new ArrayList<>();
         for(ScoreRecord record : scoreRecords) {
             result.add(new RankingResponse(
