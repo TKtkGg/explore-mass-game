@@ -33,6 +33,9 @@ export default function ExplorePage() {
                 setRouteOptions(response.routeOptions);
                 setMessage(response.message);
                 setError(null);
+                if(response.stopped) {
+                    router.push("/gameover");
+                }
             } catch (error: unknown) {
                 if (error instanceof Error) {
                 setError(error);
@@ -42,13 +45,7 @@ export default function ExplorePage() {
             }
         };
         start();
-    }, []);
-
-    useEffect(() => {
-        if (remainingSteps === 0) {
-            router.push("/gameover");
-        }
-    }, [remainingSteps, router]);
+    }, [router]);
 
     const handleMove = async (routeType: string) => {
         if (isLoading) return;
@@ -78,6 +75,10 @@ export default function ExplorePage() {
             setRouteOptions(response.routeOptions);
             setMessage(response.message);
             setError(null);
+            if(routeType === "REST" && response.stopped) {
+                router.push("/gameover");
+                return;
+            }
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setError(error);
