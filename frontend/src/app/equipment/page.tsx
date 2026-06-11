@@ -7,7 +7,7 @@ import { EquipmentState } from "@/type/types";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { EquipmentButton } from "@/components/molecules/EquipmentButton";
-import { EquipmentTooltip } from "@/components/molecules/EquipmentTooltip";
+import { Tooltip } from "@/components/molecules/Tooltip";
 
 interface EquipmentResponse {
     ownedEquipmentList: EquipmentState[];
@@ -99,8 +99,9 @@ export default function EquipmentPage() {
                 </main>
 
                 {hoveredEquipment ? (
-                    <EquipmentTooltip
-                        equipment={hoveredEquipment}
+                    <Tooltip 
+                        title={hoveredEquipment.name}
+                        lines={`ATK : ${hoveredEquipment.atk}`}
                         x={tooltipPos.x}
                         y={tooltipPos.y}
                     />

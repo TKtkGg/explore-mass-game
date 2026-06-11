@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { ItemDisplay, OwnedItemDisplay } from "@/components/molecules/ItemDisplay";
-import { ItemTooltip } from "@/components/molecules/ItemTooltip";
+import { Tooltip } from "@/components/molecules/Tooltip";
+import { getItemHealAmount } from "@/lib/itemHealAmount";
 
 interface ItemResponse {
     ownedItems: {
@@ -79,7 +80,13 @@ export default function ItemsPage() {
                 </main>
 
                 {hoveredItem ? (
-                    <ItemTooltip item={hoveredItem} x={tooltipPos.x} y={tooltipPos.y} />
+                    <Tooltip 
+                        title={hoveredItem.name} 
+                        lines={`HP : ${getItemHealAmount(hoveredItem.name)}`} 
+                        x={tooltipPos.x} 
+                        y={tooltipPos.y} 
+                        wide={true} 
+                    />
                 ) : null}
 
                 <footer className="absolute bottom-6 left-4 z-20 sm:bottom-15 sm:left-20">

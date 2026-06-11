@@ -7,7 +7,7 @@ import { CardState } from "@/type/types";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { CardDisplay } from "@/components/molecules/CardDisplay";
-import { CardTooltip } from "@/components/molecules/CardTooltip";
+import { Tooltip } from "@/components/molecules/Tooltip";
 
 interface CardsResponse {
     ownedCards: CardState[];
@@ -75,7 +75,13 @@ export default function CardsPage() {
                 </main>
 
                 {hoveredCard ? (
-                    <CardTooltip card={hoveredCard} x={tooltipPos.x} y={tooltipPos.y} />
+                    <Tooltip 
+                        title={hoveredCard.name} 
+                        lines={hoveredCard.text} 
+                        x={tooltipPos.x}
+                        y={tooltipPos.y} 
+                        wide={true} 
+                    />
                 ) : null}
 
                 <footer className="absolute bottom-6 left-4 z-20 sm:bottom-15 sm:left-20">

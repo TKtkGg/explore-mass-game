@@ -1,13 +1,15 @@
-import { CardState } from "@/type/types";
+
 
 type Props = {
-    card: CardState;
+    title: string;
+    lines: string;
     x: number;
     y: number;
-};
+    wide?: boolean;
+}
 
-export const CardTooltip = (props: Props) => {
-    const { card, x, y } = props;
+export const Tooltip = (props: Props) => {
+    const { title, lines, x, y, wide } = props;
 
     return (
         <div
@@ -16,11 +18,11 @@ export const CardTooltip = (props: Props) => {
             role="tooltip"
         >
             <p className="text-xl font-black text-white text-outline sm:text-2xl">
-                {card.name}
+                {title}
             </p>
-            <p className="mt-1 text-sm font-bold leading-relaxed text-white sm:text-base">
-                {card.text}
+            <p className={`mt-1 text-white ${wide ? "text-sm font-bold leading-relaxed sm:text-base" : "text-lg font-black text-outline sm:text-xl"}`}>
+                {lines}
             </p>
         </div>
     );
-};
+}
