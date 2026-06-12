@@ -15,6 +15,10 @@ export default function BattlePage() {
     const [battleState, setBattleState] = useState<BattleState | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [itemOptions, setItemOptions] = useState<string[]>([]);
+    const [displayMessage, setDisplayMessage] = useState<string>("");
+    const [displayPlayerHp, setDisplayPlayerHp] = useState<number>(0);
+    const [displayEnemyHp, setDisplayEnemyHp] = useState<number>(0);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [isActing, setIsActing] = useState(false);
     const router = useRouter();
 
@@ -23,6 +27,9 @@ export default function BattlePage() {
             try {
                 const response = await apiGet("/battle");
                 setBattleState(response);
+                setDisplayMessage(response.message);
+                setDisplayPlayerHp(response.playerState.hp);
+                setDisplayEnemyHp(response.enemyState.hp);
                 setError(null);
             } catch (err: unknown) {
                 if (err instanceof Error) {
@@ -48,6 +55,9 @@ export default function BattlePage() {
         try {
             const response = await apiPost("/battle/action", { playerChoice: choice });
             setBattleState(response);
+            setDisplayMessage(response.message);
+            setDisplayPlayerHp(response.playerState.hp);
+            setDisplayEnemyHp(response.enemyState.hp);
             setError(null);
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -71,6 +81,9 @@ export default function BattlePage() {
                 itemName,
             });
             setBattleState(response);
+            setDisplayMessage(response.message);
+            setDisplayPlayerHp(response.playerState.hp);
+            setDisplayEnemyHp(response.enemyState.hp);
             setError(null);
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -91,10 +104,10 @@ export default function BattlePage() {
     const battleResult =
         finished && battleState
             ? parseBattleResult(
-                  battleState.message,
-                  battleState.playerState.level,
-                  battleState.playerState.hp
-              )
+                battleState.message,
+                battleState.playerState.level,
+                battleState.playerState.hp
+            )
             : null;
 
     return (
@@ -108,17 +121,18 @@ export default function BattlePage() {
             <div className="relative z-10 flex min-h-[100dvh] flex-col">
                 {!finished ? (
                     <>
-                        <BattleMessageBox message={battleState?.message ?? ""} />
+                        <BattleMessageBox message={displayMessage} />
 
                         {error ? <ErrorAlert message={error} /> : null}
 
                         <div className="flex flex-1 items-center justify-center pb-4 pt-24 sm:pt-28">
-                            <BattleEnemyDisplay enemy={battleState?.enemyState} />
+                            <BattleEnemyDisplay enemy={battleState?.enemyState} hp={displayEnemyHp} />
                         </div>
 
                         <BattleCommandBox
                             player={battleState?.playerState}
-                            disabled={isActing || battleState === null}
+                            hp={displayPlayerHp}
+                            disabled={isActing || isPlaying || battleState === null}
                             onChoice={handleChoice}
                             itemOptions={itemOptions}
                             onItemChoice={handleItemChoice}

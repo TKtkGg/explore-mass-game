@@ -4,10 +4,11 @@ import { HpBar } from "@/components/atoms/HpBar";
 
 type Props = {
     enemy: EnemyState | undefined;
+    hp: number;
 };
 
 export const BattleEnemyDisplay = (props: Props) => {
-    const { enemy } = props;
+    const { enemy, hp } = props;
 
     if (!enemy) return null;
 
@@ -16,7 +17,7 @@ export const BattleEnemyDisplay = (props: Props) => {
             <p className="text-lg font-black text-white text-outline sm:text-xl md:text-2xl">
                 Lv.{enemy.level} {enemy.name}
             </p>
-            <HpBar hp={enemy.hp} maxHp={enemy.maxHp} className="max-w-xs sm:max-w-sm" />
+            <HpBar hp={hp} maxHp={enemy.maxHp} className="max-w-xs sm:max-w-sm" />
             {enemy.imagePath ? (
                 <Image
                     src={enemy.imagePath}

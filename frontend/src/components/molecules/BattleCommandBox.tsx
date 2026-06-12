@@ -13,6 +13,7 @@ const BATTLE_CHOICE_CONFIG: Record<
 
 type Props = {
     player: StatusState | undefined;
+    hp: number;
     disabled: boolean;
     onChoice: (choice: BattleChoice) => void;
     itemOptions: string[];
@@ -22,7 +23,7 @@ type Props = {
 };
 
 export const BattleCommandBox = (props: Props) => {
-    const { player, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems } = props;
+    const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems } = props;
 
     return (
         <div className="mt-auto w-full border-t-2 border-yellow-500/80 bg-black/65 px-4 py-4 sm:px-6 sm:py-5">
@@ -32,7 +33,7 @@ export const BattleCommandBox = (props: Props) => {
                         Lv.{player?.level ?? "—"} {player?.name ?? "プレイヤー"}
                     </p>
                     <HpBar
-                        hp={player?.hp ?? 0}
+                        hp={hp}
                         maxHp={player?.maxHp ?? 1}
                         className="flex-1"
                     />
