@@ -10,6 +10,9 @@ import { BattleCommandBox } from "@/components/molecules/BattleCommandBox";
 import { BattleMessageBox } from "@/components/molecules/BattleMessageBox";
 import { BattleResultModal } from "@/components/molecules/BattleResultModal";
 import { parseBattleResult } from "@/lib/parseBattleResult";
+import { messageDivision } from "@/lib/messageDivision";
+import { isPlayerFast } from "@/lib/isPlayerFast";
+import { sleep } from "@/lib/sleepHelper";
 
 export default function BattlePage() {
     const [battleState, setBattleState] = useState<BattleState | null>(null);
@@ -54,10 +57,15 @@ export default function BattlePage() {
         setIsActing(true);
         try {
             const response = await apiPost("/battle/action", { playerChoice: choice });
+            setIsPlaying(true);
+            const messages = messageDivision(response.message, isPlayerFast(response.playerState.spd, response.enemyState.spd, choice, response.battleState.enemyChoice), response.playerState.name, response.enemyState.name);
             setBattleState(response);
+            setDisplayMessage(messages[0]);
+            await sleep(700);
             setDisplayMessage(response.message);
             setDisplayPlayerHp(response.playerState.hp);
             setDisplayEnemyHp(response.enemyState.hp);
+            setIsPlaying(false);
             setError(null);
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -80,10 +88,15 @@ export default function BattlePage() {
                 playerChoice: BattleChoice.ITEM,
                 itemName,
             });
+            setIsPlaying(true);
             setBattleState(response);
+            const messages = messageDivision(response.message, isPlayerFast(response.playerState.spd, response.enemyState.spd, BattleChoice.ITEM, response.battleState.enemyChoice), response.playerState.name, response.enemyState.name);
+            setDisplayMessage(messages[0]);
+            await sleep(700);
             setDisplayMessage(response.message);
             setDisplayPlayerHp(response.playerState.hp);
             setDisplayEnemyHp(response.enemyState.hp);
+            setIsPlaying(false);
             setError(null);
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -119,7 +132,7 @@ export default function BattlePage() {
             />
 
             <div className="relative z-10 flex min-h-[100dvh] flex-col">
-                {!finished ? (
+                {!finished || isPlaying ? (
                     <>
                         <BattleMessageBox message={displayMessage} />
 
@@ -142,14 +155,14 @@ export default function BattlePage() {
                     </>
                 ) : null}
 
-                {finished && battleResult ? (
+                {finished && !isPlaying && battleResult ? (
                     <BattleResultModal
                         result={battleResult}
                         onBack={() => router.push(battleResult.backPath)}
                     />
                 ) : null}
 
-                {finished && !battleResult ? (
+                {finished && !isPlaying && !battleResult ? (
                     <div className="absolute inset-0 z-30 flex items-center justify-center px-4">
                         <p className="rounded-md border-2 border-black bg-white/90 px-4 py-2 font-bold text-neutral-900">
                             {battleState?.message || "戦闘終了"}
