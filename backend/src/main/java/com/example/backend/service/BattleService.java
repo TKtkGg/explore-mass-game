@@ -69,6 +69,9 @@ public class BattleService {
     }
 
     public boolean isPlayerFast() {
+        if(this.battleState.getPlayerChoice() == BattleChoice.ITEM) {
+            return true;
+        }
         if(this.battleState.getEnemyChoice() == BattleChoice.DEFEND) {
             return false;
         }

@@ -10,6 +10,7 @@ import { BattleCommandBox } from "@/components/molecules/BattleCommandBox";
 import { BattleMessageBox } from "@/components/molecules/BattleMessageBox";
 import { BattleResultModal } from "@/components/molecules/BattleResultModal";
 import { parseBattleResult } from "@/lib/parseBattleResult";
+import { getItemHealAmount } from "@/lib/itemHealAmount";
 import { messageDivision } from "@/lib/messageDivision";
 import { isPlayerFast } from "@/lib/isPlayerFast";
 import { sleep } from "@/lib/sleepHelper";
@@ -58,13 +59,22 @@ export default function BattlePage() {
         try {
             const response = await apiPost("/battle/action", { playerChoice: choice });
             setIsPlaying(true);
-            const messages = messageDivision(response.message, isPlayerFast(response.playerState.spd, response.enemyState.spd, choice, response.battleState.enemyChoice), response.playerState.name, response.enemyState.name);
+            const isPlayerFastResult = isPlayerFast(response.playerState.spd, response.enemyState.spd, choice, response.battleState.enemyChoice);
+            const messages = messageDivision(response.message, isPlayerFastResult, response.playerState.name, response.enemyState.name);
             setBattleState(response);
             setDisplayMessage(messages[0]);
+            if (isPlayerFastResult) {
+                setDisplayEnemyHp(response.enemyState.hp);
+            } else {
+                setDisplayPlayerHp(response.playerState.hp);
+            }
             await sleep(700);
             setDisplayMessage(response.message);
-            setDisplayPlayerHp(response.playerState.hp);
-            setDisplayEnemyHp(response.enemyState.hp);
+            if (isPlayerFastResult) {
+                setDisplayPlayerHp(response.playerState.hp);
+            } else {
+                setDisplayEnemyHp(response.enemyState.hp);
+            }
             setIsPlaying(false);
             setError(null);
         } catch (err: unknown) {
@@ -90,12 +100,17 @@ export default function BattlePage() {
             });
             setIsPlaying(true);
             setBattleState(response);
-            const messages = messageDivision(response.message, isPlayerFast(response.playerState.spd, response.enemyState.spd, BattleChoice.ITEM, response.battleState.enemyChoice), response.playerState.name, response.enemyState.name);
+            const isPlayerFastResult = isPlayerFast(response.playerState.spd, response.enemyState.spd, BattleChoice.ITEM, response.battleState.enemyChoice);
+            const messages = messageDivision(response.message, isPlayerFastResult, response.playerState.name, response.enemyState.name);
             setDisplayMessage(messages[0]);
+            if (response.playerState.maxHp < displayPlayerHp + (getItemHealAmount(itemName) ?? 0)) {
+                setDisplayPlayerHp(response.playerState.maxHp);
+            } else {
+                setDisplayPlayerHp(displayPlayerHp + (getItemHealAmount(itemName) ?? 0));
+            }
             await sleep(700);
             setDisplayMessage(response.message);
             setDisplayPlayerHp(response.playerState.hp);
-            setDisplayEnemyHp(response.enemyState.hp);
             setIsPlaying(false);
             setError(null);
         } catch (err: unknown) {
