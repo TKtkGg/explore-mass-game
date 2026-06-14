@@ -24,6 +24,8 @@ export default function BattlePage() {
     const [displayEnemyHp, setDisplayEnemyHp] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isActing, setIsActing] = useState(false);
+    const [shakeTarget, setShakeTarget] = useState<"player" | "enemy" | null>(null);
+    const [shakeKey, setShakeKey] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -46,6 +48,33 @@ export default function BattlePage() {
         start();
     }, []);
 
+    useEffect(() => {
+        if (!shakeTarget) return;
+        const id = setTimeout(() => setShakeTarget(null), 450);
+        return () => clearTimeout(id);
+    }, [shakeTarget, shakeKey]);
+
+    const triggerShake = (target: "player" | "enemy") => {
+        setShakeTarget(target);
+        setShakeKey((key) => key + 1);
+    };
+
+    const upgradeHpWithShake = (
+        target: "player" | "enemy",
+        nextHp: number,
+        currentHp: number,
+        useItem?: boolean,
+    ) => {
+        if (nextHp < currentHp || useItem) {
+            triggerShake(target);
+        }
+        if (target === "player") {
+            setDisplayPlayerHp(nextHp);
+        } else {
+            setDisplayEnemyHp(nextHp);
+        }
+    }
+
     const handleChoice = async (choice: BattleChoice) => {
         if (isActing || battleState?.battleState.finished) return;
 
@@ -64,16 +93,16 @@ export default function BattlePage() {
             setBattleState(response);
             setDisplayMessage(messages[0]);
             if (isPlayerFastResult) {
-                setDisplayEnemyHp(response.enemyState.hp);
+                upgradeHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
             } else {
-                setDisplayPlayerHp(response.playerState.hp);
+                upgradeHpWithShake("player", response.playerState.hp, displayPlayerHp);
             }
             await sleep(700);
             setDisplayMessage(response.message);
             if (isPlayerFastResult) {
-                setDisplayPlayerHp(response.playerState.hp);
+                upgradeHpWithShake("player", response.playerState.hp, displayPlayerHp);
             } else {
-                setDisplayEnemyHp(response.enemyState.hp);
+                upgradeHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
             }
             setIsPlaying(false);
             setError(null);
@@ -110,7 +139,7 @@ export default function BattlePage() {
             }
             await sleep(700);
             setDisplayMessage(response.message);
-            setDisplayPlayerHp(response.playerState.hp);
+            upgradeHpWithShake("player", response.playerState.hp, displayPlayerHp, true);
             setIsPlaying(false);
             setError(null);
         } catch (err: unknown) {
@@ -154,7 +183,7 @@ export default function BattlePage() {
                         {error ? <ErrorAlert message={error} /> : null}
 
                         <div className="flex flex-1 items-center justify-center pb-4 pt-24 sm:pt-28">
-                            <BattleEnemyDisplay enemy={battleState?.enemyState} hp={displayEnemyHp} />
+                            <BattleEnemyDisplay enemy={battleState?.enemyState} hp={displayEnemyHp} isShaking={shakeTarget === "enemy"} shakeKey={shakeTarget === "enemy" ? shakeKey : 0} />
                         </div>
 
                         <BattleCommandBox
@@ -166,6 +195,8 @@ export default function BattlePage() {
                             onItemChoice={handleItemChoice}
                             onItemBack={handleItemBack}
                             ownedItems={battleState?.playerState.ownedItems ?? {}}
+                            isShaking={shakeTarget === "player"}
+                            shakeKey={shakeTarget === "player" ? shakeKey : 0}
                         />
                     </>
                 ) : null}

@@ -20,15 +20,17 @@ type Props = {
     onItemChoice: (itemName: string) => void;
     onItemBack: () => void;
     ownedItems: Record<string, number>;
+    isShaking?: boolean;
+    shakeKey?: number;
 };
 
 export const BattleCommandBox = (props: Props) => {
-    const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems } = props;
+    const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems, isShaking, shakeKey } = props;
 
     return (
         <div className="mt-auto w-full border-t-2 border-yellow-500/80 bg-black/65 px-4 py-4 sm:px-6 sm:py-5">
             <div className="mx-auto flex max-w-3xl flex-col gap-4">
-                <div className="flex items-center gap-3 sm:gap-4">
+                <div key={shakeKey} className={`flex items-center gap-3 sm:gap-4 ${isShaking ? "animate-battle-shake" : ""}`}>
                     <p className="shrink-0 text-sm font-black text-white text-outline sm:text-base">
                         Lv.{player?.level ?? "—"} {player?.name ?? "プレイヤー"}
                     </p>
