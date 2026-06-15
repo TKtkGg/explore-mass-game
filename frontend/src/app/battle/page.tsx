@@ -59,19 +59,79 @@ export default function BattlePage() {
         setShakeKey((key) => key + 1);
     };
 
-    const upgradeHpWithShake = (
+    const updateHpWithShake = (
         target: "player" | "enemy",
         nextHp: number,
         currentHp: number,
-        useItem?: boolean,
     ) => {
-        if (nextHp < currentHp || useItem) {
+        if (nextHp < currentHp) {
             triggerShake(target);
         }
         if (target === "player") {
             setDisplayPlayerHp(nextHp);
         } else {
             setDisplayEnemyHp(nextHp);
+        }
+    }
+
+    const playTurn = async (choice?: BattleChoice, itemName?: string) => {
+        setItemOptions([]);
+        setIsActing(true);
+        try {
+            if (choice) {
+                const response = await apiPost("/battle/action", { playerChoice: choice });
+                setIsPlaying(true);
+                const isPlayerFastResult = isPlayerFast(response.playerState.spd, response.enemyState.spd, choice, response.battleState.enemyChoice);
+                const messages = messageDivision(response.message, isPlayerFastResult, response.playerState.name, response.enemyState.name);
+                setBattleState(response);
+                setDisplayMessage(messages[0]);
+                if (isPlayerFastResult) {
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
+                } else {
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp);
+                }
+                await sleep(700);
+                setDisplayMessage(response.message);
+                if (isPlayerFastResult) {
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp);
+                } else {
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
+                }
+            }
+            if (itemName) {
+                const response = await apiPost("/battle/action", {
+                    playerChoice: BattleChoice.ITEM,
+                    itemName,
+                });
+                setIsPlaying(true);
+                setBattleState(response);
+                const isPlayerFastResult = isPlayerFast(response.playerState.spd, response.enemyState.spd, BattleChoice.ITEM, response.battleState.enemyChoice);
+                const messages = messageDivision(response.message, isPlayerFastResult, response.playerState.name, response.enemyState.name);
+                setDisplayMessage(messages[0]);
+
+                let currentHp = displayPlayerHp;
+                currentHp = Math.min(
+                    currentHp + (getItemHealAmount(itemName) ?? 0),
+                    response.playerState.maxHp
+                );
+
+                setDisplayPlayerHp(currentHp);
+                await sleep(700);
+                setDisplayMessage(response.message);
+                updateHpWithShake("player", response.playerState.hp, currentHp);
+                currentHp = response.playerState.hp;
+            }
+
+            setIsPlaying(false);
+            setError(null);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("通信に失敗しました。");
+            }
+        } finally {
+            setIsActing(false);
         }
     }
 
@@ -82,39 +142,7 @@ export default function BattlePage() {
             setItemOptions(Object.keys(battleState?.playerState.ownedItems ?? {}));
             return;
         }
-
-        setItemOptions([]);
-        setIsActing(true);
-        try {
-            const response = await apiPost("/battle/action", { playerChoice: choice });
-            setIsPlaying(true);
-            const isPlayerFastResult = isPlayerFast(response.playerState.spd, response.enemyState.spd, choice, response.battleState.enemyChoice);
-            const messages = messageDivision(response.message, isPlayerFastResult, response.playerState.name, response.enemyState.name);
-            setBattleState(response);
-            setDisplayMessage(messages[0]);
-            if (isPlayerFastResult) {
-                upgradeHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
-            } else {
-                upgradeHpWithShake("player", response.playerState.hp, displayPlayerHp);
-            }
-            await sleep(700);
-            setDisplayMessage(response.message);
-            if (isPlayerFastResult) {
-                upgradeHpWithShake("player", response.playerState.hp, displayPlayerHp);
-            } else {
-                upgradeHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
-            }
-            setIsPlaying(false);
-            setError(null);
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("通信に失敗しました。");
-            }
-        } finally {
-            setIsActing(false);
-        }
+        await playTurn(choice);
     };
 
     const handleItemChoice = async (itemName: string) => {
@@ -122,35 +150,8 @@ export default function BattlePage() {
 
         setItemOptions([]);
         setIsActing(true);
-        try {
-            const response = await apiPost("/battle/action", {
-                playerChoice: BattleChoice.ITEM,
-                itemName,
-            });
-            setIsPlaying(true);
-            setBattleState(response);
-            const isPlayerFastResult = isPlayerFast(response.playerState.spd, response.enemyState.spd, BattleChoice.ITEM, response.battleState.enemyChoice);
-            const messages = messageDivision(response.message, isPlayerFastResult, response.playerState.name, response.enemyState.name);
-            setDisplayMessage(messages[0]);
-            if (response.playerState.maxHp < displayPlayerHp + (getItemHealAmount(itemName) ?? 0)) {
-                setDisplayPlayerHp(response.playerState.maxHp);
-            } else {
-                setDisplayPlayerHp(displayPlayerHp + (getItemHealAmount(itemName) ?? 0));
-            }
-            await sleep(700);
-            setDisplayMessage(response.message);
-            upgradeHpWithShake("player", response.playerState.hp, displayPlayerHp, true);
-            setIsPlaying(false);
-            setError(null);
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("通信に失敗しました。");
-            }
-        } finally {
-            setIsActing(false);
-        }
+        
+        await playTurn(undefined, itemName);
     };
 
     const handleItemBack = () => {
