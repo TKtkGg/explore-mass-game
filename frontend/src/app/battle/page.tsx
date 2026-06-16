@@ -15,6 +15,12 @@ import { messageDivision } from "@/lib/messageDivision";
 import { isPlayerFast } from "@/lib/isPlayerFast";
 import { sleep } from "@/lib/sleepHelper";
 
+type DamageFloater = {
+    target: "player" | "enemy";
+    value: number;
+    key: number;
+}
+
 export default function BattlePage() {
     const [battleState, setBattleState] = useState<BattleState | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -26,6 +32,7 @@ export default function BattlePage() {
     const [isActing, setIsActing] = useState(false);
     const [shakeTarget, setShakeTarget] = useState<"player" | "enemy" | null>(null);
     const [shakeKey, setShakeKey] = useState(0);
+    const [damageFloater, setDamageFloater] = useState<DamageFloater | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -54,6 +61,12 @@ export default function BattlePage() {
         return () => clearTimeout(id);
     }, [shakeTarget, shakeKey]);
 
+    useEffect(() => {
+        if (!damageFloater) return;
+        const id = setTimeout(() => setDamageFloater(null), 600);
+        return () => clearTimeout(id);
+    }, [damageFloater])
+
     const triggerShake = (target: "player" | "enemy") => {
         setShakeTarget(target);
         setShakeKey((key) => key + 1);
@@ -64,14 +77,21 @@ export default function BattlePage() {
         nextHp: number,
         currentHp: number,
     ) => {
-        if (nextHp < currentHp) {
+        const damage = currentHp - nextHp;
+        if (damage > 0) {
             triggerShake(target);
+            triggerDamageFloat(target, damage);
         }
         if (target === "player") {
             setDisplayPlayerHp(nextHp);
         } else {
             setDisplayEnemyHp(nextHp);
         }
+    };
+
+    const triggerDamageFloat = (target: "player" | "enemy", value: number) => {
+        if (value === 0) return;
+        setDamageFloater({ target, value, key: Date.now() });
     }
 
     const playTurn = async (choice?: BattleChoice, itemName?: string) => {
@@ -184,7 +204,7 @@ export default function BattlePage() {
                         {error ? <ErrorAlert message={error} /> : null}
 
                         <div className="flex flex-1 items-center justify-center pb-4 pt-24 sm:pt-28">
-                            <BattleEnemyDisplay enemy={battleState?.enemyState} hp={displayEnemyHp} isShaking={shakeTarget === "enemy"} shakeKey={shakeTarget === "enemy" ? shakeKey : 0} />
+                            <BattleEnemyDisplay enemy={battleState?.enemyState} hp={displayEnemyHp} isShaking={shakeTarget === "enemy"} shakeKey={shakeTarget === "enemy" ? shakeKey : 0} damageFloater={damageFloater?.target === "enemy" ? damageFloater : null}/>
                         </div>
 
                         <BattleCommandBox
@@ -198,6 +218,7 @@ export default function BattlePage() {
                             ownedItems={battleState?.playerState.ownedItems ?? {}}
                             isShaking={shakeTarget === "player"}
                             shakeKey={shakeTarget === "player" ? shakeKey : 0}
+                            damageFloater={damageFloater?.target === "player" ? damageFloater : null}
                         />
                     </>
                 ) : null}

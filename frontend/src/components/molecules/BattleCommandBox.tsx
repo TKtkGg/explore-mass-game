@@ -1,5 +1,6 @@
 import { BattleChoice, StatusState } from "@/type/types";
 import { HpBar } from "@/components/atoms/HpBar";
+import { BattleFloatingNumber } from "../atoms/BattleFloatingNumber";
 
 const BATTLE_CHOICE_CONFIG: Record<
     BattleChoice,
@@ -22,10 +23,11 @@ type Props = {
     ownedItems: Record<string, number>;
     isShaking?: boolean;
     shakeKey?: number;
+    damageFloater?: { value: number; key: number } | null;
 };
 
 export const BattleCommandBox = (props: Props) => {
-    const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems, isShaking, shakeKey } = props;
+    const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems, isShaking, shakeKey, damageFloater } = props;
 
     return (
         <div className="mt-auto w-full border-t-2 border-yellow-500/80 bg-black/65 px-4 py-4 sm:px-6 sm:py-5">
@@ -34,11 +36,17 @@ export const BattleCommandBox = (props: Props) => {
                     <p className="shrink-0 text-sm font-black text-white text-outline sm:text-base">
                         Lv.{player?.level ?? "—"} {player?.name ?? "プレイヤー"}
                     </p>
-                    <HpBar
-                        hp={hp}
-                        maxHp={player?.maxHp ?? 1}
-                        className="flex-1"
-                    />
+                    <div className="relative flex-1">
+                        <HpBar
+                            hp={hp}
+                            maxHp={player?.maxHp ?? 1}
+                            className="flex-1"
+                        />
+                        {damageFloater ? (
+                            <BattleFloatingNumber key={damageFloater.key} value={damageFloater.value} />
+                        ) : null}
+                    </div>
+                    
                 </div>
 
                 {itemOptions.length > 0 ? (
