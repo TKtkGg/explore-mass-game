@@ -19,6 +19,32 @@
   }
 }
 
+@keyframes battle-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+@keyframes battle-damage-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) translateY(8px);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.25) translateY(-4px);
+  }
+  50% {
+    transform: scale(1) translateY(-12px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-36px);
+  }
+}
+
 @utility text-outline {
   text-shadow:
     2px 2px 0 #000,
@@ -31,16 +57,12 @@
     -2px 0 0 #000;
 }
 
-@keyframes battle-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-10px); }
-  40% { transform: translateX(10px); }
-  60% { transform: translateX(-6px); }
-  80% { transform: translateX(6px); }
-}
-
 @utility animate-battle-shake {
   animation: battle-shake 0.45s ease-in-out;
+}
+
+@utility animate-battle-damage-pop {
+  animation: battle-damage-pop 0.6s ease-out forwards;
 }
 
 body {
