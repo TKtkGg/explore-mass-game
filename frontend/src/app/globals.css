@@ -62,7 +62,7 @@
 }
 
 @utility animate-battle-damage-pop {
-  animation: battle-damage-pop 0.6s ease-out forwards;
+  animation: battle-damage-pop 1.0s ease-out forwards;
 }
 
 body {

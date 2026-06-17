@@ -30,7 +30,14 @@ export const BattleCommandBox = (props: Props) => {
     const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems, isShaking, shakeKey, damageFloater } = props;
 
     return (
-        <div className="mt-auto w-full border-t-2 border-yellow-500/80 bg-black/65 px-4 py-4 sm:px-6 sm:py-5">
+        <div className="relative mt-auto w-full border-t-2 border-yellow-500/80 bg-black/65 px-4 py-4 sm:px-6 sm:py-5">
+            {damageFloater ? (
+                <div className="pointer-events-none absolute -top-16 left-1/2 z-20 -translate-x-1/2">
+                    <div className="relative h-16 w-20">
+                        <BattleFloatingNumber key={damageFloater.key} value={damageFloater.value} />
+                    </div>
+                </div>
+            ) : null}
             <div className="mx-auto flex max-w-3xl flex-col gap-4">
                 <div key={shakeKey} className={`flex items-center gap-3 sm:gap-4 ${isShaking ? "animate-battle-shake" : ""}`}>
                     <p className="shrink-0 text-sm font-black text-white text-outline sm:text-base">
@@ -42,9 +49,6 @@ export const BattleCommandBox = (props: Props) => {
                             maxHp={player?.maxHp ?? 1}
                             className="flex-1"
                         />
-                        {damageFloater ? (
-                            <BattleFloatingNumber key={damageFloater.key} value={damageFloater.value} />
-                        ) : null}
                     </div>
                     
                 </div>
