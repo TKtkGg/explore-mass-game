@@ -16,12 +16,19 @@ import { isPlayerFast } from "@/lib/isPlayerFast";
 import { sleep } from "@/lib/sleepHelper";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM, SFX } from "@/lib/audioPaths";
+import { FlashType, SpriteEffectType } from "@/lib/effectPaths";
+
 
 type DamageFloater = {
     target: "player" | "enemy";
     value: number;
     key: number;
 }
+
+type BattleEffect =
+    | { kind: "flash"; type: FlashType; target: "player" | "enemy"; key: number }
+    | { kind: "sprite"; type: SpriteEffectType; target: "player" | "enemy"; key: number }
+    | null;
 
 export default function BattlePage() {
     const [battleState, setBattleState] = useState<BattleState | null>(null);
@@ -35,6 +42,7 @@ export default function BattlePage() {
     const [shakeTarget, setShakeTarget] = useState<"player" | "enemy" | null>(null);
     const [shakeKey, setShakeKey] = useState(0);
     const [damageFloater, setDamageFloater] = useState<DamageFloater | null>(null);
+    const [battleEffect, setBattleEffect] = useState<BattleEffect | null>(null);
     const { playBgm, playSfx } = useAudio();
     const router = useRouter();
 
@@ -75,25 +83,53 @@ export default function BattlePage() {
         return () => clearTimeout(id);
     }, [damageFloater])
 
+    useEffect(() => {
+        if (!battleEffect) return;
+        const id = setTimeout(() => setBattleEffect(null), 500);
+        return () => clearTimeout(id);
+    }, [battleEffect])
+
+
     const triggerShake = (target: "player" | "enemy") => {
         setShakeTarget(target);
         setShakeKey((key) => key + 1);
+    };
+
+    const triggerFlash = (type: FlashType, target: "player" | "enemy") => {
+        setBattleEffect({ kind: "flash", type, target, key: Date.now() });
+    };
+
+    const triggerSprite = (type: SpriteEffectType, target: "player" | "enemy") => {
+        setBattleEffect({ kind: "sprite", type, target, key: Date.now() });
     };
 
     const updateHpWithShake = (
         target: "player" | "enemy",
         nextHp: number,
         currentHp: number,
+        choice: BattleChoice,
     ) => {
+        if (choice === BattleChoice.DEFEND) {
+            triggerFlash("defend", target === "player" ? "enemy" : "player");
+            return;
+        } else if (choice === BattleChoice.ITEM) {
+            triggerFlash("heal", target === "player" ? "enemy" : "player");
+            return;
+        } 
+
         const damage = currentHp - nextHp;
         if (damage > 0) {
             triggerShake(target);
             triggerDamageFloat(target, damage);
+            triggerFlash("hit", target);
         }
+        
         if (target === "player") {
             setDisplayPlayerHp(nextHp);
+            playSfx(SFX.punch);
         } else {
             setDisplayEnemyHp(nextHp);
+            playSfx(SFX.slash);
         }
     };
 
@@ -114,20 +150,16 @@ export default function BattlePage() {
                 setBattleState(response);
                 setDisplayMessage(messages[0]);
                 if (isPlayerFastResult) {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
-                    playSfx(SFX.slash);
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice);
                 } else {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp);
-                    playSfx(SFX.punch);
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice);
                 }
                 await sleep(700);
                 setDisplayMessage(response.message);
                 if (isPlayerFastResult) {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp);
-                    playSfx(SFX.punch);
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice);
                 } else {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
-                    playSfx(SFX.slash);
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice);
                 }
             }
             if (itemName) {
@@ -150,7 +182,7 @@ export default function BattlePage() {
                 setDisplayPlayerHp(currentHp);
                 await sleep(700);
                 setDisplayMessage(response.message);
-                updateHpWithShake("player", response.playerState.hp, currentHp);
+                updateHpWithShake("player", response.playerState.hp, currentHp, BattleChoice.ITEM);
                 currentHp = response.playerState.hp;
             }
 

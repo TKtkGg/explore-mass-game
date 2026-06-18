@@ -45,6 +45,24 @@
   }
 }
 
+@keyframes battle-flash-hit {
+  0%, 100% { opacity: 0; }
+  15% { opacity: 0.7; }
+  30% { opacity: 0; }
+}
+
+@keyframes battle-flash-defend {
+  0%, 100% { opacity: 0; }
+  20% { opacity: 0.5; }
+  40% { opacity: 0; }
+}
+
+@keyframes battle-flash-heal {
+  0%, 100% { opacity: 0; }
+  20% { opacity: 0.45; }
+  50% { opacity: 0; }
+}
+
 @utility text-outline {
   text-shadow:
     2px 2px 0 #000,
@@ -63,6 +81,16 @@
 
 @utility animate-battle-damage-pop {
   animation: battle-damage-pop 1.0s ease-out forwards;
+}
+
+@utility animate-battle-flash-hit {
+  animation: battle-flash-hit 0.35s ease-out;
+}
+@utility animate-battle-flash-defend {
+  animation: battle-flash-defend 0.35s ease-out;
+}
+@utility animate-battle-flash-heal {
+  animation: battle-flash-heal 0.35s ease-out;
 }
 
 body {
