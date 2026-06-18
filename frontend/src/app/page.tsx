@@ -7,12 +7,13 @@ import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { Input } from "@/components/atoms/Input";
+import { useAudio } from "@/components/providers/AudioProvider";
 
 export default function Home() {
     const router = useRouter();
     const [name, setName] = useState("");
     const [error, setError] = useState<string | null>(null);
-
+    const { unlockAudio } = useAudio();
     const handleStart = async () => {
         if (name.length === 0) {
             setError("名前を入力してください。");
@@ -38,7 +39,7 @@ export default function Home() {
                 aria-hidden
             />
 
-            <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8">
+            <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8" onClick={() => unlockAudio()}>
                 <TwoRowTitle firstRow="LIMIT" secondRow="EXPLORE" />
 
                 <div className="flex flex-1 flex-col items-center justify-center gap-10 sm:gap-12">

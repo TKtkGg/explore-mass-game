@@ -14,6 +14,8 @@ import { getItemHealAmount } from "@/lib/itemHealAmount";
 import { messageDivision } from "@/lib/messageDivision";
 import { isPlayerFast } from "@/lib/isPlayerFast";
 import { sleep } from "@/lib/sleepHelper";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { BGM, SFX } from "@/lib/audioPaths";
 
 type DamageFloater = {
     target: "player" | "enemy";
@@ -33,7 +35,13 @@ export default function BattlePage() {
     const [shakeTarget, setShakeTarget] = useState<"player" | "enemy" | null>(null);
     const [shakeKey, setShakeKey] = useState(0);
     const [damageFloater, setDamageFloater] = useState<DamageFloater | null>(null);
+    const { playBgm, playSfx } = useAudio();
     const router = useRouter();
+
+    useEffect(() => {
+        playBgm(BGM.battle);
+        return () => playBgm(BGM.explore);
+    }, [playBgm]);
 
     useEffect(() => {
         const start = async () => {
@@ -107,15 +115,19 @@ export default function BattlePage() {
                 setDisplayMessage(messages[0]);
                 if (isPlayerFastResult) {
                     updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
+                    playSfx(SFX.slash);
                 } else {
                     updateHpWithShake("player", response.playerState.hp, displayPlayerHp);
+                    playSfx(SFX.punch);
                 }
                 await sleep(700);
                 setDisplayMessage(response.message);
                 if (isPlayerFastResult) {
                     updateHpWithShake("player", response.playerState.hp, displayPlayerHp);
+                    playSfx(SFX.punch);
                 } else {
                     updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp);
+                    playSfx(SFX.slash);
                 }
             }
             if (itemName) {
