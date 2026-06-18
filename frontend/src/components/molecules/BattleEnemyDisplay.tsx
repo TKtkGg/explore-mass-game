@@ -1,7 +1,10 @@
 import Image from "next/image";
-import { EnemyState } from "@/type/types";
+import { BattleEffect, EnemyState } from "@/type/types";
 import { HpBar } from "@/components/atoms/HpBar";
 import { BattleFloatingNumber } from "../atoms/BattleFloatingNumber";
+import { BattleScreenFlash } from "../atoms/BattleScreenFlash";
+import { BattleSpriteEffect } from "../atoms/BattleSpriteEffect";
+import { EFFECT } from "@/lib/effectPaths";
 
 type Props = {
     enemy: EnemyState | undefined;
@@ -9,10 +12,11 @@ type Props = {
     isShaking?: boolean;
     shakeKey?: number;
     damageFloater?: { value: number; key: number } | null;
+    effect?: BattleEffect | null;
 };
 
 export const BattleEnemyDisplay = (props: Props) => {
-    const { enemy, hp, isShaking, shakeKey, damageFloater } = props;
+    const { enemy, hp, isShaking, shakeKey, damageFloater, effect } = props;
 
     if (!enemy) return null;
 
@@ -37,8 +41,20 @@ export const BattleEnemyDisplay = (props: Props) => {
                         </div>
                         
                     ) : null}
+                    {effect?.target === "enemy" && effect?.kind === "flash" ? (
+                        <BattleScreenFlash
+                            key={`flash-${effect.key}`}
+                            type={effect.type}
+                        />
+                    ) : null}
+                    {effect?.target === "enemy" && effect?.kind === "sprite" ? (
+                        <BattleSpriteEffect
+                            key={`sprite-${effect.key}`}
+                            src={EFFECT[effect.type]}
+                        />
+                    ) : null}
                     {damageFloater ? (
-                        <BattleFloatingNumber key={damageFloater.key} value={damageFloater.value} />
+                        <BattleFloatingNumber key={`damage-${damageFloater.key}`} value={damageFloater.value} />
                     ) : null}
                 </div>
                 

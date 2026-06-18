@@ -9,5 +9,7 @@ const FLASH_CLASS = {
 } as const;
 
 export const BattleScreenFlash = ({ type }: Props) => {
-    <div className={`pointer-events-none absolute inset-0 z-20 rounded-lg ${FLASH_CLASS[type]}`} />
+    return (
+        <div className={`pointer-events-none absolute inset-0 z-20 rounded-lg ${FLASH_CLASS[type]}`} />
+    )
 };

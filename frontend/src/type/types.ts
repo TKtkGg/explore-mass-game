@@ -1,3 +1,6 @@
+import { FlashType } from "@/lib/effectPaths";
+import { SpriteEffectType } from "@/lib/effectPaths";
+
 export type CardState = {
     name: string;
     text: string;
@@ -74,6 +77,11 @@ export type BattleState = {
         enemyChoice: BattleChoice;
     };
 }
+
+export type BattleEffect =
+    | { kind: "flash"; type: FlashType; target: "player" | "enemy"; key: number }
+    | { kind: "sprite"; type: SpriteEffectType; target: "player" | "enemy"; key: number }
+    | null;
 
 export type RankingResponse = {
     playerName: string;

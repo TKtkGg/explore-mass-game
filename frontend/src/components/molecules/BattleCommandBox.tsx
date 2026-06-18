@@ -1,6 +1,10 @@
 import { BattleChoice, StatusState } from "@/type/types";
 import { HpBar } from "@/components/atoms/HpBar";
 import { BattleFloatingNumber } from "../atoms/BattleFloatingNumber";
+import { BattleEffect } from "@/type/types";
+import { BattleScreenFlash } from "../atoms/BattleScreenFlash";
+import { BattleSpriteEffect } from "../atoms/BattleSpriteEffect";
+import { EFFECT } from "@/lib/effectPaths";
 
 const BATTLE_CHOICE_CONFIG: Record<
     BattleChoice,
@@ -24,17 +28,31 @@ type Props = {
     isShaking?: boolean;
     shakeKey?: number;
     damageFloater?: { value: number; key: number } | null;
+    effect?: BattleEffect | null;
 };
 
 export const BattleCommandBox = (props: Props) => {
-    const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems, isShaking, shakeKey, damageFloater } = props;
+    const { player, hp, disabled, onChoice, itemOptions, onItemChoice, onItemBack, ownedItems, isShaking, shakeKey, damageFloater, effect } = props;
 
     return (
         <div className="relative mt-auto w-full border-t-2 border-yellow-500/80 bg-black/65 px-4 py-4 sm:px-6 sm:py-5">
+            {effect?.target === "player" && effect?.kind === "flash" ? (
+                <BattleScreenFlash
+                    key={`flash-${effect.key}`}
+                    type={effect.type}
+                />
+            ) : null}
+            {effect?.target === "player" && effect?.kind === "sprite" ? (
+                <BattleSpriteEffect
+                    key={`sprite-${effect.key}`}
+                    src={EFFECT[effect.type]}
+                />
+            ) : null}
+
             {damageFloater ? (
                 <div className="pointer-events-none absolute -top-16 left-1/2 z-20 -translate-x-1/2">
                     <div className="relative h-16 w-20">
-                        <BattleFloatingNumber key={damageFloater.key} value={damageFloater.value} />
+                        <BattleFloatingNumber key={`damage-${damageFloater.key}`} value={damageFloater.value} />
                     </div>
                 </div>
             ) : null}

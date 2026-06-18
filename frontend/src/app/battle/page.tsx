@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiGet, apiPost } from "@/lib/apiClient";
 import { BattleState, BattleChoice } from "@/type/types";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ import { sleep } from "@/lib/sleepHelper";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM, SFX } from "@/lib/audioPaths";
 import { FlashType, SpriteEffectType } from "@/lib/effectPaths";
+import { BattleEffect } from "@/type/types";
 
 
 type DamageFloater = {
@@ -24,11 +25,6 @@ type DamageFloater = {
     value: number;
     key: number;
 }
-
-type BattleEffect =
-    | { kind: "flash"; type: FlashType; target: "player" | "enemy"; key: number }
-    | { kind: "sprite"; type: SpriteEffectType; target: "player" | "enemy"; key: number }
-    | null;
 
 export default function BattlePage() {
     const [battleState, setBattleState] = useState<BattleState | null>(null);
@@ -45,6 +41,8 @@ export default function BattlePage() {
     const [battleEffect, setBattleEffect] = useState<BattleEffect | null>(null);
     const { playBgm, playSfx } = useAudio();
     const router = useRouter();
+    const effectKeyRef = useRef(0);
+    const nextEffectKey = () => ++effectKeyRef.current;
 
     useEffect(() => {
         playBgm(BGM.battle);
@@ -96,24 +94,24 @@ export default function BattlePage() {
     };
 
     const triggerFlash = (type: FlashType, target: "player" | "enemy") => {
-        setBattleEffect({ kind: "flash", type, target, key: Date.now() });
+        setBattleEffect({ kind: "flash", type, target, key: nextEffectKey() });
     };
 
     const triggerSprite = (type: SpriteEffectType, target: "player" | "enemy") => {
-        setBattleEffect({ kind: "sprite", type, target, key: Date.now() });
+        setBattleEffect({ kind: "sprite", type, target, key: nextEffectKey() });
     };
 
     const updateHpWithShake = (
         target: "player" | "enemy",
         nextHp: number,
         currentHp: number,
-        choice: BattleChoice,
+        choice?: BattleChoice,
     ) => {
         if (choice === BattleChoice.DEFEND) {
             triggerFlash("defend", target === "player" ? "enemy" : "player");
             return;
         } else if (choice === BattleChoice.ITEM) {
-            triggerFlash("heal", target === "player" ? "enemy" : "player");
+            triggerFlash("heal", target === "player" ? "player" : "enemy");
             return;
         } 
 
@@ -180,9 +178,10 @@ export default function BattlePage() {
                 );
 
                 setDisplayPlayerHp(currentHp);
+                triggerFlash("heal", "player");
                 await sleep(700);
                 setDisplayMessage(response.message);
-                updateHpWithShake("player", response.playerState.hp, currentHp, BattleChoice.ITEM);
+                updateHpWithShake("player", response.playerState.hp, currentHp);
                 currentHp = response.playerState.hp;
             }
 
@@ -248,7 +247,14 @@ export default function BattlePage() {
                         {error ? <ErrorAlert message={error} /> : null}
 
                         <div className="flex flex-1 items-center justify-center pb-4 pt-24 sm:pt-28">
-                            <BattleEnemyDisplay enemy={battleState?.enemyState} hp={displayEnemyHp} isShaking={shakeTarget === "enemy"} shakeKey={shakeTarget === "enemy" ? shakeKey : 0} damageFloater={damageFloater?.target === "enemy" ? damageFloater : null}/>
+                            <BattleEnemyDisplay 
+                            enemy={battleState?.enemyState} 
+                            hp={displayEnemyHp} 
+                            isShaking={shakeTarget === "enemy"} 
+                            shakeKey={shakeTarget === "enemy" ? shakeKey : 0} 
+                            damageFloater={damageFloater?.target === "enemy" ? damageFloater : null}
+                            effect={battleEffect}
+                            />
                         </div>
 
                         <BattleCommandBox
@@ -263,6 +269,7 @@ export default function BattlePage() {
                             isShaking={shakeTarget === "player"}
                             shakeKey={shakeTarget === "player" ? shakeKey : 0}
                             damageFloater={damageFloater?.target === "player" ? damageFloater : null}
+                            effect={battleEffect}
                         />
                     </>
                 ) : null}
