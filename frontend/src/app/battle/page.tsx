@@ -106,8 +106,9 @@ export default function BattlePage() {
         nextHp: number,
         currentHp: number,
         choice?: BattleChoice,
+        message?: string,
     ) => {
-        if (choice === BattleChoice.DEFEND) {
+        if (message?.includes("防御")) {
             triggerFlash("defend", target === "player" ? "enemy" : "player");
             return;
         } else if (choice === BattleChoice.ITEM) {
@@ -148,16 +149,16 @@ export default function BattlePage() {
                 setBattleState(response);
                 setDisplayMessage(messages[0]);
                 if (isPlayerFastResult) {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice);
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice, messages[0]);
                 } else {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice);
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[0]);
                 }
                 await sleep(700);
                 setDisplayMessage(response.message);
                 if (isPlayerFastResult) {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice);
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[1]);
                 } else {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice);
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice, messages[1]);
                 }
             }
             if (itemName) {
@@ -181,7 +182,7 @@ export default function BattlePage() {
                 triggerFlash("heal", "player");
                 await sleep(700);
                 setDisplayMessage(response.message);
-                updateHpWithShake("player", response.playerState.hp, currentHp);
+                updateHpWithShake("player", response.playerState.hp, currentHp, undefined, messages[1]);
                 currentHp = response.playerState.hp;
             }
 
@@ -251,7 +252,7 @@ export default function BattlePage() {
                             enemy={battleState?.enemyState} 
                             hp={displayEnemyHp} 
                             isShaking={shakeTarget === "enemy"} 
-                            shakeKey={shakeTarget === "enemy" ? shakeKey : 0} 
+                            shakeKey={shakeKey} 
                             damageFloater={damageFloater?.target === "enemy" ? damageFloater : null}
                             effect={battleEffect}
                             />

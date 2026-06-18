@@ -2,7 +2,6 @@ import Image from "next/image";
 import { BattleEffect, EnemyState } from "@/type/types";
 import { HpBar } from "@/components/atoms/HpBar";
 import { BattleFloatingNumber } from "../atoms/BattleFloatingNumber";
-import { BattleScreenFlash } from "../atoms/BattleScreenFlash";
 import { BattleSpriteEffect } from "../atoms/BattleSpriteEffect";
 import { EFFECT } from "@/lib/effectPaths";
 
@@ -34,19 +33,22 @@ export const BattleEnemyDisplay = (props: Props) => {
                                 alt={enemy.name}
                                 width={240}
                                 height={240}
-                                className="h-auto w-[min(55vw,240px)] object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.35)] sm:w-[min(45vw,280px)] md:w-[280px]"
+                                className={[
+                                    "h-auto w-[min(55vw,240px)] object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.35)] sm:w-[min(45vw,280px)] md:w-[280px]",
+                                    effect?.target === "enemy" && effect?.kind === "flash" && effect.type === "hit"
+                                    ? "animate-battle-image-flash-hit"
+                                    : "",
+                                    effect?.target === "enemy" && effect?.kind === "flash" && effect.type === "defend"
+                                    ? "animate-battle-image-flash-defend"
+                                    : "",
+                                ].join(" ")}
                                 unoptimized
                                 priority
                             />
                         </div>
                         
                     ) : null}
-                    {effect?.target === "enemy" && effect?.kind === "flash" ? (
-                        <BattleScreenFlash
-                            key={`flash-${effect.key}`}
-                            type={effect.type}
-                        />
-                    ) : null}
+
                     {effect?.target === "enemy" && effect?.kind === "sprite" ? (
                         <BattleSpriteEffect
                             key={`sprite-${effect.key}`}
