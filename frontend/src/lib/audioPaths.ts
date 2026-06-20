@@ -6,4 +6,12 @@ export const BGM = {
 export const SFX = {
     slash: "/audio/sfx/slash.mp3",
     punch: "/audio/sfx/punch.mp3",
+    button: "/audio/sfx/button.mp3",
+    back: "/audio/sfx/back.mp3",
+    card: "/audio/sfx/card.mp3",
+    changeEquipment: "/audio/sfx/changeEquipment.mp3",
+    healBattle: "/audio/sfx/healBattle.mp3",
+    rest: "/audio/sfx/rest.mp3",
+    start: "/audio/sfx/start.mp3",
+    treasure: "/audio/sfx/treasure.mp3",
 } as const;

@@ -116,7 +116,7 @@ export default function RankingPage() {
                 </main>
 
                 <footer className="pb-2 sm:pb-4">
-                    <MainButton onClick={() => router.push("/")}>戻る</MainButton>
+                    <MainButton onClick={() => router.push("/")} kind="back">戻る</MainButton>
                 </footer>
             </div>
         </div>

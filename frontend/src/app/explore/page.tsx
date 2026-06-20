@@ -167,7 +167,7 @@ export default function ExplorePage() {
 
                 {/* STATUS（下部固定風） */}
                 <footer className="mt-auto flex justify-center px-4 pb-6 pt-4 sm:pb-8">
-                    <MainButton onClick={() => router.push("/status")}>STATUS</MainButton>
+                    <MainButton onClick={() => router.push("/status")} kind="button">STATUS</MainButton>
                 </footer>
             </div>
         </div>

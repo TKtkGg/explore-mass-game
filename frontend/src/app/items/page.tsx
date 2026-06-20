@@ -90,7 +90,7 @@ export default function ItemsPage() {
                 ) : null}
 
                 <footer className="absolute bottom-6 left-4 z-20 sm:bottom-15 sm:left-20">
-                    <MainButton onClick={() => router.push("/status")}>戻る</MainButton>
+                    <MainButton onClick={() => router.push("/status")} kind="back">戻る</MainButton>
                 </footer>
             </div>
         </div>

@@ -45,7 +45,7 @@ export default function Home() {
                 <div className="flex flex-1 flex-col items-center justify-center gap-10 sm:gap-12">
                     <Input placeholder="名前" value={name} onChange={(e) => setName(e.target.value)} />
 
-                    <MainButton onClick={handleStart}>START</MainButton>
+                    <MainButton onClick={handleStart} kind="start">START</MainButton>
 
                     {error ? <ErrorAlert message={error} /> : null}
                 </div>
