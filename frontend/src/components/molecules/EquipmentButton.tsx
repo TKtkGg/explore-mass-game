@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { EquipmentState } from "@/type/types";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { SFX } from "@/lib/audioPaths";
 
 type Props = {
     equipment: EquipmentState;
@@ -24,11 +26,14 @@ export const EquipmentButton = (props: Props) => {
         onHoverEnd,
         disabled = false,
     } = props;
-
+    const { playSfx } = useAudio();
     return (
         <button
             type="button"
-            onClick={() => onClick(equipment.name)}
+            onClick={() => {
+                playSfx(SFX.changeEquipment);
+                onClick(equipment.name);
+            }}
             disabled={disabled}
             aria-label={equipment.name}
             onMouseEnter={(event) => onHoverStart?.(equipment, event)}

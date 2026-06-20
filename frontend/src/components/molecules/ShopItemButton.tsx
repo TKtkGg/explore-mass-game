@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { MerchandiseState } from "@/type/types";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { SFX } from "@/lib/audioPaths";
 
 type Props = {
     merchandise: MerchandiseState;
@@ -23,11 +25,15 @@ function getMerchandiseIcon(type: string): string {
 export const ShopItemButton = (props: Props) => {
     const { merchandise, onClick, disabled = false } = props;
     const iconSrc = getMerchandiseIcon(merchandise.type);
-
+    const { playSfx } = useAudio();
+    
     return (
         <button
             type="button"
-            onClick={() => onClick(merchandise)}
+            onClick={() => {
+                playSfx(SFX.buy);
+                onClick(merchandise);
+            }}
             disabled={disabled}
             aria-label={`${merchandise.name} ${merchandise.price}G`}
             className="flex min-w-0 flex-1 flex-col items-center gap-2 outline-none transition cursor-pointer focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-40"

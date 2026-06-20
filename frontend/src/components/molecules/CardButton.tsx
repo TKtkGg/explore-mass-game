@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { CardState } from "@/type/types";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { SFX } from "@/lib/audioPaths";
 
 type Props = {
     card: CardState;
@@ -11,10 +13,14 @@ type Props = {
 
 export const CardButton = (props: Props) => {
     const { card, index, isDisabled, isThisChosen, handleChooseCard } = props;
+    const { playSfx } = useAudio();
     return (
         <button
             type="button"
-            onClick={() => handleChooseCard(card)}
+            onClick={() => {
+                playSfx(SFX.card);
+                handleChooseCard(card);
+            }}
             disabled={isDisabled}
             aria-label={`カード ${index + 1}`}
             className="relative shrink-0 outline-none transition cursor-pointer focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:grayscale"

@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { SFX } from "@/lib/audioPaths";
 
 type Props = {
     isOpen: boolean;
@@ -9,11 +11,15 @@ type Props = {
 
 export const TreasureButton = (props: Props) => {
     const { isOpen, isOpening, isLoading, handleOpenTreasure } = props;
+    const { playSfx } = useAudio();
     return (
         <>
             <button
                 type="button"
-                onClick={handleOpenTreasure}
+                onClick={() => {
+                    playSfx(SFX.treasure);
+                    handleOpenTreasure();
+                }}
                 disabled={isOpen || isOpening || isLoading}
                 className="group outline-none transition cursor-pointer disabled:cursor-default"
                 aria-label={isOpen ? "開いた宝箱" : "宝箱を開ける"}

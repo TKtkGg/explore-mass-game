@@ -7,6 +7,8 @@ import { MainButton } from "@/components/atoms/MainButton";
 import { RouteAllowButton } from "@/components/molecules/RouteAllowButton";
 import { Title } from "@/components/atoms/Title";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { SFX } from "@/lib/audioPaths";
 
 /** 進行ボタン配置: 中央(上向き)・左下・右下 に routeOptions の 0,1,2 を対応 */
 const ROUTE_SLOTS = [
@@ -23,6 +25,7 @@ export default function ExplorePage() {
     const [routeOptions, setRouteOptions] = useState<string[]>([]);
     const [message, setMessage] = useState("");
     const router = useRouter();
+    const { playSfx } = useAudio();
 
     useEffect(() => {
         const start = async () => {
@@ -75,9 +78,14 @@ export default function ExplorePage() {
             setRouteOptions(response.routeOptions);
             setMessage(response.message);
             setError(null);
-            if(routeType === "REST" && response.stopped) {
-                router.push("/gameover");
-                return;
+            if(routeType === "REST") {
+                playSfx(SFX.rest);
+                if (response.stopped) {
+                    router.push("/gameover");
+                    return;
+                }
+            } else {
+                playSfx(SFX.go);
             }
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -167,7 +175,7 @@ export default function ExplorePage() {
 
                 {/* STATUS（下部固定風） */}
                 <footer className="mt-auto flex justify-center px-4 pb-6 pt-4 sm:pb-8">
-                    <MainButton onClick={() => router.push("/status")} kind="button">STATUS</MainButton>
+                    <MainButton onClick={() => router.push("/status")}>STATUS</MainButton>
                 </footer>
             </div>
         </div>
