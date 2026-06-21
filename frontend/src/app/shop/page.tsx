@@ -8,12 +8,20 @@ import { Title } from "@/components/atoms/Title";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { ShopItemButton } from "@/components/molecules/ShopItemButton";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { BGM, SFX } from "@/lib/audioPaths";
 
 export default function ShopPage() {
     const router = useRouter();
     const [shop, setShop] = useState<ShopState | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [isBuying, setIsBuying] = useState(false);
+    const { playBgm, playSfx } = useAudio();
+
+    useEffect(() => {
+        playBgm(BGM.shop);
+        return () => playBgm(BGM.explore);
+    }, [playBgm]);
 
     useEffect(() => {
         const fetchShop = async () => {
@@ -34,11 +42,13 @@ export default function ShopPage() {
 
     const handleBuyMerchandise = async (merchandise: MerchandiseState) => {
         if (isBuying) return;
-
         setIsBuying(true);
         try {
             const response = await apiPost("/shop/buy", { name: merchandise.name });
             setShop(response);
+            if (response.message?.includes("手に入れた！")) {
+                playSfx(SFX.buy);
+            }
             setError(null);
         } catch (err: unknown) {
             if (err instanceof Error) {

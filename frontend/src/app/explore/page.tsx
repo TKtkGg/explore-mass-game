@@ -8,7 +8,8 @@ import { RouteAllowButton } from "@/components/molecules/RouteAllowButton";
 import { Title } from "@/components/atoms/Title";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { useAudio } from "@/components/providers/AudioProvider";
-import { SFX } from "@/lib/audioPaths";
+import { SFX, BGM } from "@/lib/audioPaths";
+
 
 /** 進行ボタン配置: 中央(上向き)・左下・右下 に routeOptions の 0,1,2 を対応 */
 const ROUTE_SLOTS = [
@@ -25,7 +26,11 @@ export default function ExplorePage() {
     const [routeOptions, setRouteOptions] = useState<string[]>([]);
     const [message, setMessage] = useState("");
     const router = useRouter();
-    const { playSfx } = useAudio();
+    const { playBgm, playSfx } = useAudio();
+
+    useEffect(() => {
+        playBgm(BGM.explore);
+    }, [playBgm]);
 
     useEffect(() => {
         const start = async () => {

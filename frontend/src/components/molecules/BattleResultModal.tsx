@@ -1,4 +1,9 @@
+"use client";
+
 import { BattleResultDisplay } from "@/lib/parseBattleResult";
+import { useEffect } from "react";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { SFX } from "@/lib/audioPaths";
 
 type Props = {
     result: BattleResultDisplay;
@@ -9,6 +14,15 @@ export const BattleResultModal = (props: Props) => {
     const { result, onBack } = props;
     const showRewards = result.exp !== null && result.gold !== null;
     const showLevelUp = result.levelFrom !== null && result.levelTo !== null;
+    const { playSfx } = useAudio();
+
+    const isVictory = showRewards || showLevelUp;
+    
+    useEffect(() => {
+        if (isVictory) {
+            playSfx(SFX.win);
+        }
+    }, [isVictory, playSfx]);
 
     return (
         <div className="absolute inset-0 z-30 flex items-center justify-center px-4">

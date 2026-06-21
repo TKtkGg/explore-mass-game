@@ -7,11 +7,14 @@ import Image from "next/image";
 import { CardState, EquipmentState, StatusState } from "@/type/types";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { SFX } from "@/lib/audioPaths";
 
 export default function StatusPage() {
     const router = useRouter();
     const [data, setData] = useState<StatusState | null>(null);
     const [error, setError] = useState<Error | null>(null);
+    const { playSfx } = useAudio();
 
     useEffect(() => {
         const fetchStatus = async () => {
@@ -78,7 +81,10 @@ export default function StatusPage() {
                                 <div className="h-8" />
                                 <button
                                     type="button"
-                                    onClick={() => router.push("/items")}
+                                    onClick={() => {
+                                        router.push("/items");
+                                        playSfx(SFX["button"]);
+                                    }}
                                     className="mb-1 inline-flex items-end gap-1 text-4xl font-black text-white text-outline transition hover:text-neutral-200 sm:text-5xl"
                                 >
                                     <span>ITEM</span>
@@ -93,7 +99,10 @@ export default function StatusPage() {
                                 <div>
                                     <button
                                         type="button"
-                                        onClick={() => router.push("/equipment")}
+                                        onClick={() => {
+                                            router.push("/equipment");
+                                            playSfx(SFX["button"]);
+                                        }}
                                         className="mb-4 inline-flex items-end gap-1 text-5xl font-black text-white text-outline transition hover:text-neutral-200 sm:text-6xl"
                                     >
                                         <span>装備</span>
@@ -128,7 +137,10 @@ export default function StatusPage() {
                                 <div>
                                     <button
                                         type="button"
-                                        onClick={() => router.push("/cards")}
+                                        onClick={() => {
+                                            router.push("/cards");
+                                            playSfx(SFX["button"]);
+                                        }}
                                         className="mb-4 inline-flex items-end gap-1 text-5xl font-black text-white text-outline transition hover:text-neutral-200 sm:text-6xl"
                                     >
                                         <span>カード</span>

@@ -8,6 +8,8 @@ import { Title } from "@/components/atoms/Title";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { CardButton } from "@/components/molecules/CardButton";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { BGM } from "@/lib/audioPaths";
 
 export default function CardPage() {
     const router = useRouter();
@@ -16,6 +18,12 @@ export default function CardPage() {
     const [error, setError] = useState<Error | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isChoosing, setIsChoosing] = useState(false);
+    const { playBgm } = useAudio();
+    
+    useEffect(() => {
+        playBgm(BGM.cave);
+        return () => playBgm(BGM.explore);
+    }, [playBgm]);
 
     useEffect(() => {
         const fetchCards = async () => {

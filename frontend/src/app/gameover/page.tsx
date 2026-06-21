@@ -6,12 +6,20 @@ import { apiGet, apiPost } from "@/lib/apiClient";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { BGM } from "@/lib/audioPaths";
 
 export default function GameOverPage() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const [score, setScore] = useState<number>(0);
     const [registerScore, setRegisterScore] = useState<boolean>(false);
+    const { playBgm, stopBgm } = useAudio();
+
+    useEffect(() => {
+        playBgm(BGM.gameover);
+        return () => stopBgm();
+    }, [playBgm, stopBgm]);
 
     useEffect(() => {
         const fetchGameover = async () => {

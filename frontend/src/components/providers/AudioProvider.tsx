@@ -16,7 +16,7 @@ const AudioContext = createContext<AudioContextValue | null>(null);
 export function AudioProvider({ children }: { children: React.ReactNode }) {
     const bgmRef = useRef<HTMLAudioElement | null>(null);
     const [unlocked, setUnlocked] = useState(false);
-    const bgmVolume = useRef(0.5);
+    const bgmVolume = useRef(0.3);
     const sfxVolume = useRef(0.8);
 
     const unlockAudio = useCallback(() => {

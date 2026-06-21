@@ -7,6 +7,8 @@ import { Title } from "@/components/atoms/Title";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TreasureButton } from "@/components/molecules/TreasureButton";
+import { useAudio } from "@/components/providers/AudioProvider";
+import { BGM } from "@/lib/audioPaths";
 
 export default function TreasurePage() {
     const router = useRouter();
@@ -15,6 +17,12 @@ export default function TreasurePage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isOpening, setIsOpening] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+    const { playBgm } = useAudio();
+    
+    useEffect(() => {
+        playBgm(BGM.cave);
+        return () => playBgm(BGM.explore);
+    }, [playBgm]);
 
     useEffect(() => {
         const fetchTreasure = async () => {

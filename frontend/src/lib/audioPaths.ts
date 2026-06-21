@@ -1,6 +1,10 @@
 export const BGM = {
     battle: "/audio/bgm/battle.mp3",
     explore: "/audio/bgm/explore.mp3",
+    cave: "/audio/bgm/cave.mp3",
+    shop: "/audio/bgm/shop.mp3",
+    gameover: "/audio/bgm/gameover.mp3",
+
 } as const;
 
 export const SFX = {
@@ -17,4 +21,5 @@ export const SFX = {
     escape: "/audio/sfx/escape.mp3",
     start: "/audio/sfx/start.mp3",
     treasure: "/audio/sfx/treasure.mp3",
+    win: "/audio/sfx/win.mp3",
 } as const;
