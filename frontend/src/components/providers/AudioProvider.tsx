@@ -6,7 +6,7 @@ type AudioContextValue = {
     unlockAudio: () => void;
     playBgm: (src: string) => void;
     stopBgm: () => void;
-    playSfx: (src: string) => void;
+    playSfx: (src: string, volumeScale?: number) => void;
     bgmVolume: number;
     sfxVolume: number;
     setBgmVolume: (v: number) => void;
@@ -42,10 +42,10 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         bgmRef.current?.pause();
     }, []);
 
-    const playSfx = useCallback((src: string) => {
+    const playSfx = useCallback((src: string, volumeScale = 1) => {
         if (!unlocked) return;
         const audio = new Audio(src);
-        audio.volume = sfxVolume.current;
+        audio.volume = Math.max(0, Math.min(1, sfxVolume.current * volumeScale));
         audio.play().catch(() => {});
     }, [unlocked]);
 

@@ -14,6 +14,7 @@ export default function Home() {
     const [name, setName] = useState("");
     const [error, setError] = useState<string | null>(null);
     const { unlockAudio } = useAudio();
+    
     const handleStart = async () => {
         if (name.length === 0) {
             setError("名前を入力してください。");
@@ -39,13 +40,16 @@ export default function Home() {
                 aria-hidden
             />
 
-            <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8" onClick={() => unlockAudio()}>
+            <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8">
                 <TwoRowTitle firstRow="LIMIT" secondRow="EXPLORE" />
 
                 <div className="flex flex-1 flex-col items-center justify-center gap-10 sm:gap-12">
                     <Input placeholder="名前" value={name} onChange={(e) => setName(e.target.value)} />
 
-                    <MainButton onClick={handleStart} kind="start">START</MainButton>
+                    <MainButton onClick={() => {
+                        unlockAudio();
+                        handleStart();
+                    }} kind="start">START</MainButton>
 
                     {error ? <ErrorAlert message={error} /> : null}
                 </div>

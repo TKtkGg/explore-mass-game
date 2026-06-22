@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { MainButton } from "@/components/atoms/MainButton";
 
@@ -39,7 +40,8 @@ const VolumeRow = ({ label, volume, onChange }: VolumeRowProps) => {
 
 export const SettingModal = (props: Props) => {
     const { onClose } = props;
-    const { bgmVolume, sfxVolume, setBgmVolume, setSfxVolume } = useAudio();
+    const router = useRouter();
+    const { bgmVolume, sfxVolume, setBgmVolume, setSfxVolume, stopBgm } = useAudio();
 
     return (
         <div
@@ -59,9 +61,16 @@ export const SettingModal = (props: Props) => {
                     <VolumeRow label="SE" volume={sfxVolume} onChange={setSfxVolume} />
                 </div>
 
-                <div className="mt-10 flex sm:mt-12">
+                <div className="mt-10 flex justify-between gap-4 sm:mt-12">
                     <MainButton onClick={onClose} kind="back">
                         戻る
+                    </MainButton>
+                    <MainButton onClick={() => {
+                        router.push("/");
+                        stopBgm();
+                    }} 
+                    kind="back">
+                        タイトル
                     </MainButton>
                 </div>
             </div>

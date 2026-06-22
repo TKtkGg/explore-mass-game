@@ -20,7 +20,7 @@ export const BattleResultModal = (props: Props) => {
     
     useEffect(() => {
         if (isVictory) {
-            playSfx(SFX.win);
+            playSfx(SFX.win, 0.4);
         }
     }, [isVictory, playSfx]);
 

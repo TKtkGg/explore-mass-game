@@ -155,9 +155,9 @@ export default function BattlePage() {
                 }
                 await sleep(700);
                 setDisplayMessage(response.message);
-                if (isPlayerFastResult) {
+                if (isPlayerFastResult && messages.length > 1) {
                     updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[1]);
-                } else {
+                } else if (messages.length > 1) {
                     updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice, messages[1]);
                 }
             }
