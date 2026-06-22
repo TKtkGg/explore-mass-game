@@ -9,6 +9,8 @@ import { Title } from "@/components/atoms/Title";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX, BGM } from "@/lib/audioPaths";
+import { IconButton } from "@/components/atoms/IconButton";
+import { SettingModal } from "@/components/molecules/SettingModal";
 
 
 /** 進行ボタン配置: 中央(上向き)・左下・右下 に routeOptions の 0,1,2 を対応 */
@@ -25,6 +27,7 @@ export default function ExplorePage() {
     const [isLoading, setIsLoading] = useState(false);
     const [routeOptions, setRouteOptions] = useState<string[]>([]);
     const [message, setMessage] = useState("");
+    const [settingModalOpen, setSettingModalOpen] = useState(false);
     const router = useRouter();
     const { playBgm, playSfx } = useAudio();
 
@@ -114,18 +117,14 @@ export default function ExplorePage() {
                 aria-hidden
             />
 
-                {/* コンテンツ */}
-                <div className="relative z-10 flex min-h-[100dvh] flex-col">
-                    {/* 上段: RESTART + 残りマス */}
-                    <div className="flex items-start justify-between px-4 pt-3 sm:px-6">
-                        <button
-                            type="button"
-                            onClick={() => router.push("/")}
-                            disabled={isLoading}
-                            className="rounded-md border-2 border-black bg-white/90 px-3 py-1.5 text-xs font-bold text-neutral-900 shadow-[2px_2px_0_#000] transition hover:bg-white disabled:opacity-50 sm:text-sm"
-                        >
-                            RESTART
-                        </button>
+            {/* コンテンツ */}
+            <div className="relative z-10 flex min-h-[100dvh] flex-col">
+                {/* 上段: RESTART + 残りマス */}
+                <div className="flex items-start justify-between px-4 pt-3 sm:px-6">
+                    <IconButton 
+                        onClick={() => setSettingModalOpen(true)}
+                        img="/icon/setting.png"
+                    />
                     <div className="rounded-md border-2 border-black bg-white/90 px-3 py-1.5 text-xs font-bold tabular-nums text-neutral-900 shadow-[2px_2px_0_#000] sm:text-sm">
                         残り {remainingSteps}
                     </div>
@@ -183,6 +182,11 @@ export default function ExplorePage() {
                     <MainButton onClick={() => router.push("/status")}>STATUS</MainButton>
                 </footer>
             </div>
+            {settingModalOpen ? (
+                <SettingModal
+                    onClose={() => setSettingModalOpen(false)}
+                />
+            ) : null}
         </div>
     );
 }

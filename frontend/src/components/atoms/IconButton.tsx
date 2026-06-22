@@ -17,7 +17,7 @@ export const IconButton = (props: Props) => {
                 playSfx(SFX.button);
                 onClick();
             }}
-            className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-neutral-300 transition hover:bg-neutral-200 active:scale-95 sm:size-14"
+            className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-neutral-300 border-2 border-black transition hover:bg-neutral-200 active:scale-95 sm:size-14"
         >
             <Image
                 src={img}

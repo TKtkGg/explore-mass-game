@@ -7,6 +7,8 @@ type AudioContextValue = {
     playBgm: (src: string) => void;
     stopBgm: () => void;
     playSfx: (src: string) => void;
+    bgmVolume: number;
+    sfxVolume: number;
     setBgmVolume: (v: number) => void;
     setSfxVolume: (v: number) => void;
 }
@@ -18,6 +20,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     const [unlocked, setUnlocked] = useState(false);
     const bgmVolume = useRef(0.3);
     const sfxVolume = useRef(0.8);
+    const [bgmVolumeState, setBgmVolumeState] = useState(0.3);
+    const [sfxVolumeState, setSfxVolumeState] = useState(0.8);
 
     const unlockAudio = useCallback(() => {
         setUnlocked(true);
@@ -46,18 +50,22 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }, [unlocked]);
 
     const setBgmVolume = useCallback((v: number) => {
-        bgmVolume.current = Math.max(0, Math.min(1, v));
+        const clamped = Math.max(0, Math.min(1, v));
+        bgmVolume.current = clamped;
+        setBgmVolumeState(clamped);
         if (bgmRef.current) {
-            bgmRef.current.volume = bgmVolume.current;
+            bgmRef.current.volume = clamped;
         }
     }, []);
 
     const setSfxVolume = useCallback((v: number) => {
-        sfxVolume.current = Math.max(0, Math.min(1, v));
+        const clamped = Math.max(0, Math.min(1, v));
+        sfxVolume.current = clamped;
+        setSfxVolumeState(clamped);
     }, []);
 
     return (
-        <AudioContext.Provider value={{ unlockAudio, playBgm, stopBgm, playSfx, setBgmVolume, setSfxVolume }}>
+        <AudioContext.Provider value={{ unlockAudio, playBgm, stopBgm, playSfx, bgmVolume: bgmVolumeState, sfxVolume: sfxVolumeState, setBgmVolume, setSfxVolume }}>
             {children}
             <audio ref={bgmRef} preload="auto" />
         </AudioContext.Provider>
