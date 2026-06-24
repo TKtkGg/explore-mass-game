@@ -11,6 +11,7 @@ import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX, BGM } from "@/lib/audioPaths";
 import { IconButton } from "@/components/atoms/IconButton";
 import { SettingModal } from "@/components/molecules/SettingModal";
+import { useRequireSession } from "@/hooks/useRequireSession";
 
 
 /** 進行ボタン配置: 中央(上向き)・左下・右下 に routeOptions の 0,1,2 を対応 */
@@ -30,6 +31,7 @@ export default function ExplorePage() {
     const [settingModalOpen, setSettingModalOpen] = useState(false);
     const router = useRouter();
     const { playBgm, playSfx } = useAudio();
+    useRequireSession();
 
     useEffect(() => {
         playBgm(BGM.explore);

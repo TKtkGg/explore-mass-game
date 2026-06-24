@@ -9,12 +9,14 @@ import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX } from "@/lib/audioPaths";
+import { useRequireSession } from "@/hooks/useRequireSession";
 
 export default function StatusPage() {
     const router = useRouter();
     const [data, setData] = useState<StatusState | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const { playSfx } = useAudio();
+    useRequireSession();
 
     useEffect(() => {
         const fetchStatus = async () => {

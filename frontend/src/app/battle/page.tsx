@@ -18,6 +18,7 @@ import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM, SFX } from "@/lib/audioPaths";
 import { FlashType, SpriteEffectType } from "@/lib/effectPaths";
 import { BattleEffect } from "@/type/types";
+import { useRequireSession } from "@/hooks/useRequireSession";
 
 
 type DamageFloater = {
@@ -42,6 +43,7 @@ export default function BattlePage() {
     const { playBgm, playSfx } = useAudio();
     const router = useRouter();
     const effectKeyRef = useRef(0);
+    useRequireSession();
     const nextEffectKey = () => ++effectKeyRef.current;
 
     useEffect(() => {

@@ -9,6 +9,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TreasureButton } from "@/components/molecules/TreasureButton";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM } from "@/lib/audioPaths";
+import { useRequireSession } from "@/hooks/useRequireSession";
 
 export default function TreasurePage() {
     const router = useRouter();
@@ -18,6 +19,7 @@ export default function TreasurePage() {
     const [isOpening, setIsOpening] = useState(false);
     const [error, setError] = useState<Error | null>(null);
     const { playBgm } = useAudio();
+    useRequireSession();
     
     useEffect(() => {
         playBgm(BGM.cave);

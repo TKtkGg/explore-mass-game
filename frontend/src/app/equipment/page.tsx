@@ -8,6 +8,7 @@ import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { EquipmentButton } from "@/components/molecules/EquipmentButton";
 import { Tooltip } from "@/components/molecules/Tooltip";
+import { useRequireSession } from "@/hooks/useRequireSession";
 
 interface EquipmentResponse {
     ownedEquipmentList: EquipmentState[];
@@ -21,6 +22,7 @@ export default function EquipmentPage() {
     const [isChanging, setIsChanging] = useState(false);
     const [hoveredEquipment, setHoveredEquipment] = useState<EquipmentState | null>(null);
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+    useRequireSession();
 
     useEffect(() => {
         const fetchEquipment = async () => {

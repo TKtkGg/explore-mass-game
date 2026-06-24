@@ -8,6 +8,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { ItemDisplay, OwnedItemDisplay } from "@/components/molecules/ItemDisplay";
 import { Tooltip } from "@/components/molecules/Tooltip";
 import { getItemHealAmount } from "@/lib/itemHealAmount";
+import { useRequireSession } from "@/hooks/useRequireSession";
 
 interface ItemResponse {
     ownedItems: {
@@ -21,6 +22,7 @@ export default function ItemsPage() {
     const [error, setError] = useState<string | null>(null);
     const [hoveredItem, setHoveredItem] = useState<OwnedItemDisplay | null>(null);
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+    useRequireSession();
 
     useEffect(() => {
         const fetchItems = async () => {

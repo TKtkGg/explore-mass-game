@@ -9,12 +9,14 @@ import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM } from "@/lib/audioPaths";
 import { clearSessionId } from "@/lib/session";
+import { useRequireSession } from "@/hooks/useRequireSession";
 export default function GameOverPage() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const [score, setScore] = useState<number>(0);
     const [registerScore, setRegisterScore] = useState<boolean>(false);
     const { playBgm, stopBgm } = useAudio();
+    useRequireSession();
 
     useEffect(() => {
         playBgm(BGM.gameover);

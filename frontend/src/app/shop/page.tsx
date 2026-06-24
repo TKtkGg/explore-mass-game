@@ -10,6 +10,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { ShopItemButton } from "@/components/molecules/ShopItemButton";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM, SFX } from "@/lib/audioPaths";
+import { useRequireSession } from "@/hooks/useRequireSession";
 
 export default function ShopPage() {
     const router = useRouter();
@@ -17,6 +18,7 @@ export default function ShopPage() {
     const [error, setError] = useState<Error | null>(null);
     const [isBuying, setIsBuying] = useState(false);
     const { playBgm, playSfx } = useAudio();
+    useRequireSession();
 
     useEffect(() => {
         playBgm(BGM.shop);

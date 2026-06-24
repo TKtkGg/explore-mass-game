@@ -8,6 +8,7 @@ import { Title } from "@/components/atoms/Title";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { clearSessionId } from "@/lib/session";
+import { useRequireSession } from "@/hooks/useRequireSession";
 /** 6行まで表示し、7人目以降は箱内スクロール */
 const VISIBLE_ROWS_BEFORE_SCROLL = 8;
 const ROW_HEIGHT_REM = 3.5;
@@ -24,6 +25,7 @@ export default function RankingPage() {
     const [ranking, setRanking] = useState<RankingResponse[]>([]);
     const [playerName, setPlayerName] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    useRequireSession();
 
     useEffect(() => {
         const fetchData = async () => {
