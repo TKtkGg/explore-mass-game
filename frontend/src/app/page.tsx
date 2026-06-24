@@ -8,6 +8,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { Input } from "@/components/atoms/Input";
 import { useAudio } from "@/components/providers/AudioProvider";
+import { saveSessionId } from "@/lib/session";
 
 export default function Home() {
     const router = useRouter();
@@ -21,7 +22,8 @@ export default function Home() {
             return;
         }
         try {
-            await apiPost("/start", { name });
+            const response = await apiPost("/start", { name });
+            saveSessionId(response.sessionId);
             router.push("/explore");
         } catch (err: unknown) {
             if (err instanceof Error) {

@@ -1,9 +1,22 @@
+import { getSessionId } from "./session";
+
+const buildHeaders = (): HeadersInit => {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+    };
+
+    const sessionId = getSessionId();
+    if (sessionId) {
+        headers["X-Session-Id"] = sessionId;
+    }
+
+    return headers;
+};
+
 export const apiGet = async(path: string) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
         method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: buildHeaders(),
     });
     if(!response.ok) {
         const error = await response.json().catch(() => null);
@@ -22,9 +35,7 @@ export const apiGet = async(path: string) => {
 export const apiPost = async(path: string, body?: Record<string, unknown>) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: buildHeaders(),
         body: body ? JSON.stringify(body) : undefined,
     });
     if(!response.ok) {
