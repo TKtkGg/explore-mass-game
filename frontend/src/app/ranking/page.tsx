@@ -7,7 +7,7 @@ import { RankingResponse } from "@/type/types";
 import { Title } from "@/components/atoms/Title";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
-
+import { clearSessionId } from "@/lib/session";
 /** 6行まで表示し、7人目以降は箱内スクロール */
 const VISIBLE_ROWS_BEFORE_SCROLL = 8;
 const ROW_HEIGHT_REM = 3.5;
@@ -116,7 +116,10 @@ export default function RankingPage() {
                 </main>
 
                 <footer className="pb-2 sm:pb-4">
-                    <MainButton onClick={() => router.push("/")} kind="back">戻る</MainButton>
+                    <MainButton onClick={() => {
+                        clearSessionId();
+                        router.push("/");
+                    }} kind="back">戻る</MainButton>
                 </footer>
             </div>
         </div>

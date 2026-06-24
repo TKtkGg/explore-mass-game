@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { MainButton } from "@/components/atoms/MainButton";
+import { clearSessionId } from "@/lib/session";
 
 type Props = {
     onClose: () => void;
@@ -67,6 +68,7 @@ export const SettingModal = (props: Props) => {
                     </MainButton>
                     <MainButton onClick={() => {
                         router.push("/");
+                        clearSessionId();
                         stopBgm();
                     }} 
                     kind="back">

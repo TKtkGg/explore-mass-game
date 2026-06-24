@@ -8,7 +8,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM } from "@/lib/audioPaths";
-
+import { clearSessionId } from "@/lib/session";
 export default function GameOverPage() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
@@ -75,7 +75,10 @@ export default function GameOverPage() {
                             <MainButton onClick={() => router.push("/ranking")}>ランキング</MainButton>
                         )}
 
-                        <MainButton onClick={() => router.push("/")}>RESTART</MainButton>
+                        <MainButton onClick={() => {
+                            clearSessionId();
+                            router.push("/");
+                        }}>RESTART</MainButton>
                     </div>
                 </div>
 
