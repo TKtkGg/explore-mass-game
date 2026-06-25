@@ -51,7 +51,7 @@ public class BattleService {
         setEnemyState(gameSession);
         gameSession.getEnemyState().adjustLevel(gameSession.getPlayerState());
         gameSession.getEnemyState().respawn();
-        return new BattleResponse("Battle started", gameSession.getPlayerState(), gameSession.getEnemyState(), gameSession.getBattleState());
+        return new BattleResponse("バトル開始！", gameSession.getPlayerState(), gameSession.getEnemyState(), gameSession.getBattleState());
     }
 
     public BattleResponse battle(BattleRequest request, String sessionId) {
@@ -166,9 +166,9 @@ public class BattleService {
     public String result(String winnerName, GameSession gameSession) {
         gameSession.getBattleState().setFinished(true);
         if(winnerName != null && winnerName.equals(gameSession.getPlayerState().getName())) {
-            String message = gameSession.getPlayerState().calcExp(gameSession.getEnemyState().getExp());
+            gameSession.getPlayerState().calcExp(gameSession.getEnemyState().getExp());
             gameSession.getPlayerState().setGold(gameSession.getPlayerState().getGold() + gameSession.getEnemyState().getGold());
-            return winnerName + "の勝利！ +" + gameSession.getEnemyState().getExp() + "EXP +" + gameSession.getEnemyState().getGold() + "Gold " + message;
+            return winnerName + "の勝利！";
         } else if(winnerName != null && winnerName.equals(gameSession.getEnemyState().getName())) {
             return gameSession.getPlayerState().getName() + "の敗北！";
         } else {

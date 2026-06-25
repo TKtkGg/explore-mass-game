@@ -146,17 +146,26 @@ export default function BattlePage() {
             if (choice) {
                 const response = await apiPost("/battle/action", { playerChoice: choice });
                 setIsPlaying(true);
+                
                 const isPlayerFastResult = isPlayerFast(response.playerState.spd, response.enemyState.spd, choice, response.battleState.enemyChoice);
                 const messages = messageDivision(response.message, isPlayerFastResult, response.playerState.name, response.enemyState.name);
+                
                 setBattleState(response);
                 setDisplayMessage(messages[0]);
+
                 if (isPlayerFastResult) {
                     updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice, messages[0]);
                 } else {
                     updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[0]);
                 }
+
                 await sleep(700);
                 setDisplayMessage(response.message);
+
+                if (response.enemyState.hp === 0) {
+                    await sleep(500);
+                }
+
                 if (isPlayerFastResult && messages.length > 1) {
                     updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[1]);
                 } else if (messages.length > 1) {

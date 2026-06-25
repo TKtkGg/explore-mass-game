@@ -99,24 +99,21 @@ public class PlayerState extends CharacterState {
         }
     }
 
-    public String calcExp(int gainExp) {
-        String message = "";
+    public void calcExp(int gainExp) {
 		this.setExp(this.getExp() + gainExp);
 		while(this.getExp() >= this.nextLevelExp) {
-			message += this.levelUp();
+			this.levelUp();
 			this.setExp(this.getExp() - this.nextLevelExp);
 			this.nextLevelExp *= 1.2;
 		}
-        return message;
 	}
-	public String levelUp() {
+	public void levelUp() {
 		this.setLevel(this.getLevel() + 1);
         this.setMaxHp(this.getMaxHp() + 10);
 		this.setHp(this.getMaxHp());
 		this.setAtk(this.getOriginalAtk() + 1);
 		this.setDef(this.getDef() + 1);
 		this.setSpd(this.getSpd() + 1);
-        return "レベルアップ！";
 	}
 
     public void init(String name) {
