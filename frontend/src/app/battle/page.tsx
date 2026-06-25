@@ -132,6 +132,7 @@ export default function BattlePage() {
             playSfx(SFX.punch);
         } else {
             setDisplayEnemyHp(nextHp);
+            triggerSprite("slash", "enemy");
             playSfx(SFX.slash);
         }
     };
