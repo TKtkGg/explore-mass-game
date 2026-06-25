@@ -2,9 +2,6 @@ package com.example.backend.service.gamestate;
 
 import com.example.backend.domain.BattleChoice;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class BattleState {
     int currentTurns;
     int damage;

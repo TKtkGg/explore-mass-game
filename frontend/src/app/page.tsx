@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { apiPost } from "@/lib/apiClient";
 import { MainButton } from "@/components/atoms/MainButton";
@@ -8,13 +8,17 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { Input } from "@/components/atoms/Input";
 import { useAudio } from "@/components/providers/AudioProvider";
-import { saveSessionId } from "@/lib/session";
+import { saveSessionId, clearSessionId } from "@/lib/session";
 
 export default function Home() {
     const router = useRouter();
     const [name, setName] = useState("");
     const [error, setError] = useState<string | null>(null);
     const { unlockAudio } = useAudio();
+
+    useEffect(() => {
+        clearSessionId();
+    }, []);
     
     const handleStart = async () => {
         if (name.length === 0) {

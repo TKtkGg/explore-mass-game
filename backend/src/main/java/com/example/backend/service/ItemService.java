@@ -2,17 +2,19 @@ package com.example.backend.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.dto.item.ItemResponse;
+import com.example.backend.service.gamestate.session.GameSession;
 
 @Service
 public class ItemService {
-    private PlayerState playerState;
-    public ItemService(PlayerState playerState) {
-        this.playerState = playerState;
+    private GameSessionManager gameSessionManager;
+    public ItemService(GameSessionManager gameSessionManager) {
+        this.gameSessionManager = gameSessionManager;
     }
 
-    public ItemResponse showOwnedItems() {
-        return new ItemResponse(this.playerState.getOwnedItems());
+    public ItemResponse showOwnedItems(String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+        
+        return new ItemResponse(gameSession.getPlayerState().getOwnedItems());
     }
 }

@@ -7,7 +7,7 @@ import com.example.backend.dto.move.MoveRequest;
 import com.example.backend.dto.move.MoveResponse;
 import com.example.backend.exception.GameStoppedException;
 import com.example.backend.service.gamestate.MoveState;
-import com.example.backend.service.gamestate.character.PlayerState;
+import com.example.backend.service.gamestate.session.GameSession;
 
 import java.util.Random;
 import java.util.Arrays;
@@ -16,53 +16,56 @@ import java.util.Arrays;
 public class MoveService {
     Random rand = new Random();
 
-    private MoveState moveState;
-    private PlayerState playerState;
     private CardService cardService;
-
-    public MoveService(MoveState moveState, PlayerState playerState, CardService cardService) {
-        this.moveState = moveState;
-        this.playerState = playerState;
+    private GameSessionManager gameSessionManager;
+    public MoveService(CardService cardService, GameSessionManager gameSessionManager) {
         this.cardService = cardService;
+        this.gameSessionManager = gameSessionManager;
     }
 
-    public void moveAbstract(MoveRequest request) {
-        this.moveState.setRouteType(request.getRouteType());
-        if(!this.moveState.isStopped()) {
-            this.moveState.setRemainingSteps(this.moveState.getRemainingSteps() - 1);
+    private void moveAbstract(MoveRequest request, MoveState moveState) {
+        moveState.setRouteType(request.getRouteType());
+        if(!moveState.isStopped()) {
+            moveState.setRemainingSteps(moveState.getRemainingSteps() - 1);
         } else {
             throw new GameStoppedException("ゲームが停止しました。");
+        } 
+        if(moveState.getRemainingSteps() <= 0) {
+            moveState.setStopped(true);
         }
-        if(this.moveState.getRemainingSteps() <= 0) {
-            this.moveState.setStopped(true);
+    }
+
+    public MoveResponse move(MoveRequest request, String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+
+        this.moveAbstract(request, gameSession.getMoveState());
+        return new MoveResponse(gameSession.getMoveState().getRouteType(), gameSession.getMoveState().getRemainingSteps(), gameSession.getMoveState().isStopped(), this.getRandomRouteOptions(gameSession), "");
+    }
+
+    public MoveResponse restart(String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+
+        gameSession.getPlayerState().init("No Name");
+        gameSession.getMoveState().setRemainingSteps(25);
+        gameSession.getMoveState().setStopped(false);
+        gameSession.getMoveState().setRouteType(null);
+
+        return new MoveResponse(gameSession.getMoveState().getRouteType(), gameSession.getMoveState().getRemainingSteps(), gameSession.getMoveState().isStopped(), this.getRandomRouteOptions(gameSession), "");
+    }
+
+    public MoveResponse getCurrentMoveState(String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+        
+        SelectedRoute[] options = gameSession.getMoveState().getRandomRouteOptions();
+        if(shouldRegenerate(options, gameSession)) {
+            options = this.getRandomRouteOptions(gameSession);
         }
+        return new MoveResponse(gameSession.getMoveState().getRouteType(), gameSession.getMoveState().getRemainingSteps(), gameSession.getMoveState().isStopped(), options, "");
     }
 
-    public MoveResponse move(MoveRequest request) {
-        this.moveAbstract(request);
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
-    }
-
-    public MoveResponse restart() {
-        this.playerState.init("No Name");
-        this.moveState.setRemainingSteps(25);
-        this.moveState.setStopped(false);
-        this.moveState.setRouteType(null);
-
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "");
-    }
-
-    public MoveResponse getCurrentMoveState() {
-        SelectedRoute[] options = this.moveState.getRandomRouteOptions();
-        if(shouldRegenerate(options)) {
-            options = this.getRandomRouteOptions();
-        }
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), options, "");
-    }
-
-    public SelectedRoute[] getRandomRouteOptions() {
-        SelectedRoute[] route = this.moveState.getRouteOptions();
-        if(cardService.getUnownedCards().isEmpty()) {
+    public SelectedRoute[] getRandomRouteOptions(GameSession gameSession) {
+        SelectedRoute[] route = gameSession.getMoveState().getRouteOptions();
+        if(this.cardService.getUnownedCards(gameSession).isEmpty()) {
             SelectedRoute[] newRoute = new SelectedRoute[route.length - 1];
             int index = 0;
             for(SelectedRoute r : route) {
@@ -75,18 +78,20 @@ public class MoveService {
             route = newRoute;
         }
         SelectedRoute[] options = {route[rand.nextInt(route.length)], route[rand.nextInt(route.length)], route[rand.nextInt(route.length)]};
-        this.moveState.setRandomRouteOptions(options);
+        gameSession.getMoveState().setRandomRouteOptions(options);
         return options;
     }
 
-    public MoveResponse rest(MoveRequest request) {
-        this.moveAbstract(request);
-        int healAmount = this.playerState.Heal(100);
-        return new MoveResponse(this.moveState.getRouteType(), this.moveState.getRemainingSteps(), this.moveState.isStopped(), this.getRandomRouteOptions(), "休んで" + healAmount + "回復した！");
+    public MoveResponse rest(MoveRequest request, String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+
+        this.moveAbstract(request, gameSession.getMoveState());
+        int healAmount = gameSession.getPlayerState().Heal(100);
+        return new MoveResponse(gameSession.getMoveState().getRouteType(), gameSession.getMoveState().getRemainingSteps(), gameSession.getMoveState().isStopped(), this.getRandomRouteOptions(gameSession), "休んで" + healAmount + "回復した！");
     }
 
-    private boolean shouldRegenerate(SelectedRoute[] options) {
+    private boolean shouldRegenerate(SelectedRoute[] options, GameSession gameSession) {
         if (options == null) return true;
-        return Arrays.asList(options).contains(SelectedRoute.CARD) && cardService.getUnownedCards().isEmpty();
+        return Arrays.asList(options).contains(SelectedRoute.CARD) && this.cardService.getUnownedCards(gameSession).isEmpty();
     }
 }

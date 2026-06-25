@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.Gameover.GameoverResponse;
-import com.example.backend.service.gamestate.character.PlayerState;
+import com.example.backend.service.gamestate.session.GameSession;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.entity.ScoreRecord;
@@ -10,21 +10,23 @@ import com.example.backend.repository.ScoreRecordRepository;
 
 @Service
 public class GameoverService {
-    private PlayerState playerState;
+    private GameSessionManager gameSessionManager;
     private ScoreRecordRepository scoreRecordRepository;
 
-    public GameoverService(PlayerState playerState, ScoreRecordRepository scoreRecordRepository) {
-        this.playerState = playerState;
+    public GameoverService(GameSessionManager gameSessionManager, ScoreRecordRepository scoreRecordRepository) {
+        this.gameSessionManager = gameSessionManager;
         this.scoreRecordRepository = scoreRecordRepository;
     }
 
-    public GameoverResponse gameover() {
-        int score = playerState.getLevel() * 100 + playerState.getOwnedEquipmentList().size() * 100 + playerState.getOwnedCards().size() * 70;
+    public GameoverResponse gameover(String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+        int score = gameSession.getPlayerState().getLevel() * 100 + gameSession.getPlayerState().getOwnedEquipmentList().size() * 100 + gameSession.getPlayerState().getOwnedCards().size() * 70;
         return new GameoverResponse(score);
     }
 
-    public void registerScore(int score) {
-        ScoreRecord scoreRecord = new ScoreRecord(playerState.getName(), score, playerState.getLevel(), Instant.now());
+    public void registerScore(int score, String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+        ScoreRecord scoreRecord = new ScoreRecord(gameSession.getPlayerState().getName(), score, gameSession.getPlayerState().getLevel(), Instant.now());
         scoreRecordRepository.save(scoreRecord);
     }
 }

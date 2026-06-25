@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.service.BattleService;
@@ -20,12 +21,12 @@ public class BattleController {
     }
 
     @GetMapping("/battle")
-    public BattleResponse battleStart() {
-        return this.battleService.battleStart();
+    public BattleResponse battleStart(@RequestHeader("X-Session-Id") String sessionId) {
+        return this.battleService.battleStart(sessionId);
     }
 
     @PostMapping("/battle/action")
-    public BattleResponse battle(@RequestBody BattleRequest request) {
-        return this.battleService.battle(request);
+    public BattleResponse battle(@RequestBody BattleRequest request, @RequestHeader("X-Session-Id") String sessionId) {
+        return this.battleService.battle(request, sessionId);
     }
 }

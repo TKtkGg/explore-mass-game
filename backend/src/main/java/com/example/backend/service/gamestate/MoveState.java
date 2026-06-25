@@ -1,10 +1,7 @@
 package com.example.backend.service.gamestate;
 
-import org.springframework.stereotype.Service;
-
 import com.example.backend.domain.SelectedRoute;
 
-@Service
 public class MoveState {
     int remainingSteps ;
     boolean stopped;

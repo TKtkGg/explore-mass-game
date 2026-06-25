@@ -3,9 +3,6 @@ package com.example.backend.service.gamestate.shop;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class ShopState {
     private List<Merchandise> display;
 

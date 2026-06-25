@@ -5,24 +5,30 @@ import org.springframework.stereotype.Service;
 import com.example.backend.dto.equipment.EquipmentRequest;
 import com.example.backend.dto.equipment.EquipmentResponse;
 import com.example.backend.dto.status.StatusResponse;
-import com.example.backend.service.gamestate.character.PlayerState;
+import com.example.backend.service.gamestate.session.GameSession;
 
 @Service
 public class StatusService {
-    private PlayerState playerState;
-    public StatusService(PlayerState playerState) {
-        this.playerState = playerState;
+    private GameSessionManager gameSessionManager;
+    public StatusService(GameSessionManager gameSessionManager) {
+        this.gameSessionManager = gameSessionManager;
     }
-    public StatusResponse status() {
-        return new StatusResponse(this.playerState.getName(), this.playerState.getLevel(), this.playerState.getMaxHp(), this.playerState.getHp(), this.playerState.getOriginalAtk(), this.playerState.getAtk(), this.playerState.getDef(), this.playerState.getSpd(), this.playerState.getExp(), this.playerState.getNextLevelExp(), this.playerState.getGold(), this.playerState.getEquipment(), this.playerState.getOwnedEquipmentList(), this.playerState.getOwnedCards(), this.playerState.getOwnedItems());
-    }
-
-    public EquipmentResponse equipment() {
-        return new EquipmentResponse(this.playerState.getOwnedEquipmentList(), this.playerState.getEquipment());
+    public StatusResponse status(String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+        
+        return new StatusResponse(gameSession.getPlayerState().getName(), gameSession.getPlayerState().getLevel(), gameSession.getPlayerState().getMaxHp(), gameSession.getPlayerState().getHp(), gameSession.getPlayerState().getOriginalAtk(), gameSession.getPlayerState().getAtk(), gameSession.getPlayerState().getDef(), gameSession.getPlayerState().getSpd(), gameSession.getPlayerState().getExp(), gameSession.getPlayerState().getNextLevelExp(), gameSession.getPlayerState().getGold(), gameSession.getPlayerState().getEquipment(), gameSession.getPlayerState().getOwnedEquipmentList(), gameSession.getPlayerState().getOwnedCards(), gameSession.getPlayerState().getOwnedItems());
     }
 
-    public EquipmentResponse changeEquipment(EquipmentRequest request) {
-        this.playerState.setEquipment(this.playerState.getOwnedEquipmentList().stream().filter(e -> e.getName().equals(request.getName())).findFirst().orElse(null));
-        return new EquipmentResponse(this.playerState.getOwnedEquipmentList(), this.playerState.getEquipment());
+    public EquipmentResponse equipment(String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+
+        return new EquipmentResponse(gameSession.getPlayerState().getOwnedEquipmentList(), gameSession.getPlayerState().getEquipment());
+    }
+
+    public EquipmentResponse changeEquipment(EquipmentRequest request, String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+
+        gameSession.getPlayerState().setEquipment(gameSession.getPlayerState().getOwnedEquipmentList().stream().filter(e -> e.getName().equals(request.getName())).findFirst().orElse(null));
+        return new EquipmentResponse(gameSession.getPlayerState().getOwnedEquipmentList(), gameSession.getPlayerState().getEquipment());
     }
 }

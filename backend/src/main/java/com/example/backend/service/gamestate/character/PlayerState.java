@@ -1,7 +1,5 @@
 package com.example.backend.service.gamestate.character;
 
-import org.springframework.stereotype.Service;
-
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentListState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
@@ -12,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-@Service
 public class PlayerState extends CharacterState {
     EquipmentState equipment;
     List<EquipmentState> ownedEquipmentList = new ArrayList<>();

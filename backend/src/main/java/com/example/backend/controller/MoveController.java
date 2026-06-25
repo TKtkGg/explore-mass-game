@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.dto.move.MoveRequest;
@@ -20,17 +21,17 @@ public class MoveController {
     }
 
     @PostMapping("/move")
-    public MoveResponse move(@RequestBody MoveRequest request) {
-        return this.moveService.move(request);
+    public MoveResponse move(@RequestBody MoveRequest request, @RequestHeader("X-Session-Id") String sessionId) {
+        return this.moveService.move(request, sessionId);
     }
 
     @PostMapping("/move/rest")
-    public MoveResponse rest(@RequestBody MoveRequest request) {
-        return this.moveService.rest(request);
+    public MoveResponse rest(@RequestBody MoveRequest request, @RequestHeader("X-Session-Id") String sessionId) {
+        return this.moveService.rest(request, sessionId);
     }
 
     @GetMapping("/move/status")
-    public MoveResponse getCurrentMoveState() {
-        return this.moveService.getCurrentMoveState();
+    public MoveResponse getCurrentMoveState(@RequestHeader("X-Session-Id") String sessionId) {
+        return this.moveService.getCurrentMoveState(sessionId);
     }
 }

@@ -3,53 +3,51 @@ package com.example.backend.service.treasure;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.service.gamestate.card.CardState;
-import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.service.gamestate.treasure.StatusTreasureState;
+import com.example.backend.service.gamestate.session.GameSession;
 
 @Service
 public class StatusTreasureService {
-    private PlayerState playerState;
     private StatusTreasureState sts;
 
-    public StatusTreasureService(PlayerState playerState, StatusTreasureState statusTreasureState) {
-        this.playerState = playerState;
+    public StatusTreasureService(StatusTreasureState statusTreasureState) {
         this.sts = statusTreasureState;
     }
 
-    public String open() {
+    public String open(GameSession gameSession) {
         int randomIndex = sts.getRandomIndex();
-        sts.setTargetName(sts.getStatusArray()[randomIndex]);
-        if(sts.getTargetName().equals("HP")) {
-            this.sts.setPoint(10);
+        String targetName = sts.getStatusArray()[randomIndex];
+        int point = 0;
+        if(targetName.equals("HP")) {
+            point = 10;
         } else {
-            this.sts.setPoint(1);
+            point = 1;
         }
+        point = applyCards(gameSession, point);
 
-        sts.setPoint(applyCards(sts.getPoint()));
-
-        switch(sts.getTargetName()) {
+        switch(targetName) {
 			case "HP":
-				playerState.setMaxHp(playerState.getMaxHp() + sts.getPoint());
-                playerState.setHp(playerState.getHp() + sts.getPoint());
+				gameSession.getPlayerState().setMaxHp(gameSession.getPlayerState().getMaxHp() + point);
+                gameSession.getPlayerState().setHp(gameSession.getPlayerState().getHp() + point);
 				break;
 			case "ATK":
-				playerState.setAtk(playerState.getOriginalAtk() + sts.getPoint());
+				gameSession.getPlayerState().setAtk(gameSession.getPlayerState().getOriginalAtk() + point);
 				break;
 			case "DEF":
-				playerState.setDef(playerState.getDef() + sts.getPoint());
+				gameSession.getPlayerState().setDef(gameSession.getPlayerState().getDef() + point);
 				break;
 			case "SPD":
-				playerState.setSpd(playerState.getSpd() + sts.getPoint());
+				gameSession.getPlayerState().setSpd(gameSession.getPlayerState().getSpd() + point);
 				break;
 			default:
 				break;
 		}
 
-        return sts.getTargetName() + "が" + this.sts.getPoint() + "上昇した！";
+        return targetName + "が" + point + "上昇した！";
     }
 
-    public int applyCards(int point) {
-        for(CardState card : this.playerState.getOwnedCards()) {
+    public int applyCards(GameSession gameSession, int point) {
+        for(CardState card : gameSession.getPlayerState().getOwnedCards()) {
             if(card.getName().equals("ラッキー")) {
                 point = point * 2;
             }

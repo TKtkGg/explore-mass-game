@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.dto.shop.ShopRequest;
@@ -20,12 +21,12 @@ public class ShopController {
     }
 
     @GetMapping("/shop")
-    public ShopResponse showShop() {
-        return this.shopService.showShop();
+    public ShopResponse showShop(@RequestHeader("X-Session-Id") String sessionId) {
+        return this.shopService.showShop(sessionId);
     }
 
     @PostMapping("/shop/buy")
-    public ShopResponse buy(@RequestBody ShopRequest request) {
-        return this.shopService.buy(request);
+    public ShopResponse buy(@RequestBody ShopRequest request, @RequestHeader("X-Session-Id") String sessionId) {
+        return this.shopService.buy(request, sessionId);
     }
 }

@@ -28,4 +28,8 @@ public class EnemyState extends CharacterState {
     public String getImagePath() {
         return this.imagePath;
     }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }

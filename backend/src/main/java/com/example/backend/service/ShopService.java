@@ -7,34 +7,31 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.dto.shop.ShopResponse;
-import com.example.backend.service.gamestate.character.PlayerState;
 import com.example.backend.dto.shop.ShopRequest;
 import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
 import com.example.backend.service.gamestate.item.ItemState;
 import com.example.backend.service.gamestate.shop.Merchandise;
-import com.example.backend.service.gamestate.shop.ShopState;
 import com.example.backend.service.gamestate.item.ItemListState;
+import com.example.backend.service.gamestate.session.GameSession;
 
 @Service
 public class ShopService {
-    private PlayerState playerState;
+    private GameSessionManager gameSessionManager;
     private CardService cardService;
     private EquipmentService equipmentService;
     private ItemListState itemListState;
-    private ShopState shopState;
-    public ShopService(PlayerState playerState, CardService cardService, EquipmentService equipmentService, ItemListState itemListState, ShopState shopState) {
-        this.playerState = playerState;
+    public ShopService(GameSessionManager gameSessionManager, CardService cardService, EquipmentService equipmentService, ItemListState itemListState) {
+        this.gameSessionManager = gameSessionManager;
         this.cardService = cardService;
         this.equipmentService = equipmentService;
         this.itemListState = itemListState;
-        this.shopState = shopState;
     }
 
-    public void display() {
+    public void display(GameSession gameSession) {
         List<Merchandise> lineup = new ArrayList<>();
-        lineup.addAll(this.cardService.getUnownedCards());
-        lineup.addAll(this.equipmentService.getUnownedEquipments());
+        lineup.addAll(this.cardService.getUnownedCards(gameSession));
+        lineup.addAll(this.equipmentService.getUnownedEquipments(gameSession));
         lineup.addAll(this.itemListState.getItemList());
         Collections.shuffle(lineup);
         List<Merchandise> display = new ArrayList<>();
@@ -44,31 +41,35 @@ public class ShopService {
                 break;
             }
         }
-        this.shopState.setDisplay(display);
+        gameSession.getShopState().setDisplay(display);
     }
 
-    public ShopResponse showShop() {
-        display();
-        return new ShopResponse(this.playerState.getGold(), this.shopState.getDisplay(), "");
+    public ShopResponse showShop(String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+
+        display(gameSession);
+        return new ShopResponse(gameSession.getPlayerState().getGold(), gameSession.getShopState().getDisplay(), "");
     }
 
-    public ShopResponse buy(ShopRequest request) {
-        Merchandise boughtItem = this.shopState.getDisplay().stream().filter(item -> item.getName().equals(request.getName())).findFirst().orElse(null);
+    public ShopResponse buy(ShopRequest request, String sessionId) {
+        GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
+
+        Merchandise boughtItem = gameSession.getShopState().getDisplay().stream().filter(item -> item.getName().equals(request.getName())).findFirst().orElse(null);
         if(boughtItem == null) {
-            return new ShopResponse(this.playerState.getGold(), this.shopState.getDisplay(), "商品が見つかりません");
+            return new ShopResponse(gameSession.getPlayerState().getGold(), gameSession.getShopState().getDisplay(), "商品が見つかりません");
         }
-        if(this.playerState.getGold() < boughtItem.getPrice()) {
-            return new ShopResponse(this.playerState.getGold(), this.shopState.getDisplay(), "ゴールドが足りません");
+        if(gameSession.getPlayerState().getGold() < boughtItem.getPrice()) {
+            return new ShopResponse(gameSession.getPlayerState().getGold(), gameSession.getShopState().getDisplay(), "ゴールドが足りません");
         }
         if(boughtItem.getType().equals("CARD")) {
-            this.playerState.addCard((CardState) boughtItem);
+            gameSession.getPlayerState().addCard((CardState) boughtItem);
         } else if (boughtItem.getType().equals("EQUIPMENT")) {
-            this.playerState.addEquipment((EquipmentState) boughtItem);
+            gameSession.getPlayerState().addEquipment((EquipmentState) boughtItem);
         } else if (boughtItem.getType().equals("ITEM")) {
-            this.playerState.addItem((ItemState) boughtItem, 1);
+            gameSession.getPlayerState().addItem((ItemState) boughtItem, 1);
         }
-        this.playerState.setGold(this.playerState.getGold() - boughtItem.getPrice());
-        this.shopState.getDisplay().remove(boughtItem);
-        return new ShopResponse(this.playerState.getGold(), this.shopState.getDisplay(), boughtItem.getName() + "を手に入れた！");
+        gameSession.getPlayerState().setGold(gameSession.getPlayerState().getGold() - boughtItem.getPrice());
+        gameSession.getShopState().getDisplay().remove(boughtItem);
+        return new ShopResponse(gameSession.getPlayerState().getGold(), gameSession.getShopState().getDisplay(), boughtItem.getName() + "を手に入れた！");
     }
 }

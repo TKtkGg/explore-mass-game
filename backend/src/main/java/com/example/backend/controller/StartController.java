@@ -27,7 +27,7 @@ public class StartController {
     public Map<String, String> start(@RequestBody StartRequest request) {
         String sessionId = UUID.randomUUID().toString();
         this.gameSessionManager.createGameSession(sessionId);
-        this.startService.start(request.getName());
+        this.startService.start(request.getName(), sessionId);
         return Map.of("sessionId", sessionId);
     }
 }
