@@ -11,6 +11,7 @@ import { ShopItemButton } from "@/components/molecules/ShopItemButton";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM, SFX } from "@/lib/audioPaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
+import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
 export default function ShopPage() {
     const router = useRouter();
@@ -19,6 +20,7 @@ export default function ShopPage() {
     const [isBuying, setIsBuying] = useState(false);
     const { playBgm, playSfx } = useAudio();
     useRequireSession();
+    useRequireActiveGame();
 
     useEffect(() => {
         playBgm(BGM.shop);

@@ -10,6 +10,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX } from "@/lib/audioPaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
+import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
 export default function StatusPage() {
     const router = useRouter();
@@ -17,6 +18,7 @@ export default function StatusPage() {
     const [error, setError] = useState<Error | null>(null);
     const { playSfx } = useAudio();
     useRequireSession();
+    useRequireActiveGame();
 
     useEffect(() => {
         const fetchStatus = async () => {

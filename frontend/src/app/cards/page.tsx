@@ -9,6 +9,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { CardDisplay } from "@/components/molecules/CardDisplay";
 import { Tooltip } from "@/components/molecules/Tooltip";
 import { useRequireSession } from "@/hooks/useRequireSession";
+import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
 interface CardsResponse {
     ownedCards: CardState[];
@@ -21,6 +22,7 @@ export default function CardsPage() {
     const [hoveredCard, setHoveredCard] = useState<CardState | null>(null);
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
     useRequireSession();
+    useRequireActiveGame();
 
     useEffect(() => {
         const fetchCards = async () => {

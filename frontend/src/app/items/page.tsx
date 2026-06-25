@@ -9,6 +9,7 @@ import { ItemDisplay, OwnedItemDisplay } from "@/components/molecules/ItemDispla
 import { Tooltip } from "@/components/molecules/Tooltip";
 import { getItemHealAmount } from "@/lib/itemHealAmount";
 import { useRequireSession } from "@/hooks/useRequireSession";
+import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
 interface ItemResponse {
     ownedItems: {
@@ -23,6 +24,7 @@ export default function ItemsPage() {
     const [hoveredItem, setHoveredItem] = useState<OwnedItemDisplay | null>(null);
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
     useRequireSession();
+    useRequireActiveGame();
 
     useEffect(() => {
         const fetchItems = async () => {

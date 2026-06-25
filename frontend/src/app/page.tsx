@@ -8,7 +8,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { Input } from "@/components/atoms/Input";
 import { useAudio } from "@/components/providers/AudioProvider";
-import { saveSessionId, clearSessionId } from "@/lib/session";
+import { saveSessionId, clearSessionId, clearGameFinished } from "@/lib/session";
 
 export default function Home() {
     const router = useRouter();
@@ -18,6 +18,7 @@ export default function Home() {
 
     useEffect(() => {
         clearSessionId();
+        clearGameFinished();
     }, []);
     
     const handleStart = async () => {

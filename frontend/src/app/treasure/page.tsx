@@ -10,6 +10,7 @@ import { TreasureButton } from "@/components/molecules/TreasureButton";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM } from "@/lib/audioPaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
+import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
 export default function TreasurePage() {
     const router = useRouter();
@@ -20,6 +21,7 @@ export default function TreasurePage() {
     const [error, setError] = useState<Error | null>(null);
     const { playBgm } = useAudio();
     useRequireSession();
+    useRequireActiveGame();
     
     useEffect(() => {
         playBgm(BGM.cave);

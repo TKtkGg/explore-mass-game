@@ -11,6 +11,7 @@ import { CardButton } from "@/components/molecules/CardButton";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM } from "@/lib/audioPaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
+import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
 export default function CardPage() {
     const router = useRouter();
@@ -21,6 +22,7 @@ export default function CardPage() {
     const [isChoosing, setIsChoosing] = useState(false);
     const { playBgm } = useAudio();
     useRequireSession();
+    useRequireActiveGame();
     
     useEffect(() => {
         playBgm(BGM.cave);

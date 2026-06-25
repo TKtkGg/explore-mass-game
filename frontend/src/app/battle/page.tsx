@@ -19,6 +19,8 @@ import { BGM, SFX } from "@/lib/audioPaths";
 import { FlashType, SpriteEffectType } from "@/lib/effectPaths";
 import { BattleEffect } from "@/type/types";
 import { useRequireSession } from "@/hooks/useRequireSession";
+import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
+import { markGameFinished } from "@/lib/session";
 
 
 type DamageFloater = {
@@ -45,6 +47,7 @@ export default function BattlePage() {
     const router = useRouter();
     const effectKeyRef = useRef(0);
     useRequireSession();
+    useRequireActiveGame();
     const nextEffectKey = () => ++effectKeyRef.current;
 
     useEffect(() => {
@@ -114,9 +117,11 @@ export default function BattlePage() {
     ) => {
         if (message?.includes("防御")) {
             triggerFlash("defend", target === "player" ? "enemy" : "player");
+            playSfx(SFX.defend);
             return;
         } else if (choice === BattleChoice.ITEM) {
             triggerFlash("heal", target === "player" ? "player" : "enemy");
+            playSfx(SFX.heal);
             return;
         } 
 
@@ -299,7 +304,12 @@ export default function BattlePage() {
                 {finished && !isPlaying && battleResult ? (
                     <BattleResultModal
                         result={battleResult}
-                        onBack={() => router.push(battleResult.backPath)}
+                        onBack={() => {
+                            if (battleResult.backPath === "/gameover") {
+                                markGameFinished();
+                            }
+                            router.push(battleResult.backPath);
+                        }}
                     />
                 ) : null}
 
