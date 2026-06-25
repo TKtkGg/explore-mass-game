@@ -83,6 +83,17 @@
   100% { filter: brightness(1) saturate(1) hue-rotate(0deg); }
 }
 
+@keyframes battle-enemy-defeat {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+}
+
 @utility text-outline {
   text-shadow:
     2px 2px 0 #000,
@@ -123,6 +134,10 @@
 
 @utility animate-battle-image-flash-defend {
   animation: battle-image-flash-defend 0.45s ease-out forwards;
+}
+
+@utility animate-battle-enemy-defeat {
+  animation: battle-enemy-defeat 0.8s ease-in forwards;
 }
 
 body {

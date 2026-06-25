@@ -40,6 +40,7 @@ export default function BattlePage() {
     const [shakeKey, setShakeKey] = useState(0);
     const [damageFloater, setDamageFloater] = useState<DamageFloater | null>(null);
     const [battleEffect, setBattleEffect] = useState<BattleEffect | null>(null);
+    const [enemyDefeated, setEnemyDefeated] = useState(false);
     const { playBgm, playSfx } = useAudio();
     const router = useRouter();
     const effectKeyRef = useRef(0);
@@ -59,6 +60,7 @@ export default function BattlePage() {
                 setDisplayMessage(response.message);
                 setDisplayPlayerHp(response.playerState.hp);
                 setDisplayEnemyHp(response.enemyState.hp);
+                setEnemyDefeated(false);
                 setError(null);
             } catch (err: unknown) {
                 if (err instanceof Error) {
@@ -137,7 +139,13 @@ export default function BattlePage() {
     const triggerDamageFloat = (target: "player" | "enemy", value: number) => {
         if (value === 0) return;
         setDamageFloater({ target, value, key: Date.now() });
-    }
+    };
+
+    const playEnemyDefeatAnimation = async (enemyHp: number) => {
+        if (enemyHp !== 0) return;
+        setEnemyDefeated(true);
+        await sleep(800);
+    };
 
     const playTurn = async (choice?: BattleChoice, itemName?: string) => {
         setItemOptions([]);
@@ -162,15 +170,13 @@ export default function BattlePage() {
                 await sleep(700);
                 setDisplayMessage(response.message);
 
-                if (response.enemyState.hp === 0) {
-                    await sleep(500);
-                }
-
                 if (isPlayerFastResult && messages.length > 1) {
                     updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[1]);
                 } else if (messages.length > 1) {
                     updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice, messages[1]);
                 }
+
+                await playEnemyDefeatAnimation(response.enemyState.hp);
             }
             if (itemName) {
                 const response = await apiPost("/battle/action", {
@@ -195,6 +201,8 @@ export default function BattlePage() {
                 setDisplayMessage(response.message);
                 updateHpWithShake("player", response.playerState.hp, currentHp, undefined, messages[1]);
                 currentHp = response.playerState.hp;
+
+                await playEnemyDefeatAnimation(response.enemyState.hp);
             }
 
             setIsPlaying(false);
@@ -266,6 +274,7 @@ export default function BattlePage() {
                             shakeKey={shakeKey} 
                             damageFloater={damageFloater?.target === "enemy" ? damageFloater : null}
                             effect={battleEffect}
+                            isDefeated={enemyDefeated}
                             />
                         </div>
 

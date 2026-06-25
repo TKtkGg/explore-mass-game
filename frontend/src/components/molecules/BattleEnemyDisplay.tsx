@@ -12,15 +12,19 @@ type Props = {
     shakeKey?: number;
     damageFloater?: { value: number; key: number } | null;
     effect?: BattleEffect | null;
+    isDefeated?: boolean;
 };
 
 export const BattleEnemyDisplay = (props: Props) => {
-    const { enemy, hp, isShaking, shakeKey, damageFloater, effect } = props;
+    const { enemy, hp, isShaking, shakeKey, damageFloater, effect, isDefeated } = props;
 
     if (!enemy) return null;
 
     return (
-            <div className="flex w-full max-w-md flex-col items-center gap-3 px-4 sm:max-w-lg sm:gap-4">
+            <div className={[
+                "flex w-full max-w-md flex-col items-center gap-3 px-4 sm:max-w-lg sm:gap-4",
+                isDefeated ? "animate-battle-enemy-defeat" : "",
+            ].join(" ")}>
                 <p className="text-lg font-black text-white text-outline sm:text-xl md:text-2xl">
                     Lv.{enemy.level} {enemy.name}
                 </p>

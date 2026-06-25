@@ -166,9 +166,9 @@ public class BattleService {
     public String result(String winnerName, GameSession gameSession) {
         gameSession.getBattleState().setFinished(true);
         if(winnerName != null && winnerName.equals(gameSession.getPlayerState().getName())) {
-            gameSession.getPlayerState().calcExp(gameSession.getEnemyState().getExp());
+            String message = gameSession.getPlayerState().calcExp(gameSession.getEnemyState().getExp());
             gameSession.getPlayerState().setGold(gameSession.getPlayerState().getGold() + gameSession.getEnemyState().getGold());
-            return winnerName + "の勝利！";
+            return winnerName + "の勝利！ +" + gameSession.getEnemyState().getExp() + "EXP +" + gameSession.getEnemyState().getGold() + "Gold " + message;
         } else if(winnerName != null && winnerName.equals(gameSession.getEnemyState().getName())) {
             return gameSession.getPlayerState().getName() + "の敗北！";
         } else {
