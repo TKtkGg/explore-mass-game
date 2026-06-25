@@ -18,15 +18,33 @@ public class GameoverService {
         this.scoreRecordRepository = scoreRecordRepository;
     }
 
+    private int calculateScore(GameSession gameSession) {
+        return gameSession.getPlayerState().getLevel() * 100 
+                + gameSession.getPlayerState().getOwnedEquipmentList().size() * 100 
+                + gameSession.getPlayerState().getOwnedCards().size() * 70
+                + gameSession.getPlayerState().getMaxHp() * 3
+                + gameSession.getPlayerState().getAtk() * 10
+                + gameSession.getPlayerState().getDef() * 10
+                + gameSession.getPlayerState().getSpd() * 10;
+    }
+
     public GameoverResponse gameover(String sessionId) {
         GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
-        int score = gameSession.getPlayerState().getLevel() * 100 + gameSession.getPlayerState().getOwnedEquipmentList().size() * 100 + gameSession.getPlayerState().getOwnedCards().size() * 70;
+        int score = calculateScore(gameSession);
         return new GameoverResponse(score);
     }
 
-    public void registerScore(int score, String sessionId) {
+    public void registerScore(String sessionId) {
         GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
-        ScoreRecord scoreRecord = new ScoreRecord(gameSession.getPlayerState().getName(), score, gameSession.getPlayerState().getLevel(), Instant.now());
+
+        ScoreRecord scoreRecord = new ScoreRecord(
+                gameSession.getPlayerState().getName(),
+                calculateScore(gameSession),
+                gameSession.getPlayerState().getLevel(),
+                Instant.now()
+        );
+    
         scoreRecordRepository.save(scoreRecord);
+        
     }
 }

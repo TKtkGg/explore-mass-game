@@ -42,7 +42,7 @@ export default function GameOverPage() {
 
     const handleRegisterScore = async () => {
         try {
-            await apiPost("/score/register", { score });
+            await apiPost("/score/register");
             setRegisterScore(true);
             setError(null);
         } catch (err: unknown) {

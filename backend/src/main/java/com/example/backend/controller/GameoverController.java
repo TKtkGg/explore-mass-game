@@ -3,7 +3,6 @@ package com.example.backend.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,9 +26,8 @@ public class GameoverController {
     }
 
     @PostMapping("/score/register")
-    public Map<String, String> registerScore(@RequestBody Map<String, Integer> requestBody, @RequestHeader("X-Session-Id") String sessionId) {
-        int score = requestBody.get("score");
-        this.gameoverService.registerScore(score, sessionId);
+    public Map<String, String> registerScore(@RequestHeader("X-Session-Id") String sessionId) {
+        this.gameoverService.registerScore(sessionId);
         return Map.of("message", "ok");
     }
 }
