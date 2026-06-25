@@ -112,16 +112,11 @@ export default function BattlePage() {
         target: "player" | "enemy",
         nextHp: number,
         currentHp: number,
-        choice?: BattleChoice,
         message?: string,
     ) => {
         if (message?.includes("防御")) {
             triggerFlash("defend", target === "player" ? "enemy" : "player");
             playSfx(SFX.defend);
-            return;
-        } else if (choice === BattleChoice.ITEM) {
-            triggerFlash("heal", target === "player" ? "player" : "enemy");
-            playSfx(SFX.heal);
             return;
         } 
 
@@ -168,18 +163,18 @@ export default function BattlePage() {
                 setDisplayMessage(messages[0]);
 
                 if (isPlayerFastResult) {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice, messages[0]);
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, messages[0]);
                 } else {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[0]);
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, messages[0]);
                 }
 
                 await sleep(700);
                 setDisplayMessage(response.message);
 
                 if (isPlayerFastResult && messages.length > 1) {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, choice, messages[1]);
+                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, messages[1]);
                 } else if (messages.length > 1) {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, choice, messages[1]);
+                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, messages[1]);
                 }
 
                 await playEnemyDefeatAnimation(response.enemyState.hp);
@@ -203,9 +198,10 @@ export default function BattlePage() {
 
                 setDisplayPlayerHp(currentHp);
                 triggerFlash("heal", "player");
+                playSfx(SFX.healBattle);
                 await sleep(700);
                 setDisplayMessage(response.message);
-                updateHpWithShake("player", response.playerState.hp, currentHp, undefined, messages[1]);
+                updateHpWithShake("player", response.playerState.hp, currentHp, messages[1]);
                 currentHp = response.playerState.hp;
 
                 await playEnemyDefeatAnimation(response.enemyState.hp);
