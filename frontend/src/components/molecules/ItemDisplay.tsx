@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ICONS } from "@/lib/imagePaths";
 
 export type OwnedItemDisplay = {
     name: string;
@@ -23,7 +24,7 @@ export const ItemDisplay = (props: Props) => {
             className="flex flex-col items-center gap-3"
         >
             <Image
-                src="/icon/回復.png"
+                src={ICONS.heal}
                 alt=""
                 width={112}
                 height={112}

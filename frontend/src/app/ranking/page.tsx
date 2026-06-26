@@ -8,6 +8,7 @@ import { Title } from "@/components/atoms/Title";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { clearSessionId } from "@/lib/session";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
 /** 6行まで表示し、7人目以降は箱内スクロール */
 const VISIBLE_ROWS_BEFORE_SCROLL = 8;
@@ -58,7 +59,7 @@ export default function RankingPage() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/木の板.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.woodPlank}')` }}
                 aria-hidden
             />
 

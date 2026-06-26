@@ -9,6 +9,7 @@ import { Title } from "@/components/atoms/Title";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX, BGM } from "@/lib/audioPaths";
+import { BACKGROUNDS, ICONS } from "@/lib/imagePaths";
 import { IconButton } from "@/components/atoms/IconButton";
 import { SettingModal } from "@/components/molecules/SettingModal";
 import { useRequireSession } from "@/hooks/useRequireSession";
@@ -120,7 +121,7 @@ export default function ExplorePage() {
             {/* 背景 */}
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/探索.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.explore}')` }}
                 aria-hidden
             />
 
@@ -130,7 +131,7 @@ export default function ExplorePage() {
                 <div className="flex items-start justify-between px-4 pt-3 sm:px-6">
                     <IconButton 
                         onClick={() => setSettingModalOpen(true)}
-                        img="/icon/setting.png"
+                        img={ICONS.setting}
                     />
                     <div className="rounded-md border-2 border-black bg-white/90 px-3 py-1.5 text-xs font-bold tabular-nums text-neutral-900 shadow-[2px_2px_0_#000] sm:text-sm">
                         残り {remainingSteps}

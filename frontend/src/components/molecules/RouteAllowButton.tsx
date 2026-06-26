@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { IMAGES } from "@/lib/imagePaths";
 
 type Props = {
     option: string;
@@ -25,7 +26,7 @@ export const RouteAllowButton = (props: Props) => {
             >
             <span className="transition group-active:translate-y-0.5 group-active:shadow-none sm:p-2">
                 <Image
-                src="/img/進行ボタン.png"
+                src={IMAGES.routeButton}
                 alt=""
                 width={150}
                 height={150}

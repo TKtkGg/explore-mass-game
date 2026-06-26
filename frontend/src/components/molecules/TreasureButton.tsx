@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX } from "@/lib/audioPaths";
+import { IMAGES } from "@/lib/imagePaths";
 
 type Props = {
     isOpen: boolean;
@@ -26,7 +27,7 @@ export const TreasureButton = (props: Props) => {
             >
                 <span className="block transition group-enabled:group-active:translate-y-1 group-enabled:group-active:scale-[0.98] group-disabled:opacity-90">
                     <Image
-                        src={isOpen ? "/img/開いた宝箱.png" : "/img/閉じた宝箱.png"}
+                        src={isOpen ? IMAGES.treasureOpen : IMAGES.treasureClosed}
                         alt=""
                         width={400}
                         height={320}

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/apiClient";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 import { EquipmentState } from "@/type/types";
 import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
@@ -78,7 +79,7 @@ export default function EquipmentPage() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/ステータス系.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.status}')` }}
                 aria-hidden
             />
 

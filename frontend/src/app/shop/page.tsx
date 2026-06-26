@@ -10,6 +10,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { ShopItemButton } from "@/components/molecules/ShopItemButton";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM, SFX } from "@/lib/audioPaths";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
 import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
@@ -69,7 +70,7 @@ export default function ShopPage() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/ショップ.png')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.shop}')` }}
                 aria-hidden
             />
 

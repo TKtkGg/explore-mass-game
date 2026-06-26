@@ -9,6 +9,7 @@ import { MainButton } from "@/components/atoms/MainButton";
 import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX } from "@/lib/audioPaths";
+import { BACKGROUNDS, ICONS } from "@/lib/imagePaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
 import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
@@ -59,7 +60,7 @@ export default function StatusPage() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/ステータス系.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.status}')` }}
                 aria-hidden
             />
 
@@ -118,7 +119,7 @@ export default function StatusPage() {
                                             return (
                                                 <div key={equipment.name} className="flex flex-col items-center gap-3">
                                                     <Image
-                                                        src="/icon/武器.png"
+                                                        src={ICONS.weapon}
                                                         alt=""
                                                         width={112}
                                                         height={112}
@@ -154,7 +155,7 @@ export default function StatusPage() {
                                         {displayedCards.map((card: CardState) => (
                                             <div key={card.name} className="flex flex-col items-center gap-3">
                                                 <Image
-                                                    src="/icon/カード.png"
+                                                    src={ICONS.card}
                                                     alt=""
                                                     width={112}
                                                     height={112}

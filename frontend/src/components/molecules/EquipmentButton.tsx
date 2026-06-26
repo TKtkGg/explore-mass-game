@@ -2,6 +2,7 @@ import Image from "next/image";
 import { EquipmentState } from "@/type/types";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX } from "@/lib/audioPaths";
+import { ICONS } from "@/lib/imagePaths";
 
 type Props = {
     equipment: EquipmentState;
@@ -42,7 +43,7 @@ export const EquipmentButton = (props: Props) => {
             className="flex flex-col items-center gap-3 outline-none transition disabled:cursor-not-allowed disabled:opacity-50"
         >
             <Image
-                src="/icon/武器.png"
+                src={ICONS.weapon}
                 alt=""
                 width={112}
                 height={112}

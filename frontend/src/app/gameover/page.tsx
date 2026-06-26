@@ -8,6 +8,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM } from "@/lib/audioPaths";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 import { clearSessionId } from "@/lib/session";
 import { useRequireSession } from "@/hooks/useRequireSession";
 export default function GameOverPage() {
@@ -58,7 +59,7 @@ export default function GameOverPage() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/木の板.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.woodPlank}')` }}
                 aria-hidden
             />
 

@@ -10,6 +10,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { CardButton } from "@/components/molecules/CardButton";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { BGM } from "@/lib/audioPaths";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
 import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
@@ -82,7 +83,7 @@ export default function CardPage() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/洞窟.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.cave}')` }}
                 aria-hidden
             />
 

@@ -9,6 +9,7 @@ import { TwoRowTitle } from "@/components/atoms/TwoRowTitle";
 import { Input } from "@/components/atoms/Input";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { saveSessionId, clearSessionId, clearGameFinished } from "@/lib/session";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 
 export default function Home() {
     const router = useRouter();
@@ -43,7 +44,7 @@ export default function Home() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/木の板.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.woodPlank}')` }}
                 aria-hidden
             />
 

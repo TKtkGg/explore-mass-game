@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ICONS } from "@/lib/imagePaths";
 import { CardState } from "@/type/types";
 
 type Props = {
@@ -19,7 +20,7 @@ export const CardDisplay = (props: Props) => {
             className="flex flex-col items-center gap-3"
         >
             <Image
-                src="/icon/カード.png"
+                src={ICONS.card}
                 alt=""
                 width={112}
                 height={112}

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CardState } from "@/type/types";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { SFX } from "@/lib/audioPaths";
+import { IMAGES } from "@/lib/imagePaths";
 
 type Props = {
     card: CardState;
@@ -28,7 +29,7 @@ export const CardButton = (props: Props) => {
             {isThisChosen ? (
                 <span className="relative block w-[min(26vw,140px)] sm:w-[min(22vw,280px)] md:w-[200px]">
                     <Image
-                        src="/img/表向きのカード.png"
+                        src={IMAGES.cardFront}
                         alt=""
                         width={200}
                         height={280}
@@ -50,7 +51,7 @@ export const CardButton = (props: Props) => {
             ) : (
                 <span className="block transition enabled:active:translate-y-0.5 enabled:active:scale-[0.98]">
                     <Image
-                        src="/img/裏向きのカード.png"
+                        src={IMAGES.cardBack}
                         alt=""
                         width={200}
                         height={280}

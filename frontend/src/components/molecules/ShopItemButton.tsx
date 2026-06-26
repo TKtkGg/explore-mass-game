@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ICONS } from "@/lib/imagePaths";
 import { MerchandiseState } from "@/type/types";
 
 type Props = {
@@ -10,13 +11,13 @@ type Props = {
 function getMerchandiseIcon(type: string): string {
     switch (type) {
         case "EQUIPMENT":
-            return "/icon/武器.png";
+            return ICONS.weapon;
         case "ITEM":
-            return "/icon/回復.png";
+            return ICONS.heal;
         case "CARD":
-            return "/icon/カード.png";
+            return ICONS.card;
         default:
-            return "/icon/武器.png";
+            return ICONS.weapon;
     }
 }
 

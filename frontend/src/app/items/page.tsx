@@ -8,6 +8,7 @@ import { ErrorAlert } from "@/components/atoms/ErrorAlert";
 import { ItemDisplay, OwnedItemDisplay } from "@/components/molecules/ItemDisplay";
 import { Tooltip } from "@/components/molecules/Tooltip";
 import { getItemHealAmount } from "@/lib/itemHealAmount";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 import { useRequireSession } from "@/hooks/useRequireSession";
 import { useRequireActiveGame } from "@/hooks/useRequireActiveGame";
 
@@ -62,7 +63,7 @@ export default function ItemsPage() {
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
                 className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/background/ステータス系.jpg')" }}
+                style={{ backgroundImage: `url('${BACKGROUNDS.status}')` }}
                 aria-hidden
             />
 
