@@ -71,7 +71,8 @@ export type BattleState = {
     enemyState: EnemyState;
     battleState: {
         currentTurns: number;
-        damage: number;
+        damageToPlayer: number;
+        damageToEnemy: number;
         finished: boolean;
         playerChoice: BattleChoice;
         enemyChoice: BattleChoice;

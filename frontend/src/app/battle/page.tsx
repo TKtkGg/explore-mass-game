@@ -112,7 +112,7 @@ export default function BattlePage() {
     const updateHpWithShake = (
         target: "player" | "enemy",
         nextHp: number,
-        currentHp: number,
+        damage: number,
         message?: string,
     ) => {
         if (message?.includes("防御")) {
@@ -121,7 +121,6 @@ export default function BattlePage() {
             return;
         } 
 
-        const damage = currentHp - nextHp;
         if (damage > 0) {
             triggerShake(target);
             triggerDamageFloat(target, damage);
@@ -164,18 +163,18 @@ export default function BattlePage() {
                 setDisplayMessage(messages[0]);
 
                 if (isPlayerFastResult) {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, messages[0]);
+                    updateHpWithShake("enemy", response.enemyState.hp, response.battleState.damageToEnemy, messages[0]);
                 } else {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, messages[0]);
+                    updateHpWithShake("player", response.playerState.hp, response.battleState.damageToPlayer, messages[0]);
                 }
 
                 await sleep(700);
                 setDisplayMessage(response.message);
 
                 if (isPlayerFastResult && messages.length > 1) {
-                    updateHpWithShake("player", response.playerState.hp, displayPlayerHp, messages[1]);
+                    updateHpWithShake("player", response.playerState.hp, response.battleState.damageToPlayer, messages[1]);
                 } else if (messages.length > 1) {
-                    updateHpWithShake("enemy", response.enemyState.hp, displayEnemyHp, messages[1]);
+                    updateHpWithShake("enemy", response.enemyState.hp, response.battleState.damageToEnemy, messages[1]);
                 }
 
                 await playEnemyDefeatAnimation(response.enemyState.hp);
@@ -202,7 +201,7 @@ export default function BattlePage() {
                 playSfx(SFX.healBattle);
                 await sleep(700);
                 setDisplayMessage(response.message);
-                updateHpWithShake("player", response.playerState.hp, currentHp, messages[1]);
+                updateHpWithShake("player", response.playerState.hp, response.battleState.damageToPlayer, messages[1]);
                 currentHp = response.playerState.hp;
 
                 await playEnemyDefeatAnimation(response.enemyState.hp);

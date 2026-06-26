@@ -60,6 +60,8 @@ public class BattleService {
         String message = "";
         gameSession.getBattleState().setPlayerChoice(request.getPlayerChoice());
         gameSession.getBattleState().setEnemyChoice(getRandomEnemyChoice());
+        gameSession.getBattleState().setDamageToPlayer(0);
+        gameSession.getBattleState().setDamageToEnemy(0);
         if(isPlayerFast(gameSession)) {
             message = playerAction(request, gameSession);
             if(gameSession.getEnemyState().isAlive() || gameSession.getPlayerState().getIsRun()) {
@@ -132,11 +134,17 @@ public class BattleService {
         if(damage < 0) {
             damage = 0;
         }
+        if(attackerState instanceof PlayerState) {
+            gameSession.getBattleState().setDamageToEnemy(damage);
+        } else {
+            gameSession.getBattleState().setDamageToPlayer(damage);
+        }
         targetState.setHp(targetState.getHp() - damage);
         if(targetState.getHp() < 0) {
             targetState.setHp(0);
             message = result(attackerState.getName(), gameSession);
         }
+        
         return attackerState.getName() + "の攻撃！" + damage + "ダメージ！" + message;
     }
 
