@@ -23,7 +23,7 @@ public class GameSessionManager {
     }
 
     public GameSession createGameSession(String sessionId) {
-        GameSession gameSession = new GameSession(sessionId, new PlayerState(new EquipmentListState()), new MoveState(), new BattleState(), new TreasureState(), new ShopState(), new EnemyState("スライム", 1, 100, 100, 10, 10, 10, 0, 100, "/img/enemy/slime.png"));
+        GameSession gameSession = new GameSession(sessionId, new PlayerState(new EquipmentListState()), new MoveState(), new BattleState(), new TreasureState(), new ShopState(), new EnemyState("スライム", 1, 100, 100, 10, 10, 10, 0, 100, "/img/enemy/slime.png", 1, 10));
         gameSessions.put(sessionId, gameSession);
         return gameSession;
     }

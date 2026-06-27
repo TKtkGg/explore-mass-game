@@ -2,9 +2,13 @@ package com.example.backend.service.gamestate.character;
 
 public class EnemyState extends CharacterState {
     String imagePath;
-    public EnemyState(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold, String imagePath) {
+    int appearedLevel;
+    int spawnRate;
+    public EnemyState(String name, int level, int maxHp, int hp, int atk, int def, int spd, int exp, int gold, String imagePath, int appearedLevel, int spawnRate) {
         super(name, level, maxHp, hp, atk, def, spd, exp, gold);
         this.imagePath = imagePath;
+        this.appearedLevel = appearedLevel;
+        this.spawnRate = spawnRate;
     }
 
     public void respawn() {
@@ -29,7 +33,23 @@ public class EnemyState extends CharacterState {
         return this.imagePath;
     }
 
+    public int getAppearedLevel() {
+        return this.appearedLevel;
+    }
+
+    public int getSpawnRate() {
+        return this.spawnRate;
+    }
+
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public void setAppearedLevel(int appearedLevel) {
+        this.appearedLevel = appearedLevel;
+    }
+
+    public void setSpawnRate(int spawnRate) {
+        this.spawnRate = spawnRate;
     }
 }
