@@ -31,7 +31,13 @@ public class BattleService {
     }
 
     private void setEnemyState(GameSession gameSession) {
-        EnemyState template = this.enemyList.get(rand.nextInt(this.enemyList.size()));
+        EnemyState template;
+        while(true) {
+            template = this.enemyList.get(rand.nextInt(this.enemyList.size()));
+            if(template.getAppearedLevel() <= gameSession.getPlayerState().getLevel()) {
+                break;
+            }
+        }
         gameSession.getEnemyState().setName(template.getName());
         gameSession.getEnemyState().setLevel(template.getLevel());
         gameSession.getEnemyState().setMaxHp(template.getMaxHp());
