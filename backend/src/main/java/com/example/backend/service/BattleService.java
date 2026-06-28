@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import java.util.Random;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
@@ -32,12 +33,15 @@ public class BattleService {
 
     private void setEnemyState(GameSession gameSession) {
         EnemyState template;
-        while(true) {
-            template = this.enemyList.get(rand.nextInt(this.enemyList.size()));
-            if(template.getAppearedLevel() <= gameSession.getPlayerState().getLevel()) {
-                break;
+        List<EnemyState> selectEnemies = new ArrayList<>();
+        for (EnemyState enemy : this.enemyList) {
+            for(int i = 0; i < enemy.getSpawnRate(); i++) {
+                if(enemy.getAppearedLevel() <= gameSession.getPlayerState().getLevel()) {
+                    selectEnemies.add(enemy);
+                }
             }
         }
+        template = selectEnemies.get(rand.nextInt(selectEnemies.size()));
         gameSession.getEnemyState().setName(template.getName());
         gameSession.getEnemyState().setLevel(template.getLevel());
         gameSession.getEnemyState().setMaxHp(template.getMaxHp());
