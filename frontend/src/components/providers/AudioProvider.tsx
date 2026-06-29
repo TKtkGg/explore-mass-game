@@ -42,10 +42,17 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         bgmRef.current?.pause();
     }, []);
 
-    const playSfx = useCallback((src: string, volumeScale = 1) => {
+    const playSfx = useCallback((src: string, volumeScale = 1, durationMs?: number) => {
         if (!unlocked) return;
         const audio = new Audio(src);
         audio.volume = Math.max(0, Math.min(1, sfxVolume.current * volumeScale));
+        if (durationMs && durationMs > 0) {
+            const timer = setTimeout(() => {
+                audio.pause();
+                audio.currentTime = 0;
+            }, durationMs);
+            audio.addEventListener("ended", () => clearTimeout(timer), { once: true });
+        }
         audio.play().catch(() => {});
     }, [unlocked]);
 

@@ -119,7 +119,12 @@ export default function BattlePage() {
             triggerFlash("defend", target === "player" ? "enemy" : "player");
             playSfx(SFX.defend);
             return;
-        } 
+        }
+        
+        if (message?.includes("逃げた")) {
+            playSfx(SFX.escape, 1, 1000);
+            return;
+        }
 
         if (damage > 0) {
             triggerShake(target);

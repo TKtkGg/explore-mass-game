@@ -74,12 +74,12 @@ public class BattleService {
         gameSession.getBattleState().setDamageToEnemy(0);
         if(isPlayerFast(gameSession)) {
             message = playerAction(request, gameSession);
-            if(gameSession.getEnemyState().isAlive() || gameSession.getPlayerState().getIsRun()) {
+            if(gameSession.getEnemyState().isAlive() && !gameSession.getPlayerState().getIsRun()) {
                 message += enemyAction(gameSession);
             }
         } else {
             message = enemyAction(gameSession);
-            if(gameSession.getPlayerState().isAlive()) {
+            if(gameSession.getPlayerState().isAlive() && !gameSession.getPlayerState().getIsRun()) {
                 message += playerAction(request, gameSession);
             }
         }
@@ -95,7 +95,7 @@ public class BattleService {
     }
 
     public boolean isPlayerFast(GameSession gameSession) {
-        if(gameSession.getBattleState().getPlayerChoice() == BattleChoice.ITEM) {
+        if(gameSession.getBattleState().getPlayerChoice() == BattleChoice.ITEM || gameSession.getBattleState().getPlayerChoice() == BattleChoice.RUN) {
             return true;
         }
         if(gameSession.getBattleState().getEnemyChoice() == BattleChoice.DEFEND) {
