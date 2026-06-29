@@ -6,7 +6,7 @@ type AudioContextValue = {
     unlockAudio: () => void;
     playBgm: (src: string) => void;
     stopBgm: () => void;
-    playSfx: (src: string, volumeScale?: number) => void;
+    playSfx: (src: string, volumeScale?: number, durationMs?: number) => void;
     bgmVolume: number;
     sfxVolume: number;
     setBgmVolume: (v: number) => void;
