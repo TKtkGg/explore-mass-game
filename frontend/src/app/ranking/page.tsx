@@ -118,7 +118,7 @@ export default function RankingPage() {
                     </div>
                 </main>
 
-                <footer className="pb-2 sm:pb-4">
+                <footer className="flex justify-center pb-2 sm:justify-start sm:pb-4">
                     <MainButton onClick={() => {
                         clearSessionId();
                         router.push("/");

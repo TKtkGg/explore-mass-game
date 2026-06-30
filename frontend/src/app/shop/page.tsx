@@ -103,7 +103,7 @@ export default function ShopPage() {
                     ))}
                 </div>
 
-                <footer className="absolute bottom-6 left-4 z-20 sm:bottom-8 sm:left-6">
+                <footer className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 sm:bottom-8 sm:left-6 sm:translate-x-0">
                     <MainButton onClick={() => router.push("/explore")} kind="back">戻る</MainButton>
                 </footer>
             </div>
