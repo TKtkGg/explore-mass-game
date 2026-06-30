@@ -32,17 +32,9 @@ export const BattleResultModal = (props: Props) => {
                 </h2>
 
                 {showRewards || showLevelUp ? (
-                    <div
-                        className={`mt-8 flex gap-6 sm:gap-8 ${
-                            showLevelUp
-                                ? "flex-col sm:flex-row sm:items-start sm:justify-between"
-                                : "flex-col items-center"
-                        }`}
-                    >
+                    <div className="mt-8 flex flex-col items-center gap-4 sm:mt-10 sm:gap-5">
                         {showRewards ? (
-                            <div
-                                className={`space-y-4 ${showLevelUp ? "sm:flex-1" : "text-center"}`}
-                            >
+                            <>
                                 <p className="text-lg font-black sm:text-xl">
                                     <span className="text-[rgb(73,254,73)] text-outline">EXP</span>
                                     <span className="text-white"> : {result.exp}</span>
@@ -51,11 +43,11 @@ export const BattleResultModal = (props: Props) => {
                                     <span className="text-[rgb(255,215,0)] text-outline">GOLD</span>
                                     <span className="text-white"> : {result.gold}</span>
                                 </p>
-                            </div>
+                            </>
                         ) : null}
 
                         {showLevelUp ? (
-                            <div className="space-y-2 text-center text-lg font-bold text-white sm:flex-1 sm:text-right sm:text-xl">
+                            <div className="space-y-2 text-center text-lg font-bold text-white sm:text-xl">
                                 <p>レベルアップ！</p>
                                 <p>
                                     LV : {result.levelFrom} → {result.levelTo}
