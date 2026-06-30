@@ -27,7 +27,7 @@ export const CardButton = (props: Props) => {
             className="relative shrink-0 outline-none transition cursor-pointer focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:grayscale"
         >
             {isThisChosen ? (
-                <span className="relative block w-[min(26vw,140px)] sm:w-[min(22vw,280px)] md:w-[200px]">
+                <span className="relative block w-[180px] sm:w-[min(22vw,280px)] md:w-[200px]">
                     <Image
                         src={IMAGES.cardFront}
                         alt=""
