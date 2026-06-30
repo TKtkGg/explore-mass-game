@@ -30,7 +30,7 @@ export const RouteAllowButton = (props: Props) => {
                 alt=""
                 width={150}
                 height={150}
-                className={`h-16 w-16 object-contain drop-shadow sm:h-44 sm:w-44 ${slot.rotationClass}`}
+                className={`h-24 w-24 object-contain drop-shadow sm:h-44 sm:w-44 ${slot.rotationClass}`}
                 unoptimized
                 />
             </span>

@@ -19,7 +19,7 @@ import { markGameFinished } from "@/lib/session";
 
 /** 進行ボタン配置: 中央(上向き)・左下・右下 に routeOptions の 0,1,2 を対応 */
 const ROUTE_SLOTS = [
-    { positionClass: "left-1/2 top-[36%] -translate-x-1/2 -translate-y-1/2", rotationClass: "rotate-0" },
+    { positionClass: "left-1/2 top-[50%] sm:top-[36%] -translate-x-1/2 -translate-y-1/2", rotationClass: "rotate-0" },
     { positionClass: "left-[10%] bottom-[20%] -translate-x-1/2", rotationClass: "-rotate-90" },
     { positionClass: "right-[10%] bottom-[20%] translate-x-1/2", rotationClass: "rotate-90" }
 ] as const;
