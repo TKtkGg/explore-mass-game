@@ -62,16 +62,23 @@ export const SettingModal = (props: Props) => {
                     <VolumeRow label="SE" volume={sfxVolume} onChange={setSfxVolume} />
                 </div>
 
-                <div className="mt-10 flex justify-between gap-4 sm:mt-12">
-                    <MainButton onClick={onClose} kind="back">
+                <div className="mt-10 flex justify-between gap-2 sm:mt-12 sm:gap-4">
+                    <MainButton
+                        onClick={onClose}
+                        kind="back"
+                        className="!min-w-0 flex-1 px-3 py-2.5 text-sm tracking-wide sm:!min-w-[240px] sm:flex-none sm:px-8 sm:py-3 sm:text-xl sm:tracking-widest"
+                    >
                         戻る
                     </MainButton>
-                    <MainButton onClick={() => {
-                        router.push("/");
-                        clearSessionId();
-                        stopBgm();
-                    }} 
-                    kind="back">
+                    <MainButton
+                        onClick={() => {
+                            router.push("/");
+                            clearSessionId();
+                            stopBgm();
+                        }}
+                        kind="back"
+                        className="!min-w-0 flex-1 px-3 py-2.5 text-sm tracking-wide sm:!min-w-[240px] sm:flex-none sm:px-8 sm:py-3 sm:text-xl sm:tracking-widest"
+                    >
                         タイトル
                     </MainButton>
                 </div>

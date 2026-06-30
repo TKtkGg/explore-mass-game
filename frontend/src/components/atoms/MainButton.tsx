@@ -5,10 +5,11 @@ type Props = {
     children: React.ReactNode;
     onClick: () => void;
     kind?: "button" | "back" | "start";
+    className?: string;
 }
 
 export const MainButton = (props: Props) => {
-    const { children, onClick, kind = "button" } = props;
+    const { children, onClick, kind = "button", className } = props;
     const { playSfx } = useAudio();
     return (
         <button
@@ -17,7 +18,7 @@ export const MainButton = (props: Props) => {
                 playSfx(SFX[kind]);
                 onClick();
             }}
-            className={`min-w-[200px] rounded-md border-2 border-black bg-white px-8 py-3 text-lg font-black tracking-widest text-neutral-900 shadow-[4px_4px_0_#000] transition cursor-pointer hover:bg-neutral-100 active:translate-y-0.5 active:shadow-none sm:min-w-[240px] sm:text-xl`}
+            className={`min-w-[200px] rounded-md border-2 border-black bg-white px-8 py-3 text-lg font-black tracking-widest text-neutral-900 shadow-[4px_4px_0_#000] transition cursor-pointer hover:bg-neutral-100 active:translate-y-0.5 active:shadow-none sm:min-w-[240px] sm:text-xl ${className ?? ""}`}
         >
             {children}
         </button>
