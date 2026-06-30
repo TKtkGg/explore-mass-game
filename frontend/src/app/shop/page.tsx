@@ -92,7 +92,7 @@ export default function ShopPage() {
                 </header>
 
                 {error ? <ErrorAlert message={error.message} /> : null}
-                <div className="flex flex-1 items-center justify-evenly">
+                <div className="grid flex-1 grid-cols-2 place-content-center gap-x-4 gap-y-8 px-4 sm:flex sm:items-center sm:justify-evenly sm:gap-0 sm:px-0">
                     {shop?.display.map((merchandise: MerchandiseState) => (
                         <ShopItemButton
                             key={merchandise.name}

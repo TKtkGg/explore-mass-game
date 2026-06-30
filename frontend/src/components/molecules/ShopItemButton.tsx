@@ -31,9 +31,9 @@ export const ShopItemButton = (props: Props) => {
             onClick={() => onClick(merchandise)}
             disabled={disabled}
             aria-label={`${merchandise.name} ${merchandise.price}G`}
-            className="flex min-w-0 flex-1 flex-col items-center gap-2 outline-none transition cursor-pointer focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex min-w-0 w-full flex-col items-center gap-3 outline-none transition cursor-pointer focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-40 sm:flex-1 sm:gap-2"
         >
-            <p className="line-clamp-2 text-center text-sm font-black text-white text-outline sm:text-base md:text-lg">
+            <p className="line-clamp-2 text-center text-base font-black text-white text-outline sm:text-base md:text-lg">
                 {merchandise.name}
             </p>
             <Image
@@ -41,10 +41,10 @@ export const ShopItemButton = (props: Props) => {
                 alt=""
                 width={120}
                 height={120}
-                className="h-auto w-[min(18vw,120px)] object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] sm:w-[min(16vw,140px)] md:w-[150px]"
+                className="h-auto w-[min(38vw,120px)] object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] sm:w-[min(16vw,140px)] md:w-[150px]"
                 unoptimized
             />
-            <p className="text-sm font-black text-white text-outline sm:text-base md:text-lg">
+            <p className="text-base font-black text-white text-outline sm:text-base md:text-lg">
                 {merchandise.price}G
             </p>
         </button>
