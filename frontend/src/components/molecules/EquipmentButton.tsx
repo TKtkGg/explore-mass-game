@@ -40,18 +40,18 @@ export const EquipmentButton = (props: Props) => {
             onMouseEnter={(event) => onHoverStart?.(equipment, event)}
             onMouseMove={(event) => onHoverMove?.(event)}
             onMouseLeave={() => onHoverEnd?.()}
-            className="flex flex-col items-center gap-3 outline-none transition disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex flex-col items-center gap-2 outline-none transition disabled:cursor-not-allowed disabled:opacity-50 sm:gap-3"
         >
             <Image
                 src={ICONS.weapon}
                 alt=""
                 width={112}
                 height={112}
-                className="h-auto w-24 object-contain transition enabled:active:scale-95 sm:w-32"
+                className="h-auto w-16 object-contain transition enabled:active:scale-95 sm:w-32"
                 unoptimized
             />
             <span
-                className={`text-center text-2xl font-black text-outline sm:text-3xl ${
+                className={`text-center text-base font-black text-outline sm:text-3xl ${
                     isEquipped ? "text-yellow-300" : "text-white"
                 }`}
             >

@@ -62,16 +62,21 @@ export default function ItemsPage() {
     return (
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
-                className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+                className="pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat sm:hidden"
+                style={{ backgroundImage: `url('${BACKGROUNDS.statusPhone}')` }}
+                aria-hidden
+            />
+            <div
+                className="pointer-events-none absolute inset-0 hidden bg-cover bg-center bg-no-repeat sm:block"
                 style={{ backgroundImage: `url('${BACKGROUNDS.status}')` }}
                 aria-hidden
             />
 
-            <div className="relative z-10 flex min-h-[100dvh] flex-col px-4 py-6 sm:px-8">
+            <div className="relative z-10 flex min-h-[100dvh] flex-col">
                 {error ? <ErrorAlert message={error} /> : null}
 
-                <main className="flex flex-1 items-start justify-start px-4 pt-6 pb-20 sm:px-8 sm:pt-8 sm:pb-24">
-                    <div className="flex flex-wrap items-start justify-start gap-8 sm:gap-10">
+                <main className="flex flex-1 items-start justify-center px-[9%] pt-[7%] pb-28 sm:px-8 sm:pt-8 sm:pb-24">
+                    <div className="grid w-full max-w-md grid-cols-2 content-start gap-x-4 gap-y-6 self-start sm:max-w-none sm:flex sm:flex-wrap sm:items-start sm:justify-start sm:gap-8 lg:gap-10">
                         {items.map((item) => (
                             <ItemDisplay
                                 key={item.name}

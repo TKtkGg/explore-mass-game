@@ -75,8 +75,8 @@ export default function StatusPage() {
             <div className="relative z-10 flex min-h-[100dvh] flex-col">
                 {error ? <ErrorAlert message={error.message} /> : null}
 
-                <main className="flex flex-1 justify-center px-[9%] pt-[7%] pb-28 sm:items-start sm:px-8 sm:pt-6 sm:pb-10">
-                    <div className="w-full max-w-md text-white sm:max-w-7xl sm:bg-black/90 sm:px-10 sm:py-10">
+                <main className="flex flex-1 items-start justify-center px-[9%] pt-[7%] pb-28 sm:px-8 sm:pt-6 sm:pb-10">
+                    <div className="w-full max-w-md self-start text-white sm:max-w-7xl sm:bg-black/90 sm:px-10 sm:py-10">
                         <div className="flex flex-col gap-7 sm:gap-10 lg:grid lg:grid-cols-[0.88fr_1.12fr] lg:gap-14">
                             <section className="text-2xl font-black leading-snug text-white text-outline sm:text-4xl sm:leading-tight lg:text-5xl">
                                 <p>Lv.{data?.level ?? "-"} {data?.name ?? "プレイヤー"}</p>
