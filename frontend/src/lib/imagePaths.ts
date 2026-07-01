@@ -2,6 +2,7 @@ export const BACKGROUNDS = {
     explore: "/background/explore.jpg",
     woodPlank: "/background/wood-plank.jpg",
     status: "/background/status.jpg",
+    statusPhone: "/background/status_phone.png",
     cave: "/background/cave.jpg",
     shop: "/background/shop.png",
 } as const;
