@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.backend.entity.ScoreRecord;
 import java.time.Instant;
 import com.example.backend.repository.ScoreRecordRepository;
+import com.example.backend.service.gamestate.card.CardState;
 
 @Service
 public class GameoverService {
@@ -19,13 +20,15 @@ public class GameoverService {
     }
 
     private int calculateScore(GameSession gameSession) {
-        return gameSession.getPlayerState().getLevel() * 100 
-                + gameSession.getPlayerState().getOwnedEquipmentList().size() * 100 
-                + gameSession.getPlayerState().getOwnedCards().size() * 70
-                + gameSession.getPlayerState().getMaxHp() * 3
-                + gameSession.getPlayerState().getAtk() * 10
-                + gameSession.getPlayerState().getDef() * 10
-                + gameSession.getPlayerState().getSpd() * 10;
+        int score = gameSession.getPlayerState().getLevel() * 100 
+                    + gameSession.getPlayerState().getOwnedEquipmentList().size() * 100 
+                    + gameSession.getPlayerState().getOwnedCards().size() * 70
+                    + gameSession.getPlayerState().getMaxHp() * 3
+                    + gameSession.getPlayerState().getAtk() * 10
+                    + gameSession.getPlayerState().getDef() * 10
+                    + gameSession.getPlayerState().getSpd() * 10;
+        score = applyCards(score, gameSession);
+        return score;
     }
 
     public GameoverResponse gameover(String sessionId) {
@@ -45,6 +48,14 @@ public class GameoverService {
         );
     
         scoreRecordRepository.save(scoreRecord);
-        
+    }
+
+    public int applyCards(int score, GameSession gameSession) {
+        for(CardState card : gameSession.getPlayerState().getOwnedCards()) {
+            if(card.getName().equals("アディショナルスコア")) {
+                score = (int) (score * 1.5);
+            }
+        }
+        return score;
     }
 }

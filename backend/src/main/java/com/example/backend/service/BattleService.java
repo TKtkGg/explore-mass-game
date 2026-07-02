@@ -184,9 +184,12 @@ public class BattleService {
     public String result(String winnerName, GameSession gameSession) {
         gameSession.getBattleState().setFinished(true);
         if(winnerName != null && winnerName.equals(gameSession.getPlayerState().getName())) {
-            String message = gameSession.getPlayerState().calcExp(gameSession.getEnemyState().getExp());
-            gameSession.getPlayerState().setGold(gameSession.getPlayerState().getGold() + gameSession.getEnemyState().getGold());
-            return winnerName + "の勝利！ +" + gameSession.getEnemyState().getExp() + "EXP +" + gameSession.getEnemyState().getGold() + "Gold " + message;
+            int[] reward = applyCards(gameSession.getEnemyState().getGold(), gameSession.getEnemyState().getExp(), gameSession);
+
+            String message = gameSession.getPlayerState().calcExp(reward[1]);
+            gameSession.getPlayerState().setGold(gameSession.getPlayerState().getGold() + reward[0]);
+            
+            return winnerName + "の勝利！ +" + reward[1] + "EXP +" + reward[0] + "Gold " + message;
         } else if(winnerName != null && winnerName.equals(gameSession.getEnemyState().getName())) {
             return gameSession.getPlayerState().getName() + "の敗北！";
         } else {
@@ -205,5 +208,15 @@ public class BattleService {
         }
 
         return damage;
+    }
+
+    public int[] applyCards(int gold, int exp, GameSession gameSession) {
+        for(CardState card : gameSession.getPlayerState().getOwnedCards()) {
+            if(card.getName().equals("ラッキー2")) {
+                gold = (int) (gold * 1.5);
+                exp = (int) (exp * 1.5);
+            }
+        }
+        return new int[] {gold, exp};
     }
 }
