@@ -21,8 +21,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/auth/**", "/start", "/move/**").permitAll()
-                .requestMatchers("/save/**", "/ranking/register").authenticated()
+                // ゲストでも遊べる（ゲーム進行・閲覧）
+                .requestMatchers(
+                    "/auth/**",
+                    "/start",
+                    "/move", "/move/**",
+                    "/battle", "/battle/**",
+                    "/treasure", "/treasure/**",
+                    "/shop", "/shop/**",
+                    "/status",
+                    "/equipment", "/equipment/**",
+                    "/card", "/card/**", "/cards",
+                    "/items",
+                    "/gameover",
+                    "/ranking"
+                ).permitAll()
+                // ログイン必須（セーブ・ランキング登録）
+                .requestMatchers("/save/**", "/score/register").authenticated()
                 .anyRequest().permitAll()
             )
             .formLogin(formLogin -> formLogin
