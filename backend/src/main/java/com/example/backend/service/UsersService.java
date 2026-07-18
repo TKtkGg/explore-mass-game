@@ -4,19 +4,25 @@ import com.example.backend.repository.UsersRepository;
 import com.example.backend.entity.Users;
 import com.example.backend.dto.UsersDto;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
+@Service
 public class UsersService implements UserDetailsService {
-    @Autowired
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UsersService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
+        this.usersRepository = usersRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -32,12 +38,17 @@ public class UsersService implements UserDetailsService {
     }
 
     @Transactional
-    public void save(UsersDto usersDto) {
+    public ResponseEntity<Map<String,String>> save(UsersDto usersDto) {
+        Users existing = findByEmail(usersDto.getEmail());
+
+        if (existing != null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Email already exists"));        }
+
         Users users = new Users();
-        users.setUsername(usersDto.getUsername());
+        users.setUsername(usersDto.getUsername());  
         users.setEmail(usersDto.getEmail());
         users.setPassword(passwordEncoder.encode(usersDto.getPassword()));
-
         usersRepository.save(users);
+        return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     }
 }

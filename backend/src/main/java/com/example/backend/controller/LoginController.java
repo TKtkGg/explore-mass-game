@@ -70,7 +70,7 @@ public class LoginController {
 
         return ResponseEntity.ok(Map.of(
             "authenticated", true,
-            "email", principal.getUsername()
+            "email", principal.getEmail()
         ));
     }
 
