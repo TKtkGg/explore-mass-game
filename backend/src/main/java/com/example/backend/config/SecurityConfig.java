@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity
@@ -40,14 +41,18 @@ public class SecurityConfig {
                 .requestMatchers("/save/**", "/score/register").authenticated()
                 .anyRequest().permitAll()
             )
-            .formLogin(formLogin -> formLogin
-                .loginPage("/login")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .permitAll()
-            );
+            .exceptionHandling((ex -> ex
+                .authenticationEntryPoint((req, res, authEx) -> {
+                    res.setStatus(401);
+                    res.setContentType("application/json");
+                    res.getWriter().write("{\"authenticated\":false}");
+                })
+            ))
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable())
+            .logout(logout -> logout.disable());
         return http.build();
     }
 }
