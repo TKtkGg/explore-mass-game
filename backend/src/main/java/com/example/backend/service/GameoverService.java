@@ -37,10 +37,11 @@ public class GameoverService {
         return new GameoverResponse(score);
     }
 
-    public void registerScore(String sessionId) {
+    public void registerScore(String sessionId, UserPrincipal principal) {
         GameSession gameSession = this.gameSessionManager.getRequiredGameSession(sessionId);
 
         ScoreRecord scoreRecord = new ScoreRecord(
+                principal.getUserId(),
                 gameSession.getPlayerState().getName(),
                 calculateScore(gameSession),
                 gameSession.getPlayerState().getLevel(),

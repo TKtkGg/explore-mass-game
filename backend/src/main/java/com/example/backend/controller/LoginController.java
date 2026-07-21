@@ -2,7 +2,6 @@ package com.example.backend.controller;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
@@ -27,11 +26,12 @@ import jakarta.validation.Valid;
 
 @RestController
 public class LoginController {
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
+    public LoginController(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/auth/login")
     public Map<String, String> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest request) {

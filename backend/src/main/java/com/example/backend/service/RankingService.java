@@ -21,6 +21,7 @@ public class RankingService {
         List<RankingResponse> result = new ArrayList<>();
         for(ScoreRecord record : scoreRecords) {
             result.add(new RankingResponse(
+                record.getUserId(),
                 record.getPlayerName(), 
                 record.getScore(), 
                 record.getLevel(), 
