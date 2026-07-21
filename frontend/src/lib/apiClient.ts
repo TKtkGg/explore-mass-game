@@ -16,6 +16,7 @@ const buildHeaders = (): HeadersInit => {
 export const apiGet = async(path: string) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
         method: "GET",
+        credentials: "include",
         headers: buildHeaders(),
     });
     if(!response.ok) {
@@ -35,6 +36,7 @@ export const apiGet = async(path: string) => {
 export const apiPost = async(path: string, body?: Record<string, unknown>) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
         method: "POST",
+        credentials: "include",
         headers: buildHeaders(),
         body: body ? JSON.stringify(body) : undefined,
     });

@@ -66,7 +66,7 @@ public class LoginController {
     @GetMapping("/auth/user")
     public ResponseEntity<?> user(@AuthenticationPrincipal UserPrincipal principal) {
         if (principal == null) {
-            return ResponseEntity.status(401).body(Map.of("authenticated", false));
+            return ResponseEntity.ok(Map.of("authenticated", false));
         }
 
         return ResponseEntity.ok(Map.of(
