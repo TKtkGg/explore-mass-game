@@ -15,34 +15,35 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
-import com.example.backend.dto.UsersDto;
-import com.example.backend.entity.Users;
-import com.example.backend.service.UsersPrincipal;
-import com.example.backend.service.UsersService;
+import com.example.backend.dto.LoginRequest;
+import com.example.backend.entity.User;
+import com.example.backend.service.UserPrincipal;
+import com.example.backend.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @RestController
 public class LoginController {
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/auth/login")
-    public Map<String, String> login(@RequestBody UsersDto usersDto, HttpServletRequest request) {
-        Users user = usersService.findByEmail(usersDto.getEmail());
+    public Map<String, String> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest request) {
+        User user = userService.findByEmail(loginRequest.getEmail());
         if (user == null) {
             return Map.of("message", "User not found");
         }
-        if (!passwordEncoder.matches(usersDto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return Map.of("message", "Invalid password");
         }
 
-        UsersPrincipal principal = new UsersPrincipal(user);
+        UserPrincipal principal = new UserPrincipal(user);
         UsernamePasswordAuthenticationToken authentication = 
             new UsernamePasswordAuthenticationToken(
                 principal, null, principal.getAuthorities()
@@ -63,7 +64,7 @@ public class LoginController {
     }
 
     @GetMapping("/auth/user")
-    public ResponseEntity<?> user(@AuthenticationPrincipal UsersPrincipal principal) {
+    public ResponseEntity<?> user(@AuthenticationPrincipal UserPrincipal principal) {
         if (principal == null) {
             return ResponseEntity.status(401).body(Map.of("authenticated", false));
         }

@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 
-import com.example.backend.dto.UsersDto;
-import com.example.backend.service.UsersService;
+import com.example.backend.dto.UserDto;
+import com.example.backend.service.UserService;
 
 import jakarta.validation.Valid;
 
 @RestController
 public class RegisterController {
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     @PostMapping("/auth/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody @Valid UsersDto usersDto) {
-        return usersService.save(usersDto);
+    public ResponseEntity<Map<String, String>> register(@RequestBody @Valid UserDto userDto) {
+        return userService.save(userDto);
     }
 
 }

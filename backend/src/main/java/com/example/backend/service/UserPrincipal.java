@@ -5,13 +5,13 @@ import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.example.backend.entity.Users;
+import com.example.backend.entity.User;
 
-public class UsersPrincipal implements UserDetails {
-    private Users users;
+public class UserPrincipal implements UserDetails {
+    private User user;
 
-    public UsersPrincipal(Users users) {
-        this.users = users;
+    public UserPrincipal(User user) {
+        this.user = user;
     }
 
     @Override
@@ -21,16 +21,16 @@ public class UsersPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return users.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return users.getUsername();
+        return user.getUsername();
     }
 
     public String getEmail() {
-        return users.getEmail();
+        return user.getEmail();
     }
 
     @Override

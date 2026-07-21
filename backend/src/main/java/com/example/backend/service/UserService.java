@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.repository.UsersRepository;
-import com.example.backend.entity.Users;
-import com.example.backend.dto.UsersDto;
+import com.example.backend.repository.UserRepository;
+import com.example.backend.entity.User;
+import com.example.backend.dto.UserDto;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,40 +15,40 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 @Service
-public class UsersService implements UserDetailsService {
-    private final UsersRepository usersRepository;
+public class UserService implements UserDetailsService {
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UsersService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
-        this.usersRepository = usersRepository;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Users users = usersRepository.findByEmail(email);
-        if (users == null) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return new UsersPrincipal(users);
+        return new UserPrincipal(user);
     }
 
-    public Users findByEmail(String email) {
-        return usersRepository.findByEmail(email);
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Transactional
-    public ResponseEntity<Map<String,String>> save(UsersDto usersDto) {
-        Users existing = findByEmail(usersDto.getEmail());
+    public ResponseEntity<Map<String,String>> save(UserDto userDto) {
+        User existing = findByEmail(userDto.getEmail());
 
         if (existing != null) {
             return ResponseEntity.badRequest().body(Map.of("message", "Email already exists"));        }
 
-        Users users = new Users();
-        users.setUsername(usersDto.getUsername());  
-        users.setEmail(usersDto.getEmail());
-        users.setPassword(passwordEncoder.encode(usersDto.getPassword()));
-        usersRepository.save(users);
+        User user = new User();
+        user.setUsername(userDto.getUsername());  
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     }
 }

@@ -9,23 +9,23 @@ import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "username", nullable = true)
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email", nullable = true, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = true)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    
+
     public Integer getId() {
         return this.id;
     }
