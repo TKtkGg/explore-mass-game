@@ -85,6 +85,7 @@ export type BattleEffect =
     | null;
 
 export type RankingResponse = {
+    userId: number;
     playerName: string;
     score: number;
     level: number;

@@ -15,6 +15,7 @@ export default function GameOverPage() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const [score, setScore] = useState<number>(0);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [registerScore, setRegisterScore] = useState<boolean>(false);
     const { playBgm, stopBgm } = useAudio();
     useRequireSession();
@@ -23,6 +24,18 @@ export default function GameOverPage() {
         playBgm(BGM.gameover);
         return () => stopBgm();
     }, [playBgm, stopBgm]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await apiGet("/auth/user");
+            if (user.authenticated) {
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+            }
+        }
+        fetchUser();
+    }, []);
 
     useEffect(() => {
         const fetchGameover = async () => {
@@ -73,7 +86,7 @@ export default function GameOverPage() {
 
                     <div className="flex flex-col items-center gap-4">
                         {!registerScore ? (
-                            <MainButton onClick={handleRegisterScore}>ランキングに登録する</MainButton>
+                            <MainButton onClick={handleRegisterScore} disabled={!isLoggedIn}>ランキングに登録する</MainButton>
                         ) : (
                             <MainButton onClick={() => router.push("/ranking")}>ランキング</MainButton>
                         )}

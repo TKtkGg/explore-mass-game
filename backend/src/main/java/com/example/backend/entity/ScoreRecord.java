@@ -15,13 +15,13 @@ public class ScoreRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int userId;
+    private Integer userId;
     private String playerName;
     private int score;
     private int level;
     private Instant playedAt;
 
-    public ScoreRecord(int userId, String playerName, int score, int level, Instant playedAt) {
+    public ScoreRecord(Integer userId, String playerName, int score, int level, Instant playedAt) {
         this.userId = userId;
         this.playerName = playerName;
         this.score = score;
@@ -31,7 +31,7 @@ public class ScoreRecord {
 
     protected ScoreRecord() {}
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 

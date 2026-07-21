@@ -52,6 +52,16 @@ export default function RankingPage() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await apiGet("/auth/user");
+            if (!user.authenticated) {
+                router.push("/");
+            }
+        }
+        fetchUser();
+    }, [router]);
+
     const shouldScroll = ranking.length > VISIBLE_ROWS_BEFORE_SCROLL;
     const scrollAreaMaxHeight = `${VISIBLE_ROWS_BEFORE_SCROLL * ROW_HEIGHT_REM}rem`;
 

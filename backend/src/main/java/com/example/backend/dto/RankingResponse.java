@@ -3,13 +3,13 @@ package com.example.backend.dto;
 import java.time.Instant;
 
 public class RankingResponse {
-    int userId;
+    Integer userId;
     String playerName;
     int score;
     int level;
     Instant playedAt;
 
-    public RankingResponse(int userId, String playerName, int score, int level, Instant playedAt) {
+    public RankingResponse(Integer userId, String playerName, int score, int level, Instant playedAt) {
         this.userId = userId;
         this.playerName = playerName;
         this.score = score;
@@ -17,7 +17,7 @@ public class RankingResponse {
         this.playedAt = playedAt;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
