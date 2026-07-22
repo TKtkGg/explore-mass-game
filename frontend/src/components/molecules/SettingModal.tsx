@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useAudio } from "@/components/providers/AudioProvider";
 import { MainButton } from "@/components/atoms/MainButton";
 import { clearSessionId } from "@/lib/session";
+import { apiPost, apiGet } from "@/lib/apiClient";
+import { useEffect, useState } from "react";
 
 type Props = {
     onClose: () => void;
@@ -43,6 +45,32 @@ export const SettingModal = (props: Props) => {
     const { onClose } = props;
     const router = useRouter();
     const { bgmVolume, sfxVolume, setBgmVolume, setSfxVolume, stopBgm } = useAudio();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await apiGet("/auth/user");
+            if (user.authenticated) {
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+            }
+        }
+        fetchUser();
+    }, []);
+
+    const handleSave = async () => {
+        try {
+            if (isLoggedIn) {
+                await apiPost("/save");
+            }
+            router.push("/");
+            clearSessionId();
+            stopBgm();
+        } catch {
+            alert("保存に失敗しました。");
+        }
+    }
 
     return (
         <div
@@ -71,15 +99,11 @@ export const SettingModal = (props: Props) => {
                         戻る
                     </MainButton>
                     <MainButton
-                        onClick={() => {
-                            router.push("/");
-                            clearSessionId();
-                            stopBgm();
-                        }}
+                        onClick={handleSave}
                         kind="back"
                         className="!min-w-0 flex-1 px-3 py-2.5 text-sm tracking-wide sm:!min-w-[240px] sm:flex-none sm:px-8 sm:py-3 sm:text-xl sm:tracking-widest"
                     >
-                        タイトル
+                        {isLoggedIn ? "セーブしてタイトルへ" : "タイトル"}
                     </MainButton>
                 </div>
             </div>

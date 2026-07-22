@@ -53,6 +53,24 @@ export default function Home() {
         }
     };
 
+    const handleContinue = async () => {
+        try {
+            const response = await apiGet("/save");
+            if (!response.sessionId) {
+                alert("セーブデータがありません。");
+                return;
+            }
+            saveSessionId(response.sessionId);
+            router.push("/explore");
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("通信に失敗しました。");
+            }
+        }
+    }
+    
     return (
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
@@ -77,6 +95,15 @@ export default function Home() {
                             unlockAudio();
                             handleStart();
                         }} kind="start">START</MainButton>
+
+                        <MainButton 
+                            onClick={() => handleContinue()} 
+                            kind="start" 
+                            disabled={!isLoggedIn}
+                            className="!min-w-0 flex-1 px-3 py-2.5 text-sm tracking-wide sm:!min-w-[240px] sm:flex-none sm:px-8 sm:py-3 sm:text-xl sm:tracking-widest"
+                        >
+                            CONTINUE
+                        </MainButton>
 
                         {error ? <ErrorAlert message={error} /> : null}
                     </div>
