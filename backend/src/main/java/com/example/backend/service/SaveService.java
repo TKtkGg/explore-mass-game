@@ -4,7 +4,12 @@ import org.springframework.stereotype.Service;
 
 import com.example.backend.entity.SaveData;
 import com.example.backend.repository.SaveDataRepository;
+import com.example.backend.service.gamestate.session.GameSaveSnapshot;
 import com.example.backend.service.gamestate.session.GameSession;
+import com.example.backend.service.gamestate.BattleState;
+import com.example.backend.service.gamestate.treasure.TreasureState;
+import com.example.backend.service.gamestate.shop.ShopState;
+import com.example.backend.service.gamestate.character.EnemyState;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -23,18 +28,29 @@ public class SaveService {
         this.saveDataRepository = saveDataRepository;
     }
 
-    public String toJson(GameSession gameSession) throws Exception {
-        return objectMapper.writeValueAsString(gameSession);
+    public String toJson(GameSaveSnapshot snapshot) throws Exception {
+        return objectMapper.writeValueAsString(snapshot);
     }
 
-    public GameSession fromJson(String json) throws Exception {
-        return objectMapper.readValue(json, GameSession.class);
+    public GameSaveSnapshot fromJson(String json) throws Exception {
+        return objectMapper.readValue(json, GameSaveSnapshot.class);
     }
 
     public void save(String sessionId, Integer userId) throws Exception {
         GameSession gameSession = gameSessionManager.getRequiredGameSession(sessionId);
-        String json = toJson(gameSession);
-        SaveData saveData = new SaveData(userId, json, Instant.now());
+
+        GameSaveSnapshot snapshot = new GameSaveSnapshot();
+        snapshot.setPlayerState(gameSession.getPlayerState());
+        snapshot.setMoveState(gameSession.getMoveState());
+
+        String json = toJson(snapshot);
+        SaveData saveData = saveDataRepository.findByUserId(userId);
+        if (saveData == null) {
+            saveData = new SaveData(userId, json, Instant.now());
+        } else {
+            saveData.setSaveData(json);
+            saveData.setUpdatedAt(Instant.now());
+        }
         saveDataRepository.save(saveData);
     }
 
@@ -44,8 +60,18 @@ public class SaveService {
             return null;
         }
         String json = saveData.getSaveData();
-        GameSession gameSession = fromJson(json);
+        GameSaveSnapshot snapshot = fromJson(json);
         String newSessionId = UUID.randomUUID().toString();
+
+        GameSession gameSession = new GameSession(
+            newSessionId,
+            snapshot.getPlayerState(),
+            snapshot.getMoveState(), 
+            new BattleState(), 
+            new TreasureState(), 
+            new ShopState(), 
+            new EnemyState("スライム", 1, 100, 100, 10, 10, 10, 0, 100, "/img/enemy/slime.png", 1, 10));
+        
         gameSession.setSessionId(newSessionId);
 
         gameSessionManager.putGameSession(gameSession);

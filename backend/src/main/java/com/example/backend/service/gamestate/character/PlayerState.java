@@ -4,6 +4,7 @@ import com.example.backend.service.gamestate.card.CardState;
 import com.example.backend.service.gamestate.equipment.EquipmentListState;
 import com.example.backend.service.gamestate.equipment.EquipmentState;
 import com.example.backend.service.gamestate.item.ItemState;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class PlayerState extends CharacterState {
     boolean isRun = false;
     Map<String, Integer> ownedItems = new HashMap<>();
 
+    @JsonIgnore
     public PlayerState(EquipmentListState equipmentList) {
         super("No Name", 1, 100, 100, 10, 10, 10, 0, 100);
         this.equipmentList = equipmentList;
@@ -28,6 +30,14 @@ public class PlayerState extends CharacterState {
         this.isRun = false;
         this.nextLevelExp = 100;
         this.ownedItems.put("回復薬(小)", 3);
+    }
+
+    protected PlayerState() {
+        super("No Name", 1, 100, 100, 10, 10, 10, 0, 100);
+        this.equipmentList = new EquipmentListState();
+        this.ownedCards = new ArrayList<>();
+        this.ownedItems = new HashMap<>();
+        this.ownedEquipmentList = new ArrayList<>();
     }
 
     @Override
@@ -63,6 +73,21 @@ public class PlayerState extends CharacterState {
         return isRun;
     }
 
+    public void setEquipment(EquipmentState equipment) {
+        this.equipment = equipment;
+    }
+    public void setEquipmentList(EquipmentListState equipmentList) {
+        this.equipmentList = equipmentList;
+    }
+    public void setOwnedEquipmentList(List<EquipmentState> ownedEquipmentList) {
+        this.ownedEquipmentList = ownedEquipmentList;
+    }
+    public void setOwnedCards(List<CardState> ownedCards) {
+        this.ownedCards = ownedCards;
+    }
+    public void setOwnedItems(Map<String, Integer> ownedItems) {
+        this.ownedItems = ownedItems;
+    }
     public void setIsRun(boolean isRun) {
         this.isRun = isRun;
     }
@@ -74,10 +99,6 @@ public class PlayerState extends CharacterState {
         int healAmount = Math.min(amount, this.maxHp - this.hp);
         this.hp += healAmount;
         return healAmount;
-    }
-
-    public void setEquipment(EquipmentState equipment) {
-        this.equipment = equipment;
     }
 
     public void addEquipment(EquipmentState equipment) {
