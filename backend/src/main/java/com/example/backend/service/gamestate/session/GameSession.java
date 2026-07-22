@@ -32,6 +32,8 @@ public class GameSession {
         this.enemyState = enemyState;
     }
 
+    protected GameSession() {}
+
     public String getSessionId() {
         return sessionId;
     }
@@ -67,4 +69,17 @@ public class GameSession {
     public List<CardState> getCardDisplay() {
         return cardDisplay;
     }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public void setPlayerState(PlayerState playerState) {
+        this.playerState = playerState;
+    }
+    
+    public void setMoveState(MoveState moveState) {
+        this.moveState = moveState;
+    }
+
 }
