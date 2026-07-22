@@ -43,4 +43,8 @@ public class GameSessionManager {
         }
         return gameSession;
     }
+
+    public void putGameSession(GameSession gameSession) {
+        gameSessions.put(gameSession.getSessionId(), gameSession);
+    }
 }
