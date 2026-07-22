@@ -36,6 +36,13 @@ public class SaveService {
         return objectMapper.readValue(json, GameSaveSnapshot.class);
     }
 
+    public void deleteByUserId(Integer userId) {
+        SaveData saveData = saveDataRepository.findByUserId(userId);
+        if (saveData != null) {
+            saveDataRepository.delete(saveData);
+        }
+    }
+
     public void save(String sessionId, Integer userId) throws Exception {
         GameSession gameSession = gameSessionManager.getRequiredGameSession(sessionId);
 

@@ -6,4 +6,5 @@ import com.example.backend.entity.SaveData;
 
 public interface SaveDataRepository extends JpaRepository<SaveData, Long> {
     SaveData findByUserId(Integer userId);
+    void deleteByUserId(Integer userId);
 }

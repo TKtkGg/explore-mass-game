@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.example.backend.dto.Gameover.GameoverResponse;
 import com.example.backend.service.GameoverService;
+import com.example.backend.service.SaveService;
 import com.example.backend.service.UserPrincipal;
 
 import java.util.Map;
@@ -15,14 +16,23 @@ import java.util.Map;
 @RestController
 public class GameoverController {
     private GameoverService gameoverService;
+    private SaveService saveService;
 
-    public GameoverController(GameoverService gameoverService) {
+    public GameoverController(GameoverService gameoverService, SaveService saveService) {
         this.gameoverService = gameoverService;
+        this.saveService = saveService;
     }
 
     @GetMapping("/gameover")
-    public GameoverResponse gameover(@RequestHeader("X-Session-Id") String sessionId) {
-        return this.gameoverService.gameover(sessionId);
+    public GameoverResponse gameover(
+        @RequestHeader("X-Session-Id") String sessionId,
+        @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        GameoverResponse response = gameoverService.gameover(sessionId);
+        if (principal != null) {
+            saveService.deleteByUserId(principal.getUserId());
+        }
+        return response;
     }
 
     @PostMapping("/score/register")
