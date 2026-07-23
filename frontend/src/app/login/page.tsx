@@ -1,59 +1,83 @@
 "use client";
 
-import { useState, type FormEvent, useEffect } from "react";
-import { apiPost, apiGet } from "@/lib/apiClient";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { apiPost } from "@/lib/apiClient";
+import { Title } from "@/components/atoms/Title";
+import { Input } from "@/components/atoms/Input";
+import { MainButton } from "@/components/atoms/MainButton";
+import { ErrorAlert } from "@/components/atoms/ErrorAlert";
+import { BACKGROUNDS } from "@/lib/imagePaths";
 
 export default function LoginPage() {
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState<Error | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const user = await apiGet("/auth/user");
-            if (user.authenticated) {
-                console.log(user)
-            } else {
-                console.log("not authenticated");
-            }
-        }
-        fetchUser();
-    }, []);
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleLogin = async () => {
         try {
-            const response = await apiPost("/auth/login", { email, password });
-        } catch (error) {
-            if (error instanceof Error) {
-                setError(error);
+            await apiPost("/auth/login", { email, password });
+            setError(null);
+            router.push("/");
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
             } else {
-                setError(new Error("通信に失敗しました。"));
+                setError("通信に失敗しました。");
             }
         }
-    }
-
-    const logout = async () => {
-        await apiPost("/auth/logout");
-    }
+    };
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            {error && <p>{error.message}</p>}
+        <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
+            <div
+                className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url('${BACKGROUNDS.woodPlank}')` }}
+                aria-hidden
+            />
 
-            <button onClick={logout}>Logout</button>
+            <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8 sm:px-8">
+                <header className="pt-[4vh] text-center sm:pt-[6vh]">
+                    <Title>LOGIN</Title>
+                </header>
+
+                <main className="flex w-full flex-1 items-center justify-center py-6">
+                    <div className="flex w-full max-w-[512px] flex-col items-center justify-between gap-10 border-[5px] border-[rgba(139,105,20,0.9)] bg-black/75 px-10 py-12 sm:min-h-[533px] sm:px-12 sm:py-14">
+                        <div className="flex w-full flex-col items-center gap-8 sm:gap-10">
+                            <Input
+                                type="email"
+                                placeholder="E-mail"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="max-w-[351px] rounded-[15px] border-[3px] border-white py-3 sm:py-3"
+                            />
+                            <Input
+                                type="password"
+                                placeholder="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="max-w-[351px] rounded-[15px] border-[3px] border-white py-3 sm:py-3"
+                            />
+                        </div>
+
+                        <MainButton
+                            onClick={handleLogin}
+                            className="!min-w-[265px] !rounded-none !px-6 !py-5 !text-[40px] !leading-none !tracking-[1.2px]"
+                        >
+                            LOG IN
+                        </MainButton>
+
+                        {error ? <ErrorAlert message={error} /> : null}
+                    </div>
+                </main>
+
+                <footer className="flex justify-center pb-2 sm:justify-start sm:pb-4">
+                    <MainButton onClick={() => router.push("/")} kind="back">
+                        戻る
+                    </MainButton>
+                </footer>
+            </div>
         </div>
-    )
+    );
 }
