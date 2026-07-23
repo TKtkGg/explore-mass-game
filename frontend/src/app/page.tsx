@@ -31,10 +31,10 @@ export default function Home() {
             } else {
                 setIsLoggedIn(false);
             }
-        }
+        };
         fetchUser();
     }, []);
-    
+
     const handleStart = async () => {
         if (name.length === 0) {
             setError("名前を入力してください。");
@@ -69,8 +69,8 @@ export default function Home() {
                 setError("通信に失敗しました。");
             }
         }
-    }
-    
+    };
+
     return (
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
@@ -82,35 +82,43 @@ export default function Home() {
             <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-4 py-8">
                 <TwoRowTitle firstRow="LIMIT" secondRow="EXPLORE" />
 
-                <div className="flex flex-1 w-full flex-col items-center justify-between pb-8 pt-10 sm:pb-12 sm:pt-14">
-                    <div className="flex flex-col items-center gap-4 sm:gap-5">
-                        <MainButton onClick={() => router.push("/login")}>LOGIN</MainButton>
+                <div className="flex w-full flex-1 flex-col items-center justify-center gap-8 pb-8 sm:gap-10 sm:pb-12">
+                    <div className="flex w-full max-w-[555px] flex-row items-center justify-center gap-6">
                         <MainButton onClick={() => router.push("/signup")}>SIGNUP</MainButton>
+                        <MainButton onClick={() => router.push("/login")}>LOGIN</MainButton>
                     </div>
 
-                    <div className="flex flex-col items-center gap-8 sm:gap-10">
-                        <Input placeholder="名前" value={name} onChange={(e) => setName(e.target.value)} />
+                    <Input
+                        placeholder="NAME"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="max-w-[513px]"
+                    />
 
-                        <MainButton onClick={() => {
-                            unlockAudio();
-                            handleStart();
-                        }} kind="start">START</MainButton>
-
-                        <MainButton 
-                            onClick={() => handleContinue()} 
-                            kind="start" 
+                    <div className="flex w-full max-w-[555px] flex-row items-center justify-center gap-6">
+                        <MainButton
+                            onClick={() => {
+                                unlockAudio();
+                                handleStart();
+                            }}
+                            kind="start"
+                        >
+                            START
+                        </MainButton>
+                        <MainButton
+                            onClick={() => handleContinue()}
+                            kind="start"
                             disabled={!isLoggedIn}
-                            className="!min-w-0 flex-1 px-3 py-2.5 text-sm tracking-wide sm:!min-w-[240px] sm:flex-none sm:px-8 sm:py-3 sm:text-xl sm:tracking-widest"
                         >
                             CONTINUE
                         </MainButton>
-
-                        {error ? <ErrorAlert message={error} /> : null}
                     </div>
+
+                    {error ? <ErrorAlert message={error} /> : null}
                 </div>
 
                 <p className="pointer-events-none absolute bottom-4 right-4 text-base font-black tracking-wide text-white text-outline sm:bottom-6 sm:right-6 sm:text-xl md:text-2xl">
-                    {isLoggedIn ? "ログイン中" : "ログインしていません"}
+                    {isLoggedIn ? "ログイン中です" : "ログインしていません"}
                 </p>
             </div>
         </div>
