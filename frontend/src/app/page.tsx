@@ -71,6 +71,20 @@ export default function Home() {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            await apiPost("/auth/logout");
+            setIsLoggedIn(false);
+            setError(null);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("通信に失敗しました。");
+            }
+        }
+    };
+
     return (
         <div className="relative min-h-[100dvh] w-full overflow-hidden bg-neutral-900">
             <div
@@ -83,9 +97,12 @@ export default function Home() {
                 <TwoRowTitle firstRow="LIMIT" secondRow="EXPLORE" />
 
                 <div className="flex w-full flex-1 flex-col items-center justify-center gap-8 pb-8 sm:gap-10 sm:pb-12">
-                    <div className="flex w-full max-w-[555px] flex-row items-center justify-center gap-6">
+                    <div className="flex w-full max-w-[840px] flex-row items-center justify-center gap-4 sm:gap-6">
                         <MainButton onClick={() => router.push("/signup")}>SIGNUP</MainButton>
                         <MainButton onClick={() => router.push("/login")}>LOGIN</MainButton>
+                        <MainButton onClick={handleLogout} disabled={!isLoggedIn}>
+                            LOGOUT
+                        </MainButton>
                     </div>
 
                     <Input

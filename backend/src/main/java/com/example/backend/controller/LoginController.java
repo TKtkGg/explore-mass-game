@@ -34,13 +34,13 @@ public class LoginController {
     }
 
     @PostMapping("/auth/login")
-    public Map<String, String> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest request) {
         User user = userService.findByEmail(loginRequest.getEmail());
         if (user == null) {
-            return Map.of("message", "User not found");
+            return ResponseEntity.badRequest().body(Map.of("message", "User not found"));
         }
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return Map.of("message", "Invalid password");
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid password"));
         }
 
         UserPrincipal principal = new UserPrincipal(user);
@@ -60,7 +60,7 @@ public class LoginController {
         );
 
 
-        return Map.of("message", "ok");
+        return ResponseEntity.ok(Map.of("message", "ok"));
     }
 
     @GetMapping("/auth/user")
